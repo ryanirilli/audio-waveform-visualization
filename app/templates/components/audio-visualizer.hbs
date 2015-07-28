@@ -1,0 +1,15 @@
+{{#if isLoadingPhotos}}
+    Loading ...
+{{else}}
+    <div class="audio-visualizer">
+        <div class="audio-visualizer__controls">
+            <div class="controls__play" {{action 'play'}}>
+                play
+            </div>
+            <div class="controls__stop" {{action 'stop'}}>
+                stop
+            </div>
+        </div>
+    </div>
+{{/if}}
+<div class="audio-visualizer__viewer"></div>

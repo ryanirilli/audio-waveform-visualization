@@ -1,0 +1,18 @@
+.audio-visualizer{
+  audio {
+    display: none;
+  }
+}
+
+.audio-visualizer__viewer {
+  position: relative;
+  height: 800px;
+  overflow: hidden;
+  img {
+    position: absolute;
+    object-fit: contain;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
