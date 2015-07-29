@@ -1,16 +1,19 @@
-{{#if isLoadingPhotos}}
-    Loading ...
-{{else}}
-    <div class="audio-visualizer">
+<div class="audio-visualizer">
+    <div class="audio-visualizer__viewer"></div>
+    {{#if isLoadingPhotos}}
+        Loading ...
+    {{else}}
         <div class="audio-visualizer__controls">
-            <div class="controls__play" {{action 'play'}}>
-                play
-            </div>
-            <div class="controls__stop" {{action 'stop'}}>
-                stop
-            </div>
+            {{#unless isPlaying}}
+                <div class="audio-visualizer__icon controls__play" {{action 'play'}}>
+                    <div class="vizaudio-play"></div>
+                </div>
+            {{else}}
+                <div class="audio-visualizer__icon controls__stop" {{action 'stop'}}>
+                    <div class="vizaudio-pause"></div>
+                </div>
+            {{/unless}}
         </div>
-    </div>
-{{/if}}
-<div class="audio-visualizer__viewer"></div>
+    {{/if}}
+</div>
 

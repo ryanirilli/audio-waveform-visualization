@@ -4,7 +4,9 @@ export default Ember.Component.extend({
   analyser: null,
   images: null,
   lastFrameVal: 0,
+  lastChangeVal: 0,
   isLoadingPhotos: true,
+  isPlaying: false,
   raf: null,
   audio: null,
   photos: [
@@ -44,18 +46,34 @@ export default Ember.Component.extend({
   loadPhotos: function(){
     var self = this;
     var promises = [];
+    var $viewer = this.$().find('.audio-visualizer__viewer');
+    var viewerHeight = $viewer.outerHeight();
     self.get('photos').forEach(function(path){
       var promise = new Promise(function(resolve, reject) {
         var $img = Ember.$('<img />');
         $img.attr('src', path);
         $img.css({
-          position: 'absolute',
+          position: 'fixed',
           visibility: 'hidden'
         });
         self.$().find('.audio-visualizer__viewer').append($img);
         $img.load(function(){
+
           self.get('images').pushObject($img);
-          $img.css('visibility', 'visible');
+
+          $img.css({
+            position: 'relative',
+            visibility: 'visible',
+            width: '100%'
+          });
+
+          var heightDiff = $img.outerHeight() - viewerHeight;
+          if(heightDiff > 0) {
+            $img.css({
+              top: -(heightDiff/3)
+            });
+          }
+
           $img.hide();
           resolve();
         });
@@ -67,18 +85,17 @@ export default Ember.Component.extend({
 
   initAudio: function(){
     var audio = new Audio();
-    audio.src = '03_Looking_For_Love.mp3';
+    audio.src = '02_How_Did_I_Get_Here.mp3';
     audio.controls = true;
     audio.loop = true;
     audio.autoplay = false;
 
     this.set('audio', audio);
-
-    this.$().find('.mp3-player__audio-box').append(audio);
+    this.$('audio-visualizer').append(audio);
 
     var context = new AudioContext(); // AudioContext object instance
     var analyser = context.createAnalyser(); // AnalyserNode method
-    analyser.fftSize = 512;
+    analyser.fftSize = 1024;
     analyser.smoothingTimeConstant = 0.3;
     this.set('analyser', analyser);
 
@@ -105,11 +122,23 @@ export default Ember.Component.extend({
     var curFrameVal = this.getAvgVolume(frequencyData);
     this.set('lastFrameVal', curFrameVal);
 
-    if(Math.abs(lastFrameVal - curFrameVal) > 10) {
+    var change = Math.abs(curFrameVal - lastFrameVal);
+    var lastChangeVal = this.get('lastChangeVal');
+    this.set('lastChangeVal', change);
+    //console.log('CHANGE: ', change);
+
+    if(change > 15) {
       var images = this.get('images');
       var image = images[Math.floor(Math.random()*images.length)];
       $('img').hide();
       image.show();
+      setTimeout(function(){
+        image.toggleClass('audio-visualizer__effect--scale');
+      });
+    }
+
+    if(change-lastChangeVal > 4) {
+
     }
   },
 
@@ -128,11 +157,13 @@ export default Ember.Component.extend({
     play: function(){
       this.get('audio').play();
       this.frameLoop();
+      this.set('isPlaying', true);
     },
 
     stop: function(){
       this.get('audio').pause();
       cancelAnimationFrame(this.get('raf'));
+      this.set('isPlaying', false);
     }
   }
 });

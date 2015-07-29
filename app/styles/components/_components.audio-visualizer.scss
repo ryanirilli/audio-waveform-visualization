@@ -1,18 +1,45 @@
 .audio-visualizer{
+  text-align: center;
   audio {
     display: none;
   }
+
 }
 
 .audio-visualizer__viewer {
   position: relative;
-  height: 800px;
   overflow: hidden;
+  height: 90vh;
+  background: rgba(0,0,0,0.05);
   img {
-    position: absolute;
-    object-fit: contain;
-    top: 0;
-    left: 0;
-    width: 100%;
+    -webkit-transition: all 5s; /* Safari */
+    transition: all 30s;
   }
+}
+
+.audio-visualizer__icon {
+  font-size: 2.5rem;
+  cursor: pointer;
+  &:hover {
+    color: pink;
+  }
+}
+
+.audio-visualizer__controls {
+  line-height: 0;
+  margin-top: 2.5vh;
+}
+
+.audio-visualizer__effect--opacity {
+  opacity: 0.8;
+}
+
+.audio-visualizer__effect--blur {
+  blur: 2px;
+  -webkit-filter: blur(2px);
+}
+
+.audio-visualizer__effect--scale {
+  -webkit-transform: scale(1.3); /* Safari */
+  transform: scale(1.3);
 }
