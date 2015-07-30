@@ -85,7 +85,7 @@ export default Ember.Component.extend({
 
   initAudio: function(){
     var audio = new Audio();
-    audio.src = '02_How_Did_I_Get_Here.mp3';
+    audio.src = '02_In_Time.mp3';
     audio.controls = true;
     audio.loop = true;
     audio.autoplay = false;
@@ -93,16 +93,16 @@ export default Ember.Component.extend({
     this.set('audio', audio);
     this.$('audio-visualizer').append(audio);
 
-    var context = new AudioContext(); // AudioContext object instance
-    var analyser = context.createAnalyser(); // AnalyserNode method
-    analyser.fftSize = 1024;
+    var audioContext = new AudioContext(); // AudioContext object instance
+    var analyser = audioContext.createAnalyser(); // AnalyserNode method
+    analyser.fftSize = 512;
     analyser.smoothingTimeConstant = 0.3;
     this.set('analyser', analyser);
 
     // Re-route audio playback into the processing graph of the AudioContext
-    var source = context.createMediaElementSource(audio);
+    var source = audioContext.createMediaElementSource(audio);
     source.connect(analyser);
-    analyser.connect(context.destination);
+    analyser.connect(audioContext.destination);
   },
 
   frameLoop: function(){
@@ -122,35 +122,44 @@ export default Ember.Component.extend({
     var curFrameVal = this.getAvgVolume(frequencyData);
     this.set('lastFrameVal', curFrameVal);
 
-    var change = Math.abs(curFrameVal - lastFrameVal);
+    var change = curFrameVal - lastFrameVal;
     var lastChangeVal = this.get('lastChangeVal');
-    this.set('lastChangeVal', change);
-    //console.log('CHANGE: ', change);
-
-    if(change > 15) {
-      var images = this.get('images');
-      var image = images[Math.floor(Math.random()*images.length)];
-      $('img').hide();
-      image.show();
-      setTimeout(function(){
-        image.toggleClass('audio-visualizer__effect--scale');
-      });
-    }
-
-    if(change-lastChangeVal > 4) {
-
+    console.log('CHANGE: ', change);
+    if(change > 5) {
+      this.showRandomImage();
     }
   },
 
+  showRandomImage: function(){
+    var images = this.get('images');
+    var image = images[Math.floor(Math.random()*images.length)];
+    $('img').hide();
+    image.show();
+    setTimeout(function(){
+      image.toggleClass('audio-visualizer__effect--scale');
+    });
+  },
+
   getAvgVolume: function(frequencyData){
-    var values = 0;
     var average;
+    var values = 0;
     var length = frequencyData.length;
     for(var i=0; i < length; i++) {
       values += frequencyData[i];
     }
     average = values/length;
     return average;
+  },
+
+  getPeak: function(frequencyData){
+    var peak = 0;
+    for(var i=0; i < frequencyData.length; i++) {
+      var val = frequencyData[i];
+      if(val > peak) {
+        peak = val;
+      }
+    };
+    return peak;
   },
 
   actions: {
