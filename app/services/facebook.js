@@ -11,14 +11,15 @@ export default Ember.Service.extend({
     return new Ember.RSVP.Promise((resolve, reject) => {
       this.fbGetLoginStatus().then((status) => {
         if (status === 'connected') {
-          this.fbFetchUser().then((user) => {
-            _user = user;
-            resolve(user);
+          this.fbFetchUser().then(() => {
+            resolve();
           });
         } else {
           this.fbLogin().then((authResponse) => {
-            resolve();
-          })
+            this.fbFetchUser().then(() => {
+              resolve();
+            });
+          });
         }
       }).catch((error)=> {
         reject(error);
@@ -64,8 +65,9 @@ export default Ember.Service.extend({
 
   fbFetchUser: function () {
     return new Ember.RSVP.Promise((resolve, reject) => {
-      FB.api('/me', function (response) {
-        resolve(response);
+      FB.api('/me', function (user) {
+        _user = user;
+        resolve();
       });
     });
   },
