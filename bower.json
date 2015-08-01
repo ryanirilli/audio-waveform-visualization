@@ -13,6 +13,8 @@
     "loader.js": "ember-cli/loader.js#3.2.0",
     "qunit": "~1.17.1",
     "inuit-starter-kit": "~0.2.9",
-    "ember-simple-auth": "0.8.0"
+    "ember-simple-auth": "0.8.0",
+    "inuit-buttons": "~0.4.2",
+    "inuit-layout": "~0.3.2"
   }
 }

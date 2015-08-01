@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  THRESHOLD: 9,
+  THRESHOLD: 7,
   analyser: null,
   images: null,
   lastFrameVal: 0,
@@ -49,11 +49,11 @@ export default Ember.Component.extend({
 
           $img.data('id', Ember.generateGuid());
 
-          //if image is longer tha
+          //if image is longer than viewer, adjust to fit in frame
           var heightDiff = $img.outerHeight() - viewerHeight;
           if(heightDiff > 0) {
             $img.css({
-              top: -(heightDiff/3)
+              top: -(heightDiff/4)
             });
           }
 
@@ -68,7 +68,7 @@ export default Ember.Component.extend({
 
   initAudio: function(){
     var audio = new Audio();
-    audio.src = '02_How_Did_I_Get_Here.mp3';
+    audio.src = 'jai_paul.mp3';
     audio.controls = true;
     audio.loop = true;
     audio.autoplay = false;

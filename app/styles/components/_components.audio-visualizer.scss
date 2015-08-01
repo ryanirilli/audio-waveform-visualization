@@ -1,5 +1,7 @@
 .audio-visualizer{
   text-align: center;
+  width: 980px;
+  margin: 50px auto 0 auto;
   audio {
     display: none;
   }
@@ -9,8 +11,9 @@
 .audio-visualizer__viewer {
   position: relative;
   overflow: hidden;
-  height: 90vh;
+  height: 551px;
   background: rgba(0,0,0,0.05);
+  border-radius: 10px;
   img {
     -webkit-transition: all 5s; /* Safari */
     transition: all 30s;
@@ -27,7 +30,7 @@
 
 .audio-visualizer__controls {
   line-height: 0;
-  margin-top: 2.5vh;
+  margin-top: 20px;
 }
 
 .audio-visualizer__effect--opacity {
@@ -41,5 +44,5 @@
 
 .audio-visualizer__effect--scale {
   -webkit-transform: scale(1.3); /* Safari */
-  transform: scale(1.3);
+  transform: scale(1.1);
 }

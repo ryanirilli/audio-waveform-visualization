@@ -5,4 +5,23 @@
 @import "../../bower_components/inuit-box-sizing/generic.box-sizing";
 @import "../../bower_components/inuit-page/base.page";
 @import "fonts/fonts.visaudio";
+
+$inuit-btn-background:      #4a8ec2 !default;
+$inuit-btn-color:           #fff !default;
+$inuit-btn-border-width:    1px !default;
+$inuit-btn-border-style:    solid !default;
+$inuit-btn-border-color:    $inuit-btn-background !default;
+$inuit-btn-radius:          2px;
+
+$inuit-enable-btn--small:   true;
+$inuit-enable-btn--large:   true;
+$inuit-enable-btn--full:    true;
+$inuit-enable-btn--pill:    true;
+@import "../../bower_components/inuit-buttons/objects.buttons";
+@import "objects/objects.buttons";
+
 @import "components/components.audio-visualizer";
+
+.text-center {
+  text-align: center;
+}
