@@ -16,6 +16,16 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    torii: {
+      providers: {
+        'facebook-oauth2': {
+          apiKey: '1636712916587895',
+          scope: 'user_photos',
+          redirectUri: 'http://localhost:4200/'
+        }
+      }
     }
   };
 
