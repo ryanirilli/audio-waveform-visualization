@@ -1,27 +1,15 @@
 @import "../../bower_components/inuit-defaults/settings.defaults";
+@import "settings/settings.inuit-vars";
 @import "../../bower_components/inuit-functions/tools.functions";
 @import "../../bower_components/inuit-mixins/tools.mixins";
+@import "../../bower_components/inuit-tools-widths/tools.widths";
 @import "../../bower_components/inuit-normalize/generic.normalize";
 @import "../../bower_components/inuit-box-sizing/generic.box-sizing";
 @import "../../bower_components/inuit-page/base.page";
 @import "fonts/fonts.visaudio";
-
-$inuit-btn-background:      #4a8ec2 !default;
-$inuit-btn-color:           #fff !default;
-$inuit-btn-border-width:    1px !default;
-$inuit-btn-border-style:    solid !default;
-$inuit-btn-border-color:    $inuit-btn-background !default;
-$inuit-btn-radius:          2px;
-
-$inuit-enable-btn--small:   true;
-$inuit-enable-btn--large:   true;
-$inuit-enable-btn--full:    true;
-$inuit-enable-btn--pill:    true;
 @import "../../bower_components/inuit-buttons/objects.buttons";
+@import "../../bower_components/inuit-layout/objects.layout";
 @import "objects/objects.buttons";
-
 @import "components/components.audio-visualizer";
-
-.text-center {
-  text-align: center;
-}
+@import "helpers/helpers.text";
+@import "../../bower_components/inuit-spacing/trumps.spacing";
