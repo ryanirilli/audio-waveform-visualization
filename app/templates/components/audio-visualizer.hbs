@@ -1,19 +1,26 @@
 <div class="audio-visualizer">
-    <div class="audio-visualizer__viewer"></div>
-    {{#if isLoadingPhotos}}
-        Loading ...
-    {{else}}
-        <div class="audio-visualizer__controls">
-            {{#unless isPlaying}}
-                <div class="audio-visualizer__icon controls__play" {{action 'play'}}>
-                    <div class="vizaudio-play"></div>
-                </div>
-            {{else}}
-                <div class="audio-visualizer__icon controls__stop" {{action 'stop'}}>
-                    <div class="vizaudio-pause"></div>
-                </div>
-            {{/unless}}
+    <div class="audio-visualizer__controls">
+        <div class="layout">
+            <div class="layout__item u-1/2">
+
+            </div><!--
+            --><div class="layout__item u-1/2">
+                {{#if isLoadingPhotos}}
+                    Loading ...
+                {{else}}
+                    {{#unless isPlaying}}
+                        <div class="audio-visualizer__icon controls__play" {{action 'play'}}>
+                            <div class="vizaudio-play"></div>
+                        </div>
+                    {{else}}
+                        <div class="audio-visualizer__icon controls__stop" {{action 'stop'}}>
+                            <div class="vizaudio-pause"></div>
+                        </div>
+                    {{/unless}}
+                {{/if}}
+            </div>
         </div>
-    {{/if}}
+    </div>
+    <div class="audio-visualizer__viewer"></div>
 </div>
 

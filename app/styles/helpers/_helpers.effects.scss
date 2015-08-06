@@ -1,0 +1,11 @@
+@mixin blur($amount) {
+  -webkit-filter: blur($amount);
+  -moz-filter: blur($amount);
+  -o-filter: blur($amount);
+  -ms-filter: blur($amount);
+  filter: blur($amount);
+}
+
+.blur-5px {
+  @include blur(5px);
+}

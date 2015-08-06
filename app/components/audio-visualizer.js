@@ -12,6 +12,14 @@ export default Ember.Component.extend({
   audio: null,
   photos: null,
   usedPhotos: [],
+  selectedSong: null,
+  songs: [{
+    name: 'Jai Paul',
+    path: 'jai_paul.mp3'
+  }, {
+    name: 'Avicii - Wake Me Up',
+    path: '01_Wake_Me_Up.m4a'
+  }],
 
   onReady: function(){
     if(!this.get('photos')) {return}

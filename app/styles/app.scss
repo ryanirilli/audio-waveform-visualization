@@ -3,6 +3,7 @@
 @import "../../bower_components/inuit-functions/tools.functions";
 @import "../../bower_components/inuit-mixins/tools.mixins";
 @import "../../bower_components/inuit-tools-widths/tools.widths";
+@include inuit-widths(1 2 3 4 5 6 7 8 9 10 11 12);
 @import "../../bower_components/inuit-normalize/generic.normalize";
 @import "../../bower_components/inuit-box-sizing/generic.box-sizing";
 @import "../../bower_components/inuit-page/base.page";
@@ -12,4 +13,5 @@
 @import "objects/objects.buttons";
 @import "components/components.audio-visualizer";
 @import "helpers/helpers.text";
+@import "helpers/helpers.effects";
 @import "../../bower_components/inuit-spacing/trumps.spacing";
