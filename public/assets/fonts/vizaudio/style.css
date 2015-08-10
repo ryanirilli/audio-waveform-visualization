@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'vizaudio';
-	src:url('fonts/vizaudio.eot?-6tcp7n');
-	src:url('fonts/vizaudio.eot?#iefix-6tcp7n') format('embedded-opentype'),
-		url('fonts/vizaudio.ttf?-6tcp7n') format('truetype'),
-		url('fonts/vizaudio.woff?-6tcp7n') format('woff'),
-		url('fonts/vizaudio.svg?-6tcp7n#vizaudio') format('svg');
+	src:url('fonts/vizaudio.eot?-wsc1cp');
+	src:url('fonts/vizaudio.eot?#iefix-wsc1cp') format('embedded-opentype'),
+		url('fonts/vizaudio.ttf?-wsc1cp') format('truetype'),
+		url('fonts/vizaudio.woff?-wsc1cp') format('woff'),
+		url('fonts/vizaudio.svg?-wsc1cp#vizaudio') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -46,4 +46,7 @@
 }
 .vizaudio-pause:before {
 	content: "\e053";
+}
+.vizaudio-loader:before {
+	content: "\e105";
 }

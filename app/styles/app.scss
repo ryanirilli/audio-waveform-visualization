@@ -1,3 +1,4 @@
+$brand-color: #3498DB;
 @import "../../bower_components/inuit-defaults/settings.defaults";
 @import "settings/settings.inuit-vars";
 @import "../../bower_components/inuit-functions/tools.functions";
@@ -6,12 +7,42 @@
 @include inuit-widths(1 2 3 4 5 6 7 8 9 10 11 12);
 @import "../../bower_components/inuit-normalize/generic.normalize";
 @import "../../bower_components/inuit-box-sizing/generic.box-sizing";
+@import "base/base.links";
+@import "base/base.headings";
 @import "../../bower_components/inuit-page/base.page";
 @import "fonts/fonts.visaudio";
 @import "../../bower_components/inuit-buttons/objects.buttons";
 @import "../../bower_components/inuit-layout/objects.layout";
 @import "objects/objects.buttons";
 @import "components/components.audio-visualizer";
+@import "components/components.headings";
 @import "helpers/helpers.text";
 @import "helpers/helpers.effects";
 @import "../../bower_components/inuit-spacing/trumps.spacing";
+
+
+
+
+
+
+
+
+
+.tint--blue {
+  position: relative;
+  &:after {
+    content: '';
+    @extend %absolute-fill;
+    background-color: rgba(52,152,219,0.7);
+  }
+}
+
+.relative {
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  max-width: 800px;
+  margin: 0 auto;
+}

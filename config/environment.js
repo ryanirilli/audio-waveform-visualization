@@ -17,17 +17,18 @@ module.exports = function(environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-
-    torii: {
-      providers: {
-        'facebook-oauth2': {
-          apiKey: '1636712916587895',
-          scope: 'user_photos',
-          redirectUri: 'http://localhost:4200/'
-        }
-      }
+    contentSecurityPolicy: {
+      'default-src': "*.facebook.com",
+      'script-src': "'self' *.facebook.net *.facebook.com",
+      'font-src': "'self'",
+      'connect-src': "'self'",
+      'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com",
+      'style-src': "'self' 'unsafe-inline'",
+      'media-src': "'self'"
     }
   };
+
+
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

@@ -2,7 +2,11 @@
     <div class="audio-visualizer__controls">
         <div class="layout">
             <div class="layout__item u-1/2">
-
+                {{view "select"
+                content=songs
+                optionValuePath="content.path"
+                optionLabelPath="content.name"
+                selection=selectedSong}}
             </div><!--
             --><div class="layout__item u-1/2">
                 {{#if isLoadingPhotos}}

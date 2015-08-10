@@ -76,8 +76,8 @@ export default Ember.Service.extend({
     return this.fbFetchMePhotos().then((photos) => {
       let urls = [];
       let photosPromises = [];
-      photos.forEach((album) => {
-        photosPromises.push(this.fetchPhoto(album.id).then((photoUrl) => {
+      photos.forEach((photo) => {
+        photosPromises.push(this.fetchPhoto(photo.id).then((photoUrl) => {
           urls.push(photoUrl);
         }));
       });

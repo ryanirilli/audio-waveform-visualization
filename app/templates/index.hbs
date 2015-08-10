@@ -1,9 +1,46 @@
-{{#full-page coverPhotoPath='/assets/image/old_on_bench.jpeg'}}
-  <div class="text-center u-pt++">
-      <div class="btn btn--huge btn--primary btn--facebook btn--outline"
+{{#full-page coverPhotoPath='/assets/image/old_on_bench.jpeg' class='tint--blue'}}
+  <div class="text-center u-pt++ relative">
+      <h1 class="main-heading">
+          VISAUDIO
+        <div class="main-heading__tagline">
+            playback your photos with style
+        </div>
+      </h1>
+      <div class="btn btn--huge btn--primary btn--facebook {{if isLoading 'btn--loading'}}"
         {{action 'fbConnect'}}>
           Connect Facebook Photos
       </div>
   </div>
 {{/full-page}}
+<div class="section u-mv++ u-p-">
+    <h2>What is this app?</h2>
+    <p>Visaudio allows you to view your photos to the rhythm of a song. It does this by taking the song and analyzing its audio data to
+        drive the speed of the playback. When the song changes in amplitude, Visaudio shows you a random image from your past.</p>
+    <div class="u-mt+">
+        <h2>What do you do with my photos?</h2>
+        <p>Absolutely nothing. Visaudio is a fun project intended for you to view your personal history in an interesting way. I do not store or use
+            your photos in any way and completely follow Facebook's <a href="https://developers.facebook.com/policy/">Platform Policy</a> </p>
+    </div>
+    <div class="u-mt+">
+        <h2>Why did you make this?</h2>
+        <p>No one ever goes through their old photos, but when you do, you realize how fun it is to go down memory lane. I wanted to create something
+            that could build on that nostalgic feeling. I also think by adding music, it even furthers your personal narrative. The randomized and sporadic
+            playback creates a really cool effect and means that every time you try it with different songs you get a completely different context and experience. It's great.
+        </p>
+    </div>
+    <div class="u-mt+">
+        <h2>How does it work?</h2>
+        <p>Visuadio uses the HTML5 audio api to connect an mp3 audio source to an analyser. For each sample, the analyser gives me the
+            frequency as an array of integers. I take the average value of that array and compare it with the
+            last frame's value. If the difference between the current sample and the previous one is greater than the threshold (a constant
+            value that I came up with after some trial and error) then I switch the photo. Though the photo is random, I ensure you only see a
+            given photo once. When all photos have been shown, the app recycles the photos.
+        </p>
+    </div>
+    <div class="u-mt+">
+        <h2>Who are you?</h2>
+        <p>My name is Ryan Irilli. I'm a web developer in San Francisco. <br>If you like my vibe, <a href="https://twitter.com/ryanirilli">follow me on Twitter</a>
+        </p>
+    </div>
+</div>
 

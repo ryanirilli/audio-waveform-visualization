@@ -1,11 +1,53 @@
 $facebook-blue: #3B5998;
+
+
+@-webkit-keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 2s linear infinite;
+  -moz-animation: rotating 2s linear infinite;
+  -ms-animation: rotating 2s linear infinite;
+  -o-animation: rotating 2s linear infinite;
+  animation: rotating 2s linear infinite;
+}
+
+
 .btn--facebook {
   background: $facebook-blue;
   border-color: $facebook-blue;
-  color: white;
-  opacity: 0.7;
-  &:hover {
-    opacity: 1;
+  &:before, & {
+    color: white;
   }
 }
 
@@ -24,5 +66,22 @@ $facebook-blue: #3B5998;
     box-shadow: 0 0 0 10px rgba(0,0,0,0.1);
     @extend %absolute-fill;
     border-radius: $inuit-btn-radius/4;
+  }
+}
+
+.btn--loading {
+  color: transparent !important;
+  opacity: 1;
+  @extend .vizaudio-loader;
+  &:before {
+    @extend .rotating;
+    font-family: 'vizaudio';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    line-height: 2;
+    font-size: 1.5rem;
+    opacity: 0.3;
   }
 }

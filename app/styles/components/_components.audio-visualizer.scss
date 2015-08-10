@@ -10,7 +10,7 @@
   position: relative;
   overflow: hidden;
   height: 95vh;
-  background: rgba(0,0,0,0.05);
+  background: rgba(0,0,0,0.85);
   img {
     -webkit-transition: all 5s; /* Safari */
     transition: all 30s;
@@ -21,7 +21,7 @@
   font-size: 2.5rem;
   cursor: pointer;
   &:hover {
-    color: pink;
+    color: $brand-color;
   }
 }
 

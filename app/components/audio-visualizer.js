@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   THRESHOLD: 7,
+  FFTSIZE: 512,
+  SMOOTHING: 0.3,
   analyser: null,
   images: null,
   lastFrameVal: 0,
@@ -19,6 +21,15 @@ export default Ember.Component.extend({
   }, {
     name: 'Avicii - Wake Me Up',
     path: '01_Wake_Me_Up.m4a'
+  }, {
+    name: 'Odesza - How Did I Get Here',
+    path: '02_How_Did_I_Get_Here.mp3'
+  },{
+    name: 'Black Keys - In Time',
+    path: '02_In_Time.mp3'
+  }, {
+    name: 'Pretty Lights - Looking for Love (But Not So Sure)',
+    path: '03_Looking_For_Love.mp3'
   }],
 
   onReady: function(){
@@ -74,20 +85,23 @@ export default Ember.Component.extend({
     return Ember.RSVP.all(promises);
   },
 
-  initAudio: function(){
-    var audio = new Audio();
-    audio.src = 'jai_paul.mp3';
-    audio.controls = true;
+  initAudio: function(audioSrcPath){
+    var curAudio = this.get('audio');
+    if(curAudio) {
+      curAudio.remove();
+    }
+
+    var audio =  new Audio();
+    audio.src = audioSrcPath || 'jai_paul.mp3';
     audio.loop = true;
     audio.autoplay = false;
-
     this.set('audio', audio);
-    this.$('audio-visualizer').append(audio);
+    this.$('.audio-visualizer').append(audio);
 
-    var audioContext = new AudioContext(); // AudioContext object instance
-    var analyser = audioContext.createAnalyser(); // AnalyserNode method
-    analyser.fftSize = 512;
-    analyser.smoothingTimeConstant = 0.3;
+    var audioContext = new AudioContext();
+    var analyser = audioContext.createAnalyser();
+    analyser.fftSize = this.get('FFTSIZE');
+    analyser.smoothingTimeConstant = this.get('SMOOTHING');
     this.set('analyser', analyser);
 
     // Re-route audio playback into the processing graph of the AudioContext
@@ -123,7 +137,7 @@ export default Ember.Component.extend({
   },
 
   showRandomImage: function(){
-    var $curImage = this.getRandomImage()
+    var $curImage = this.getRandomImage();
     this.$('.audio-visualizer__viewer img').hide();
     $curImage.show();
     setTimeout(function(){
@@ -151,6 +165,13 @@ export default Ember.Component.extend({
     }
   },
 
+  selectedSongObserver: function(){
+    var selectedSong = this.get('selectedSong');
+    this.stop();
+    this.initAudio(selectedSong.path);
+    this.play();
+  }.observes('selectedSong'),
+
   getAvgVolume: function(frequencyData){
     var average;
     var values = 0;
@@ -162,17 +183,25 @@ export default Ember.Component.extend({
     return average;
   },
 
+  play: function(){
+    this.get('audio').play();
+    this.frameLoop();
+    this.set('isPlaying', true);
+  },
+
+  stop: function(){
+    this.get('audio').pause();
+    cancelAnimationFrame(this.get('raf'));
+    this.set('isPlaying', false);
+  },
+
   actions: {
     play: function(){
-      this.get('audio').play();
-      this.frameLoop();
-      this.set('isPlaying', true);
+      this.play();
     },
 
     stop: function(){
-      this.get('audio').pause();
-      cancelAnimationFrame(this.get('raf'));
-      this.set('isPlaying', false);
+      this.stop();
     }
   }
 });

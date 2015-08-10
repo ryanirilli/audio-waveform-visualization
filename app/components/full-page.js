@@ -19,7 +19,8 @@ export default Ember.Component.extend({
     if(!this.get('coverPhotoPath')) { return; }
     this.$().css({
       background: `url(${coverPhotoPath})`,
-      'background-size': 'cover'
+      'background-size': 'cover',
+      'background-attachment': 'fixed'
     });
   }
 });
