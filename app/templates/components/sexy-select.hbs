@@ -1,0 +1,14 @@
+<div class="sexy-select {{if isShowingBody 'sexy-select--open'}}">
+    <div class="sexy-select__label u-pl-" {{action 'toggleBody'}}>
+        {{or-that selectedLabel defaultLabel}}
+    </div>
+    <div class="sexy-select__body">
+        <ul class="list-bare">
+            {{#each label in optionsLabels}}
+                <li {{action 'selectItem' label}} class="sexy-select__item u-pv-- u-ph-">
+                    {{label}}
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

@@ -42,6 +42,9 @@ $facebook-blue: #3B5998;
   animation: rotating 2s linear infinite;
 }
 
+.btn {
+  position: relative;
+}
 
 .btn--facebook {
   background: $facebook-blue;
@@ -49,14 +52,6 @@ $facebook-blue: #3B5998;
   &:before, & {
     color: white;
   }
-}
-
-%absolute-fill {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
 }
 
 .btn--outline {

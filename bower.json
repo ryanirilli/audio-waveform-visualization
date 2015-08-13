@@ -17,6 +17,8 @@
     "inuit-buttons": "~0.4.2",
     "inuit-layout": "~0.3.2",
     "inuit-tools-widths": "~0.1.4",
-    "inuit-spacing": "~0.7.0"
+    "inuit-spacing": "~0.7.0",
+    "inuit-list-bare": "~0.3.0",
+    "inuit-media": "~0.4.2"
   }
 }

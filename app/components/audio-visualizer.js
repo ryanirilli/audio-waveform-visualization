@@ -16,7 +16,7 @@ export default Ember.Component.extend({
   usedPhotos: [],
   selectedSong: null,
   songs: [{
-    name: 'Jai Paul',
+    name: 'Jai Paul - Jasmine (Demo)',
     path: 'jai_paul.mp3'
   }, {
     name: 'Avicii - Wake Me Up',
@@ -34,6 +34,7 @@ export default Ember.Component.extend({
 
   onReady: function(){
     if(!this.get('photos')) {return}
+    this.set('selectedSong', this.get('songs.firstObject'));
     var self = this;
     this.set('images', Ember.A());
     this.loadPhotos().then(function(data){
@@ -169,7 +170,7 @@ export default Ember.Component.extend({
     var selectedSong = this.get('selectedSong');
     this.stop();
     this.initAudio(selectedSong.path);
-    this.play();
+    //this.play();
   }.observes('selectedSong'),
 
   getAvgVolume: function(frequencyData){
@@ -190,7 +191,8 @@ export default Ember.Component.extend({
   },
 
   stop: function(){
-    this.get('audio').pause();
+    let audio = this.get('audio');
+    audio && audio.pause();
     cancelAnimationFrame(this.get('raf'));
     this.set('isPlaying', false);
   },

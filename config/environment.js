@@ -20,10 +20,10 @@ module.exports = function(environment) {
     contentSecurityPolicy: {
       'default-src': "*.facebook.com",
       'script-src': "'self' *.facebook.net *.facebook.com",
-      'font-src': "'self'",
+      'font-src': "'self' *.gstatic.com",
       'connect-src': "'self'",
       'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com",
-      'style-src': "'self' 'unsafe-inline'",
+      'style-src': "'self' 'unsafe-inline' *.googleapis.com",
       'media-src': "'self'"
     }
   };

@@ -1,0 +1,47 @@
+$sexy-select-bg: #fff;
+$sexy-select-color: #333;
+$sexy-select-triangle-size: 10px;
+
+.sexy-select {
+  position: relative;
+  font-size: 0.7rem;
+}
+
+.sexy-select__label {
+  cursor: pointer;
+}
+
+.sexy-select__body {
+  background: $sexy-select-bg;
+  color: $sexy-select-color;
+  position: absolute;
+  z-index: 1;
+  border-radius: 4px;
+  top: 70px;
+  display: none;
+  &:after {
+    content: '';
+    width: 0;
+    height: 0;
+    left: 20px;
+    border-left: $sexy-select-triangle-size solid transparent;
+    border-right: $sexy-select-triangle-size solid transparent;
+    border-bottom: $sexy-select-triangle-size solid $sexy-select-bg;
+    top: -($sexy-select-triangle-size - 1);
+    position: absolute;
+    z-index: 1;
+  }
+}
+
+.sexy-select__item {
+  cursor: pointer;
+  &:hover {
+    background: rgba(0,0,0,0.05);
+  }
+}
+
+.sexy-select--open{
+  .sexy-select__body {
+    display: block;
+  }
+}

@@ -90,7 +90,7 @@ export default Ember.Service.extend({
   fetchPhoto: function (photoId) {
     return new Ember.RSVP.Promise((resolve, reject) => {
       FB.api(`${photoId}`, 'get', {fields: 'images'}, (response)=> {
-        resolve(response.images[0].source);
+        resolve(response.images[1].source);
       });
     });
   },

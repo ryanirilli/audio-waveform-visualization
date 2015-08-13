@@ -13,33 +13,35 @@ $brand-color: #3498DB;
 @import "fonts/fonts.visaudio";
 @import "../../bower_components/inuit-buttons/objects.buttons";
 @import "../../bower_components/inuit-layout/objects.layout";
+@import "../../bower_components/inuit-list-bare/objects.list-bare";
+@import "../../bower_components/inuit-media/objects.media";
 @import "objects/objects.buttons";
 @import "components/components.audio-visualizer";
 @import "components/components.headings";
-@import "helpers/helpers.text";
-@import "helpers/helpers.effects";
+@import "components/components.sexy-select";
+@import "trumps/trumps.positioning";
+@import "trumps/trumps.text";
+@import "trumps/trumps.visibility";
+@import "../../bower_components/inuit-clearfix/trumps.clearfix";
 @import "../../bower_components/inuit-spacing/trumps.spacing";
 
 
 
 
 
-
-
-
-
-.tint--blue {
+%tint {
   position: relative;
   &:after {
     content: '';
     @extend %absolute-fill;
-    background-color: rgba(52,152,219,0.7);
   }
 }
 
-.relative {
-  position: relative;
-  z-index: 1;
+.tint--blue {
+  @extend %tint;
+  &:after {
+    background-color: rgba(52,152,219,0.7);
+  }
 }
 
 .section {
