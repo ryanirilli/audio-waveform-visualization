@@ -2,7 +2,8 @@ import Ember from 'ember';
 import Shuffle from "audio-visualization/mixins/shuffle";
 
 export default Ember.Component.extend(Shuffle, {
-  THRESHOLD: 14,
+  facebook: Ember.inject.service(),
+  THRESHOLD: 12,
   FFTSIZE: 512,
   SMOOTHING: 0.3,
   analyser: null,
@@ -19,14 +20,14 @@ export default Ember.Component.extend(Shuffle, {
   photoUrls: null,
   selectedSong: null,
   songs: [{
+    name: 'Odesza - How Did I Get Here',
+    path: '02_How_Did_I_Get_Here.mp3'
+  },{
     name: 'Family Of The Year - Hero',
     path: '05_hero.mp3'
   }, {
     name: 'Kendrick Lamar - I',
     path: 'kendrick-i.mp3'
-  },{
-    name: 'Odesza - How Did I Get Here',
-    path: '02_How_Did_I_Get_Here.mp3'
   }, {
     name: 'Jai Paul - Jasmine (Demo)',
     path: 'jai_paul.mp3'
@@ -219,6 +220,10 @@ export default Ember.Component.extend(Shuffle, {
 
     stop: function(){
       this.stop();
+    },
+
+    fbShare: function(){
+      this.get('facebook').fbShare();
     }
   }
 });

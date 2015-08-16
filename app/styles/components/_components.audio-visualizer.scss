@@ -1,3 +1,6 @@
+$fb-blue: #4c66a4;
+$twitter-blue: #00aced;
+
 .audio-visualizer{
   audio {
     display: none;
@@ -48,8 +51,22 @@
 .audio-visualizer__brand {
   height: 20px;
   position: absolute;
+  font-size: 1.2rem;
   bottom: 50px;
-  right: 50px;
+  right: 20px;
   z-index: 1;
   color: white;
+  .icon {
+    cursor: pointer;
+  }
+  .fb-icon{
+    &:hover {
+      color: $fb-blue;
+    }
+  }
+  .twitter-icon{
+    &:hover {
+      color: $twitter-blue;
+    }
+  }
 }

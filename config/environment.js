@@ -18,8 +18,8 @@ module.exports = function(environment) {
       // when it is created
     },
     contentSecurityPolicy: {
-      'default-src': "*.facebook.com",
-      'script-src': "'self' *.facebook.net *.facebook.com",
+      'default-src': "*.facebook.com *.twitter.com",
+      'script-src': "'self' 'unsafe-inline' *.facebook.net *.facebook.com *.twitter.com",
       'font-src': "'self' *.gstatic.com",
       'connect-src': "'self'",
       'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com",

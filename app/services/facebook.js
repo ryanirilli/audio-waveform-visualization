@@ -117,5 +117,13 @@ export default Ember.Service.extend({
         resolve(response.data);
       });
     });
+  },
+
+  fbShare: function() {
+    FB.ui({
+      method: 'share',
+      href: 'http://visaudio.me'
+    }, function(response){
+    });
   }
 });

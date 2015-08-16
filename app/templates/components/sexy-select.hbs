@@ -4,7 +4,7 @@
     </div>
     <div class="sexy-select__body">
         <ul class="list-bare">
-            {{#each label in optionsLabels}}
+            {{#each optionsLabels as |label|}}
                 <li {{action 'selectItem' label}} class="sexy-select__item u-pv-- u-ph-">
                     {{label}}
                 </li>
