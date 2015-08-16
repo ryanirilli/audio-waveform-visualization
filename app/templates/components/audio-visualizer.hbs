@@ -1,20 +1,20 @@
 <div class="audio-visualizer">
-    <div class="audio-visualizer__controls u-ph u-pt--">
+    <div class="audio-visualizer__header">
         <div class="layout">
             <div class="layout__item u-1/2">
-                <div class="media">
-                    <div class="media__img">
+                <div class="player clearfix u-ml u-mv-">
+                    <div class="player__controls float-left">
                         {{#unless isPlaying}}
-                            <div class="audio-visualizer__icon controls__play" {{action 'play'}}>
-                                <div class="vizaudio-play"></div>
+                            <div class="circle-icon" {{action 'play'}}>
+                                <div class="circle-icon__symbol vizaudio-play"></div>
                             </div>
                         {{else}}
-                            <div class="audio-visualizer__icon controls__stop" {{action 'stop'}}>
-                                <div class="vizaudio-pause"></div>
+                            <div class="circle-icon" {{action 'stop'}}>
+                                <div class="circle-icon__symbol vizaudio-pause"></div>
                             </div>
                         {{/unless}}
                     </div>
-                    <div class="media__body overflow-visible">
+                    <div class="player__options float-left">
                         {{sexy-select
                         selection=selectedSong
                         options=songs
@@ -26,6 +26,17 @@
             </div>
         </div>
     </div>
-    <div class="audio-visualizer__viewer"></div>
+    <div class="audio-visualizer__viewer">
+        <div class="audio-visualizer__progress {{if isProgressComplete 'audio-visualizer__progress--hide'}}">
+            {{progress}}%
+        </div>
+        <div class="audio-visualizer__brand">
+            <h3 class="u-mb0 inline">
+                VISAUDIO
+            </h3>
+            <div class="inline social-facebook-with-circle"></div>
+            <div class="inline social-twitter-with-circle"></div>
+        </div>
+    </div>
 </div>
 

@@ -9,6 +9,10 @@ $sexy-select-triangle-size: 10px;
 
 .sexy-select__label {
   cursor: pointer;
+  margin-left: 10px;
+  margin-top: 4px;
+  padding: 2px 45px 2px 10px;
+  border-radius: 2px;
 }
 
 .sexy-select__body {
@@ -35,6 +39,7 @@ $sexy-select-triangle-size: 10px;
 
 .sexy-select__item {
   cursor: pointer;
+  white-space: nowrap;
   &:hover {
     background: rgba(0,0,0,0.05);
   }

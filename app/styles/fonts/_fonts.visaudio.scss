@@ -50,3 +50,29 @@
 .vizaudio-loader:before {
   content: "\e105";
 }
+
+
+.circle-icon {
+  border: 2px solid white;
+  border-radius: 16px;
+  height: 30px;
+  width: 30px;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    background: white;
+    .circle-icon__symbol {
+      color: black;
+    }
+  }
+}
+
+.circle-icon__symbol {
+  position: absolute;
+  top: 4px;
+  width: 100%;
+  text-align: center;
+  &.vizaudio-play {
+    text-indent: 4px;
+  }
+}

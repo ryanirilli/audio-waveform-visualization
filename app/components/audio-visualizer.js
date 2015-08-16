@@ -1,29 +1,38 @@
 import Ember from 'ember';
+import Shuffle from "audio-visualization/mixins/shuffle";
 
-export default Ember.Component.extend({
-  THRESHOLD: 7,
+export default Ember.Component.extend(Shuffle, {
+  THRESHOLD: 14,
   FFTSIZE: 512,
   SMOOTHING: 0.3,
   analyser: null,
   images: null,
+  increment: 0,
   lastFrameVal: 0,
   lastChangeVal: 0,
   isLoadingPhotos: true,
+  loadingProgress: 0,
+  isProgressComplete: false,
   isPlaying: false,
   raf: null,
   audio: null,
-  photos: null,
-  usedPhotos: [],
+  photoUrls: null,
   selectedSong: null,
   songs: [{
+    name: 'Family Of The Year - Hero',
+    path: '05_hero.mp3'
+  }, {
+    name: 'Kendrick Lamar - I',
+    path: 'kendrick-i.mp3'
+  },{
+    name: 'Odesza - How Did I Get Here',
+    path: '02_How_Did_I_Get_Here.mp3'
+  }, {
     name: 'Jai Paul - Jasmine (Demo)',
     path: 'jai_paul.mp3'
   }, {
     name: 'Avicii - Wake Me Up',
     path: '01_Wake_Me_Up.m4a'
-  }, {
-    name: 'Odesza - How Did I Get Here',
-    path: '02_How_Did_I_Get_Here.mp3'
   },{
     name: 'Black Keys - In Time',
     path: '02_In_Time.mp3'
@@ -33,22 +42,24 @@ export default Ember.Component.extend({
   }],
 
   onReady: function(){
-    if(!this.get('photos')) {return}
-    this.set('selectedSong', this.get('songs.firstObject'));
-    var self = this;
+    if(!this.get('photoUrls')) {return}
+    let selectedSong = this.get('songs.firstObject');
+    this.set('selectedSong', selectedSong);
     this.set('images', Ember.A());
-    this.loadPhotos().then(function(data){
-      self.initAudio();
-      self.set('isLoadingPhotos', false);
+    this.loadPhotos().then(() => {
+      let images = this.get('images');
+      this.shuffle(images);
+      this.initAudio(selectedSong.path);
+      this.set('isLoadingPhotos', false);
     });
-  }.observes('photos'),
+  }.observes('photoUrls'),
 
   loadPhotos: function(){
     var self = this;
     var promises = [];
     var $viewer = this.$().find('.audio-visualizer__viewer');
     var viewerHeight = $viewer.outerHeight();
-    self.get('photos').forEach(function(path){
+    self.get('photoUrls').forEach(function(path){
       var promise = new Promise(function(resolve, reject) {
         var $img = Ember.$('<img />');
         $img.attr('src', path);
@@ -58,7 +69,7 @@ export default Ember.Component.extend({
         });
         self.$().find('.audio-visualizer__viewer').append($img);
         $img.load(function(){
-
+          self.incrementProperty('loadingProgress');
           self.get('images').pushObject($img);
 
           $img.css({
@@ -86,59 +97,81 @@ export default Ember.Component.extend({
     return Ember.RSVP.all(promises);
   },
 
+  progress: function(){
+    let totalCount = this.get('photoUrls.length');
+    if(!totalCount) { return 0; }
+    let currentProgress = this.get('loadingProgress');
+    let progress = Math.floor(currentProgress/totalCount*100);
+    if(progress === 100) {
+      this.set('isProgressComplete', true);
+      this.play();
+    } else {
+      return progress;
+    }
+  }.property('loadingProgress', 'photoUrls'),
+
   initAudio: function(audioSrcPath){
-    var curAudio = this.get('audio');
+    let curAudio = this.get('audio');
     if(curAudio) {
       curAudio.remove();
     }
 
-    var audio =  new Audio();
-    audio.src = audioSrcPath || 'jai_paul.mp3';
+    let audio =  new Audio();
+    audio.src = audioSrcPath;
     audio.loop = true;
     audio.autoplay = false;
     this.set('audio', audio);
     this.$('.audio-visualizer').append(audio);
 
-    var audioContext = new AudioContext();
-    var analyser = audioContext.createAnalyser();
+    let audioContext = this.get('audioContext');
+    if(!audioContext) {
+      audioContext = new AudioContext();
+      this.set('audioContext', audioContext)
+    }
+
+    let analyser = audioContext.createAnalyser();
     analyser.fftSize = this.get('FFTSIZE');
     analyser.smoothingTimeConstant = this.get('SMOOTHING');
     this.set('analyser', analyser);
 
     // Re-route audio playback into the processing graph of the AudioContext
-    var source = audioContext.createMediaElementSource(audio);
+    let source = audioContext.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(audioContext.destination);
   },
 
   frameLoop: function(){
-    var self = this;
-    var usedPhotos = this.get('usedPhotos');
-
-    var raf = requestAnimationFrame( function(){
-      self.frameLoop();
-    } );
-
+    let raf = requestAnimationFrame(()=> {
+      this.frameLoop();
+    });
     this.set('raf', raf);
+    let analyser = this.get('analyser');
+    let frequencyData = new Uint8Array(analyser.frequencyBinCount); //empty array
+    analyser.getByteFrequencyData(frequencyData); //populated array
 
-    var analyser = this.get('analyser');
-    var frequencyData = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(frequencyData);
-
-    var lastFrameVal = this.get('lastFrameVal');
-    var curFrameVal = this.getAvgVolume(frequencyData);
+    let lastFrameVal = this.get('lastFrameVal');
+    let curFrameVal = this.getAvgVolume(frequencyData);
     this.set('lastFrameVal', curFrameVal);
 
-    var change = curFrameVal - lastFrameVal;
-    var lastChangeVal = this.get('lastChangeVal');
+    let change = curFrameVal - lastFrameVal;
+    let lastChangeVal = this.get('lastChangeVal');
 
     if(change > this.get('THRESHOLD')) {
-      this.showRandomImage();
+      this.showImage();
     }
   },
 
-  showRandomImage: function(){
-    var $curImage = this.getRandomImage();
+  showImage: function(){
+    let curImage = null;
+    let images = this.get('images');
+    let increment = this.get('increment');
+    if(increment === images.length) {
+      this.shuffle(images);
+      increment = 0;
+      this.set('increment', increment);
+    }
+    let $curImage = images[increment];
+    this.incrementProperty('increment');
     this.$('.audio-visualizer__viewer img').hide();
     $curImage.show();
     setTimeout(function(){
@@ -146,31 +179,13 @@ export default Ember.Component.extend({
     });
   },
 
-  getRandomImage: function(){
-    var images = this.get('images');
-    var image = images[Math.floor(Math.random()*images.length)];
-    var imageId = image.data('id');
-    var photos = this.get('photos');
-    var usedPhotos = this.get('usedPhotos');
-
-    if(photos.length === usedPhotos.length) {
-      usedPhotos = [];
-      this.set('usedPhotos', usedPhotos);
-    }
-
-    if(usedPhotos.contains(imageId)){
-      return this.getRandomImage();
-    } else {
-      usedPhotos.push(imageId);
-      return image;
-    }
-  },
-
   selectedSongObserver: function(){
     var selectedSong = this.get('selectedSong');
     this.stop();
     this.initAudio(selectedSong.path);
-    //this.play();
+    if(!this.get('isLoadingPhotos')) {
+      this.play();
+    }
   }.observes('selectedSong'),
 
   getAvgVolume: function(frequencyData){
