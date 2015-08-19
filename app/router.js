@@ -7,7 +7,7 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('app');
-  this.route('login');
+  this.route('privacy-policy');
 });
 
 export default Router;
