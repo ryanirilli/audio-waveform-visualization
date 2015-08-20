@@ -15,3 +15,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
+
+profiles_settings.xml
+Project_Default.xml
+workspace.xml
