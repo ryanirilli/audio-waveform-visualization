@@ -23,6 +23,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.vizaudio-chevron-down:before {
+  content: "\e600";
+}
+.vizaudio-chevron-with-circle-down:before {
+  content: "\e601";
+}
+.vizaudio-chevron-small-down:before {
+  content: "\e602";
+}
+.vizaudio-triangle-down:before {
+  content: "\e603";
+}
 .vizaudio-mail:before {
   content: "\e002";
 }
@@ -50,6 +62,7 @@
 .vizaudio-loader:before {
   content: "\e105";
 }
+
 
 
 .circle-icon {

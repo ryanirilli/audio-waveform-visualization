@@ -20,14 +20,14 @@ export default Ember.Component.extend(Shuffle, {
   photoUrls: null,
   selectedSong: null,
   songs: [{
+    name: 'Kendrick Lamar - I',
+    path: 'kendrick-i.mp3'
+  }, {
     name: 'Odesza - How Did I Get Here',
     path: '02_How_Did_I_Get_Here.mp3'
   },{
     name: 'Family Of The Year - Hero',
     path: '05_hero.mp3'
-  }, {
-    name: 'Kendrick Lamar - I',
-    path: 'kendrick-i.mp3'
   }, {
     name: 'Jai Paul - Jasmine (Demo)',
     path: 'jai_paul.mp3'
