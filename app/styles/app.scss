@@ -43,7 +43,7 @@ $brand-color: #3498DB;
 .tint--blue {
   @extend %tint;
   &:after {
-    background-color: rgba(52,152,219,0.7);
+    @include vertical-gradient(rgba(52,152,219,0.7), transparent);
   }
 }
 
