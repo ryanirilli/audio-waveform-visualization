@@ -41,7 +41,14 @@ $twitter-blue: #00aced;
   position: absolute;
   width: 100%;
   z-index: 1;
+}
+
+.audio-visualizer__progress__number {
   font-size: 5rem;
+}
+
+.audio-visualizer__progress__messages {
+
 }
 
 .audio-visualizer__progress--hide {

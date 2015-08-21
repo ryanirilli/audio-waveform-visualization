@@ -2,7 +2,7 @@
     <div class="audio-visualizer__header">
         <div class="layout">
             <div class="layout__item u-1/2">
-                <div class="player clearfix u-ml- u-mv-">
+                <div class="player clearfix u-ml- u-mv- {{unless isProgressComplete 'hide'}}">
                     <div class="player__controls float-left">
                         {{#unless isPlaying}}
                             <div class="circle-icon" {{action 'play'}}>
@@ -34,7 +34,12 @@
     </div>
     <div class="audio-visualizer__viewer">
         <div class="audio-visualizer__progress {{if isProgressComplete 'audio-visualizer__progress--hide'}}">
-            {{progress}}%
+            <div class="audio-visualizer__progress__number">
+                {{progress}}%
+            </div>
+            <div class="audio-visualizer__progress__messages">
+                {{loading-messages}}
+            </div>
         </div>
         <div class="audio-visualizer__brand">
             <h3 class="u-mb0 inline">

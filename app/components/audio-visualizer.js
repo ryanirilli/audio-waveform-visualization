@@ -10,7 +10,6 @@ export default Ember.Component.extend(Shuffle, {
   images: null,
   increment: 0,
   lastFrameVal: 0,
-  lastChangeVal: 0,
   isLoadingPhotos: true,
   loadingProgress: 0,
   isProgressComplete: false,
@@ -119,8 +118,7 @@ export default Ember.Component.extend(Shuffle, {
 
     let audio =  new Audio();
     audio.src = audioSrcPath;
-    audio.loop = true;
-    audio.autoplay = false;
+
     this.set('audio', audio);
     this.$('.audio-visualizer').append(audio);
 
@@ -146,6 +144,7 @@ export default Ember.Component.extend(Shuffle, {
       this.frameLoop();
     });
     this.set('raf', raf);
+
     let analyser = this.get('analyser');
     let frequencyData = new Uint8Array(analyser.frequencyBinCount); //empty array
     analyser.getByteFrequencyData(frequencyData); //populated array
@@ -155,22 +154,20 @@ export default Ember.Component.extend(Shuffle, {
     this.set('lastFrameVal', curFrameVal);
 
     let change = curFrameVal - lastFrameVal;
-    let lastChangeVal = this.get('lastChangeVal');
-
     if(change > this.get('THRESHOLD')) {
       this.showImage();
     }
   },
 
   showImage: function(){
-    let curImage = null;
     let images = this.get('images');
     let increment = this.get('increment');
+
     if(increment === images.length) {
       this.shuffle(images);
-      increment = 0;
-      this.set('increment', increment);
+      this.set('increment', 0);
     }
+
     let $curImage = images[increment];
     this.incrementProperty('increment');
     this.$('.audio-visualizer__viewer img').hide();
