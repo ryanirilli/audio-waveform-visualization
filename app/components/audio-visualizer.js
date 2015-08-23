@@ -3,9 +3,9 @@ import Shuffle from "audio-visualization/mixins/shuffle";
 
 export default Ember.Component.extend(Shuffle, {
   facebook: Ember.inject.service(),
-  THRESHOLD: 12,
-  FFTSIZE: 512,
-  SMOOTHING: 0.3,
+  THRESHOLD: 20,
+  FFTSIZE: 1024,
+  SMOOTHING: 0.1,
   analyser: null,
   images: null,
   increment: 0,
@@ -18,13 +18,14 @@ export default Ember.Component.extend(Shuffle, {
   audio: null,
   photoUrls: null,
   selectedSong: null,
+  showImageInterval: null,
   songs: [{
-    name: 'Kendrick Lamar - I',
-    path: 'kendrick-i.mp3'
-  }, {
     name: 'Odesza - How Did I Get Here',
     path: '02_How_Did_I_Get_Here.mp3'
   },{
+    name: 'Kendrick Lamar - I',
+    path: 'kendrick-i.mp3'
+  }, {
     name: 'Family Of The Year - Hero',
     path: '05_hero.mp3'
   }, {
@@ -144,7 +145,6 @@ export default Ember.Component.extend(Shuffle, {
       this.frameLoop();
     });
     this.set('raf', raf);
-
     let analyser = this.get('analyser');
     let frequencyData = new Uint8Array(analyser.frequencyBinCount); //empty array
     analyser.getByteFrequencyData(frequencyData); //populated array
@@ -167,6 +167,15 @@ export default Ember.Component.extend(Shuffle, {
       this.shuffle(images);
       this.set('increment', 0);
     }
+
+    let showImageInterval = this.get('showImageInterval');
+    if(showImageInterval) {
+      clearInterval(showImageInterval);
+    }
+    showImageInterval = setInterval(()=> {
+      this.showImage();
+    }, 2000);
+    this.set('showImageInterval', showImageInterval);
 
     let $curImage = images[increment];
     this.incrementProperty('increment');
