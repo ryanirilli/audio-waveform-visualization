@@ -3,7 +3,7 @@ import Shuffle from "audio-visualization/mixins/shuffle";
 
 export default Ember.Component.extend(Shuffle, {
   facebook: Ember.inject.service(),
-  THRESHOLD: 20,
+  THRESHOLD: 25,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   analyser: null,
@@ -20,20 +20,11 @@ export default Ember.Component.extend(Shuffle, {
   selectedSong: null,
   showImageInterval: null,
   songs: [{
-    name: 'Odesza - How Did I Get Here',
-    path: '02_How_Did_I_Get_Here.mp3'
-  },{
     name: 'Kendrick Lamar - I',
     path: 'kendrick-i.mp3'
   }, {
     name: 'Family Of The Year - Hero',
     path: '05_hero.mp3'
-  }, {
-    name: 'Jai Paul - Jasmine (Demo)',
-    path: 'jai_paul.mp3'
-  }, {
-    name: 'Avicii - Wake Me Up',
-    path: '01_Wake_Me_Up.m4a'
   },{
     name: 'Black Keys - In Time',
     path: '02_In_Time.mp3'
@@ -41,6 +32,7 @@ export default Ember.Component.extend(Shuffle, {
     name: 'Pretty Lights - Looking for Love (But Not So Sure)',
     path: '03_Looking_For_Love.mp3'
   }],
+
 
   onReady: function(){
     if(!this.get('photoUrls')) {return}
@@ -163,7 +155,7 @@ export default Ember.Component.extend(Shuffle, {
     let images = this.get('images');
     let increment = this.get('increment');
 
-    if(increment === images.length) {
+    if(increment === images.length-1) {
       this.shuffle(images);
       this.set('increment', 0);
     }
