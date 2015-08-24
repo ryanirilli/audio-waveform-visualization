@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a4237bf-0cc8-4920-a79e-646343f68bb1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/audio-visualizer.js" afterPath="$PROJECT_DIR$/app/components/audio-visualizer.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/initializers/facebook.js" afterPath="$PROJECT_DIR$/app/initializers/facebook.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="AUDIO_VISUALIZATION.iws" />
@@ -40,20 +38,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="facebook.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="facebook.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/initializers/facebook.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+            <state vertical-scroll-proportion="0.07575758" vertical-offset="0" max-vertical-offset="594">
               <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6052632" vertical-offset="0" max-vertical-offset="675">
+            <state vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="675">
               <caret line="23" column="95" selection-start-line="23" selection-start-column="95" selection-end-line="23" selection-end-column="95" />
               <folding />
             </state>
@@ -103,10 +101,10 @@
         <option value="$PROJECT_DIR$/app/styles/trumps/_trumps.visibility.scss" />
         <option value="$PROJECT_DIR$/app/components/loading-messages.js" />
         <option value="$PROJECT_DIR$/app/templates/components/audio-visualizer.hbs" />
-        <option value="$PROJECT_DIR$/app/initializers/facebook.js" />
         <option value="$PROJECT_DIR$/app/styles/components/_components.audio-visualizer.scss" />
         <option value="$PROJECT_DIR$/app/components/audio-visualizer.js" />
         <option value="$PROJECT_DIR$/app/index.html" />
+        <option value="$PROJECT_DIR$/app/initializers/facebook.js" />
       </list>
     </option>
   </component>
@@ -370,7 +368,15 @@
       <created>1440372027659</created>
       <updated>1440372027659</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="update facebook share image">
+      <created>1440382398960</created>
+      <updated>1440382398960</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add new song and forgotten image">
+      <created>1440382419053</created>
+      <updated>1440382419053</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -428,7 +434,9 @@
     <MESSAGE value="add loading messages" />
     <MESSAGE value="add loading message component" />
     <MESSAGE value="fix images showing too fast" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix images showing too fast" />
+    <MESSAGE value="update facebook share image" />
+    <MESSAGE value="add new song and forgotten image" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new song and forgotten image" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -794,18 +802,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/initializers/facebook.js">
+    <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
+        <state vertical-scroll-proportion="-14.375" vertical-offset="0" max-vertical-offset="675">
+          <caret line="23" column="95" selection-start-line="23" selection-start-column="95" selection-end-line="23" selection-end-column="95" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
+    <entry file="file://$PROJECT_DIR$/app/initializers/facebook.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6052632" vertical-offset="0" max-vertical-offset="675">
-          <caret line="23" column="95" selection-start-line="23" selection-start-column="95" selection-end-line="23" selection-end-column="95" />
+        <state vertical-scroll-proportion="0.07575758" vertical-offset="0" max-vertical-offset="594">
+          <caret line="3" column="36" selection-start-line="3" selection-start-column="36" selection-end-line="3" selection-end-column="36" />
           <folding />
         </state>
       </provider>
