@@ -20,6 +20,9 @@ export default Ember.Component.extend(Shuffle, {
   selectedSong: null,
   showImageInterval: null,
   songs: [{
+    name: 'Pretty Lights - Looking for Love (But Not So Sure)',
+    path: '03_Looking_For_Love.mp3'
+  }, {
     name: 'Kendrick Lamar - I',
     path: 'kendrick-i.mp3'
   }, {
@@ -28,9 +31,6 @@ export default Ember.Component.extend(Shuffle, {
   },{
     name: 'Black Keys - In Time',
     path: '02_In_Time.mp3'
-  }, {
-    name: 'Pretty Lights - Looking for Love (But Not So Sure)',
-    path: '03_Looking_For_Love.mp3'
   }],
 
 

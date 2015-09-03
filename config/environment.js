@@ -19,10 +19,10 @@ module.exports = function(environment) {
     },
     contentSecurityPolicy: {
       'default-src': "*.facebook.com *.twitter.com",
-      'script-src': "'self' 'unsafe-inline' *.facebook.net *.facebook.com *.twitter.com",
+      'script-src': "'self' 'unsafe-inline' *.facebook.net *.facebook.com *.twitter.com *.google-analytics.com",
       'font-src': "'self' *.gstatic.com",
       'connect-src': "'self'",
-      'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com",
+      'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com *.google-analytics.com",
       'style-src': "'self' 'unsafe-inline' *.googleapis.com",
       'media-src': "'self'"
     }
