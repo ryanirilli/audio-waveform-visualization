@@ -112,8 +112,10 @@ export default Ember.Service.extend({
   },
 
   fbFetchMePhotos: function () {
+    var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)
+    var numImages = ismobile ? 10 : 500;
     return new Ember.RSVP.Promise((resolve, reject) => {
-      FB.api(`/${_user.id}/photos`, 'get', {limit: 500}, function (response) {
+      FB.api(`/${_user.id}/photos`, 'get', {limit: numImages}, function (response) {
         resolve(response.data);
       });
     });
