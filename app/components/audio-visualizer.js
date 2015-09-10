@@ -111,13 +111,15 @@ export default Ember.Component.extend(Shuffle, {
 
     let audio =  new Audio();
     audio.src = audioSrcPath;
+    audio.type="audio/mpeg";
 
     this.set('audio', audio);
     this.$('.audio-visualizer').append(audio);
 
     let audioContext = this.get('audioContext');
     if(!audioContext) {
-      audioContext = new AudioContext();
+      let context = window.AudioContext || window.webkitAudioContext;
+      audioContext = new context();
       this.set('audioContext', audioContext)
     }
 
@@ -130,9 +132,42 @@ export default Ember.Component.extend(Shuffle, {
     let source = audioContext.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(audioContext.destination);
+
+
   },
 
   frameLoop: function(){
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+    // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+    // MIT license
+    (function() {
+      var lastTime = 0;
+      var vendors = ['ms', 'moz', 'webkit', 'o'];
+      for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+          || window[vendors[x]+'CancelRequestAnimationFrame'];
+      }
+
+      if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+          var currTime = new Date().getTime();
+          var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+          var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+            timeToCall);
+          lastTime = currTime + timeToCall;
+          return id;
+        };
+
+      if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+          clearTimeout(id);
+        };
+    }());
+
+
+
     let raf = requestAnimationFrame(()=> {
       this.frameLoop();
     });
@@ -188,6 +223,11 @@ export default Ember.Component.extend(Shuffle, {
   }.observes('selectedSong'),
 
   getAvgVolume: function(frequencyData){
+    if(_.unique(frequencyData).length === 1){
+      let random = Math.floor((Math.random() * 35) + 1);
+      console.log('random: ', random);
+      return random;
+    };
     var average;
     var values = 0;
     var length = frequencyData.length;
@@ -199,7 +239,7 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   play: function(){
-    this.get('audio').play();
+    this.get('audio').play(0);
     this.frameLoop();
     this.set('isPlaying', true);
   },

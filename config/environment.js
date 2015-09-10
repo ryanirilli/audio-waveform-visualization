@@ -22,11 +22,12 @@ module.exports = function(environment) {
       'script-src': "'self' 'unsafe-inline' *.facebook.net *.facebook.com *.twitter.com *.google-analytics.com",
       'font-src': "'self' *.gstatic.com",
       'connect-src': "'self'",
-      'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com *.google-analytics.com",
+      'img-src': "'self' scontent.xx.fbcdn.net *.facebook.com *.google-analytics.com *.akamaihd.net *.fbcdn.net",
       'style-src': "'self' 'unsafe-inline' *.googleapis.com",
       'media-src': "'self'"
     }
   };
+
 
 
 
