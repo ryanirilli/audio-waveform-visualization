@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
   actions: {
     fbConnect: function(){
       this.set('isLoading', true);
-      this.get('facebook').fbConnect().then((authResponse) => {
+      this.get('facebook').fbConnect().then(() => {
         this.set('isLoading', false);
         this.transitionToRoute('app');
       }).catch(() => {

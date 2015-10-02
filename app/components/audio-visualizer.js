@@ -35,7 +35,7 @@ export default Ember.Component.extend(Shuffle, {
 
 
   onReady: function(){
-    if(!this.get('photoUrls')) {return}
+    if(!this.get('photoUrls')) {return;}
     let selectedSong = this.get('songs.firstObject');
     this.set('selectedSong', selectedSong);
     this.set('images', Ember.A());
@@ -53,7 +53,7 @@ export default Ember.Component.extend(Shuffle, {
     var $viewer = this.$().find('.audio-visualizer__viewer');
     var viewerHeight = $viewer.outerHeight();
     self.get('photoUrls').forEach(function(path){
-      var promise = new Promise(function(resolve, reject) {
+      var promise = new Promise(function(resolve) {
         var $img = Ember.$('<img />');
         $img.attr('src', path);
         $img.css({
@@ -118,9 +118,9 @@ export default Ember.Component.extend(Shuffle, {
 
     let audioContext = this.get('audioContext');
     if(!audioContext) {
-      let context = window.AudioContext || window.webkitAudioContext;
-      audioContext = new context();
-      this.set('audioContext', audioContext)
+      let Context = window.AudioContext || window.webkitAudioContext;
+      audioContext = new Context();
+      this.set('audioContext', audioContext);
     }
 
     let analyser = audioContext.createAnalyser();
@@ -146,24 +146,27 @@ export default Ember.Component.extend(Shuffle, {
       var vendors = ['ms', 'moz', 'webkit', 'o'];
       for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-          || window[vendors[x]+'CancelRequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
       }
 
-      if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function (callback) {
           var currTime = new Date().getTime();
           var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-          var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+          var id = window.setTimeout(function () {
+              callback(currTime + timeToCall);
+            },
             timeToCall);
           lastTime = currTime + timeToCall;
           return id;
         };
+      }
 
-      if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
+      if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function (id) {
           clearTimeout(id);
         };
+      }
     }());
 
 
@@ -225,9 +228,8 @@ export default Ember.Component.extend(Shuffle, {
   getAvgVolume: function(frequencyData){
     if(_.unique(frequencyData).length === 1){
       let random = Math.floor((Math.random() * 35) + 1);
-      console.log('random: ', random);
       return random;
-    };
+    }
     var average;
     var values = 0;
     var length = frequencyData.length;
@@ -246,7 +248,9 @@ export default Ember.Component.extend(Shuffle, {
 
   stop: function(){
     let audio = this.get('audio');
-    audio && audio.pause();
+    if (audio) {
+      audio.pause();
+    }
     cancelAnimationFrame(this.get('raf'));
     this.set('isPlaying', false);
   },

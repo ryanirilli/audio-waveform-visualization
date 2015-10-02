@@ -13,14 +13,14 @@ export default Ember.Component.extend({
     let options = this.get('options');
     let labels = [];
     options.forEach((option) => {
-      labels.push(option[this.get('labelProperty')])
+      labels.push(option[this.get('labelProperty')]);
     });
     return labels;
   }),
 
   selectedLabel: function(){
     let selection = this.get('selection');
-    this.set('isShowingBody', false)
+    this.set('isShowingBody', false);
     return selection ? selection[this.get('labelProperty')] : undefined;
   }.property('selection'),
 
@@ -45,7 +45,7 @@ export default Ember.Component.extend({
         this.set('clickId', clickId);
       }
       if(isShowingBody) {
-        Ember.$(window).on(`click.${clickId}`, (e)=> {
+        Ember.$(window).on(`click.${clickId}`, ()=> {
           if(!isInitialized) {
             isInitialized = true;
             return;

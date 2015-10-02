@@ -15,7 +15,7 @@ export default Ember.Service.extend({
             resolve();
           });
         } else {
-          this.fbLogin().then((authResponse) => {
+          this.fbLogin().then(() => {
             this.fbFetchUser().then(() => {
               resolve();
             });
@@ -52,19 +52,19 @@ export default Ember.Service.extend({
   },
 
   fbGetPhotos: function () {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
+    return new Ember.RSVP.Promise(function (resolve) {
       resolve();
-    })
+    });
   },
 
   fbApi: function () {
-    return new Ember.RSVP.Promise(function (resolve, reject) {
+    return new Ember.RSVP.Promise(function (resolve) {
       resolve();
-    })
+    });
   },
 
   fbFetchUser: function () {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       FB.api('/me', function (user) {
         _user = user;
         resolve();
@@ -88,7 +88,7 @@ export default Ember.Service.extend({
   },
 
   fetchPhoto: function (photoId) {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       FB.api(`${photoId}`, 'get', {fields: 'images'}, (response)=> {
         resolve(response.images[1].source);
       });
@@ -96,15 +96,15 @@ export default Ember.Service.extend({
   },
 
   fetchAlbumPhotos: function (albumId) {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       FB.api(`/${albumId}/photos`, function (response) {
         resolve(response.data);
       });
-    })
+    });
   },
 
   fbFetchAlbums: function () {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       FB.api('/me/albums', function (response) {
         resolve(response.data);
       });
@@ -112,9 +112,9 @@ export default Ember.Service.extend({
   },
 
   fbFetchMePhotos: function () {
-    var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i)
+    var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
     var numImages = ismobile ? 10 : 500;
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise((resolve) => {
       FB.api(`/${_user.id}/photos`, 'get', {limit: numImages}, function (response) {
         resolve(response.data);
       });
@@ -125,7 +125,6 @@ export default Ember.Service.extend({
     FB.ui({
       method: 'share',
       href: 'http://visaudio.me'
-    }, function(response){
     });
   }
 });
