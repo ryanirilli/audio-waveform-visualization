@@ -6,7 +6,8 @@
     "Promise",
     "_",
     "$",
-    "FB"
+    "FB",
+    "moment"
   ],
   "browser": true,
   "boss": true,

@@ -137,7 +137,6 @@ export default Ember.Component.extend(Shuffle, {
   frameLoop: function(){
     let raf = this.get('raf');
     let startIntervalTime = this.get('startIntervalTime');
-    let times = this.get('times');
 
     if(!startIntervalTime) {
       this.set('startIntervalTime', moment());
