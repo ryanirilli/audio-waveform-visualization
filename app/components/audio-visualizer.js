@@ -19,6 +19,8 @@ export default Ember.Component.extend(Shuffle, {
   photoUrls: null,
   selectedSong: null,
   showImageInterval: null,
+  startIntervalTime: null,
+  times: [],
   songs: [{
     name: 'Pretty Lights - Looking for Love (But Not So Sure)',
     path: '03_Looking_For_Love.mp3'
@@ -32,7 +34,6 @@ export default Ember.Component.extend(Shuffle, {
     name: 'Black Keys - In Time',
     path: '02_In_Time.mp3'
   }],
-
 
   onReady: function(){
     if(!this.get('photoUrls')) {return;}
@@ -52,16 +53,16 @@ export default Ember.Component.extend(Shuffle, {
     var promises = [];
     var $viewer = this.$().find('.audio-visualizer__viewer');
     var viewerHeight = $viewer.outerHeight();
-    self.get('photoUrls').forEach(function(path){
-      var promise = new Promise(function(resolve) {
-        var $img = Ember.$('<img />');
+    this.get('photoUrls').forEach(function(path){
+      let promise = new Promise(function(resolve) {
+        let $img = Ember.$('<img />');
         $img.attr('src', path);
         $img.css({
           position: 'fixed',
           visibility: 'hidden'
         });
         self.$().find('.audio-visualizer__viewer').append($img);
-        $img.load(function(){
+        $img.load(() => {
           self.incrementProperty('loadingProgress');
           self.get('images').pushObject($img);
 
@@ -70,8 +71,6 @@ export default Ember.Component.extend(Shuffle, {
             visibility: 'visible',
             width: '100%'
           });
-
-          $img.data('id', Ember.generateGuid());
 
           //if image is longer than viewer, adjust to fit in frame
           var heightDiff = $img.outerHeight() - viewerHeight;
@@ -83,6 +82,7 @@ export default Ember.Component.extend(Shuffle, {
 
           $img.hide();
           resolve();
+
         });
       });
       promises.push(promise);
@@ -132,49 +132,23 @@ export default Ember.Component.extend(Shuffle, {
     let source = audioContext.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(audioContext.destination);
-
-
   },
 
   frameLoop: function(){
-    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-    // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-    // MIT license
-    (function() {
-      var lastTime = 0;
-      var vendors = ['ms', 'moz', 'webkit', 'o'];
-      for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-      }
+    let raf = this.get('raf');
+    let startIntervalTime = this.get('startIntervalTime');
+    let times = this.get('times');
 
-      if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function (callback) {
-          var currTime = new Date().getTime();
-          var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-          var id = window.setTimeout(function () {
-              callback(currTime + timeToCall);
-            },
-            timeToCall);
-          lastTime = currTime + timeToCall;
-          return id;
-        };
-      }
+    if(!startIntervalTime) {
+      this.set('startIntervalTime', moment());
+    }
 
-      if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function (id) {
-          clearTimeout(id);
-        };
-      }
-    }());
-
-
-
-    let raf = requestAnimationFrame(()=> {
-      this.frameLoop();
-    });
-    this.set('raf', raf);
+    if (!raf) {
+      raf = setInterval(()=> {
+        this.frameLoop();
+      }, 33.333333);
+      this.set('raf', raf);
+    }
     let analyser = this.get('analyser');
     let frequencyData = new Uint8Array(analyser.frequencyBinCount); //empty array
     analyser.getByteFrequencyData(frequencyData); //populated array
@@ -189,7 +163,8 @@ export default Ember.Component.extend(Shuffle, {
     }
   },
 
-  showImage: function(){
+  showImage(){
+    this.captureTime();
     let images = this.get('images');
     let increment = this.get('increment');
 
@@ -214,6 +189,16 @@ export default Ember.Component.extend(Shuffle, {
     setTimeout(function(){
       $curImage.toggleClass('audio-visualizer__effect--scale');
     });
+  },
+
+  captureTime() {
+    let times = this.get('times');
+    let startIntervalTime = this.get('startIntervalTime');
+    let endIntervalTime = moment();
+    let diff = endIntervalTime.diff(startIntervalTime, 'milliseconds');
+    console.log(diff);
+    times.push(diff);
+    this.set('startIntervalTime', moment());
   },
 
   selectedSongObserver: function(){
@@ -251,7 +236,9 @@ export default Ember.Component.extend(Shuffle, {
     if (audio) {
       audio.pause();
     }
-    cancelAnimationFrame(this.get('raf'));
+    //cancelAnimationFrame(this.get('raf'));
+    clearInterval(this.get('raf'));
+    this.set('raf', null);
     this.set('isPlaying', false);
   },
 
