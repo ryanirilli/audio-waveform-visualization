@@ -3,11 +3,11 @@ import Ember from 'ember';
 var _user = null;
 
 export default Ember.Service.extend({
-  getUser: function () {
+  getUser() {
     return _user;
   },
 
-  fbConnect: function () {
+  fbConnect() {
     return new Ember.RSVP.Promise((resolve, reject) => {
       this.fbGetLoginStatus().then((status) => {
         if (status === 'connected') {
@@ -27,7 +27,7 @@ export default Ember.Service.extend({
     });
   },
 
-  fbLogin: function () {
+  fbLogin() {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       FB.login(function (response) {
         if (response.authResponse) {
@@ -39,7 +39,7 @@ export default Ember.Service.extend({
     });
   },
 
-  fbGetLoginStatus: function () {
+  fbGetLoginStatus() {
     return new Ember.RSVP.Promise(function (resolve, reject) {
       FB.getLoginStatus(function (response) {
         if (response && !response.error) {
@@ -51,19 +51,19 @@ export default Ember.Service.extend({
     });
   },
 
-  fbGetPhotos: function () {
+  fbGetPhotos() {
     return new Ember.RSVP.Promise(function (resolve) {
       resolve();
     });
   },
 
-  fbApi: function () {
+  fbApi() {
     return new Ember.RSVP.Promise(function (resolve) {
       resolve();
     });
   },
 
-  fbFetchUser: function () {
+  fbFetchUser() {
     return new Ember.RSVP.Promise((resolve) => {
       FB.api('/me', function (user) {
         _user = user;
@@ -72,7 +72,7 @@ export default Ember.Service.extend({
     });
   },
 
-  fbFetchPhotoUrls: function () {
+  fbFetchPhotoUrls() {
     return this.fbFetchMePhotos().then((photos) => {
       let urls = [];
       let photosPromises = [];
@@ -103,7 +103,7 @@ export default Ember.Service.extend({
     });
   },
 
-  fbFetchAlbums: function () {
+  fbFetchAlbums() {
     return new Ember.RSVP.Promise((resolve) => {
       FB.api('/me/albums', function (response) {
         resolve(response.data);
@@ -111,7 +111,7 @@ export default Ember.Service.extend({
     });
   },
 
-  fbFetchMePhotos: function () {
+  fbFetchMePhotos() {
     var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
     var numImages = ismobile ? 10 : 500;
     return new Ember.RSVP.Promise((resolve) => {
