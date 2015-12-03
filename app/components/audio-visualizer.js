@@ -27,6 +27,9 @@ export default Ember.Component.extend(Shuffle, {
   selectedSong: null,
   times: [],
   songs: [{
+    name: 'Pretty Lights - Looking For Love',
+    path: 'https://dl.dropboxusercontent.com/u/7119407/03_Looking_For_Love.mp3'
+  }, {
     name: 'Islandis - Home',
     path: 'https://dl.dropboxusercontent.com/u/7119407/01%20Home_1.mp3'
   },{

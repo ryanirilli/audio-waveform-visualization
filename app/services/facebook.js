@@ -115,7 +115,7 @@ export default Ember.Service.extend({
     var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
     var numImages = ismobile ? 10 : 500;
     return new Ember.RSVP.Promise((resolve) => {
-      FB.api(`/${_user.id}/photos`, 'get', {limit: numImages}, function (response) {
+      FB.api(`/${_user.id}/photos`, 'get', {type: 'uploaded', limit: numImages}, function (response) {
         resolve(response.data);
       });
     });
