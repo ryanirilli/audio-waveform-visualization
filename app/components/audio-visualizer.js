@@ -13,7 +13,7 @@ export default Ember.Component.extend(Shuffle, {
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   MAX_IMAGE_DURATION: 5000,
-  FRAMES_PER_SECOND: 10,
+  FRAMES_PER_SECOND: 24,
 
   /**----------------------------
    * Audio
@@ -23,6 +23,7 @@ export default Ember.Component.extend(Shuffle, {
   source: null,
   lastFrameVal: 0,
   isPlaying: false,
+  audioStartTime: null,
   selectedSong: null,
   times: [],
   songs: [{
@@ -134,33 +135,47 @@ export default Ember.Component.extend(Shuffle, {
 
   }.property('loadingProgress', 'photoUrls'),
 
-  initAudio(audioSrcPath){
-    let audioCache = this.get('audioCache');
-    let data = audioCache.get(audioSrcPath);
-    if(data) {
-      this.startPlaying(data);
+  initAudio(selectedSong){
+    let buffer = selectedSong.buffer;
+    if(buffer) {
+      this.startPlaying(buffer);
     } else {
-      this.set('loadingProgress', 'Loading audio...');
-      this.fetchAudio(audioSrcPath).then((data) => {
-        audioCache.set(audioSrcPath, data);
+      this.setProperties({
+        loadingProgress: 'Loading audio...',
+        audioStartTime: 0
+      });
+      this.fetchAudio(selectedSong.path).then((data) => {
         this.set('isProgressComplete', true);
         this.startPlaying(data);
       });
     }
   },
 
-  startPlaying(data) {
-    let context = new AudioContext();
+  connectAndStart(buffer, context) {
     let source = this.createSource(context);
     let analyser = this.createAnalyser(context);
-    context.decodeAudioData(data, (buffer) => {
-      source.buffer = buffer;
-      source.connect(analyser);
-      source.connect(context.destination);
-      source.start(0);
-      this.set('isPlaying', true);
-      this.compareFrames();
+    source.buffer = buffer;
+    source.connect(analyser);
+    source.connect(context.destination);
+    source.start(0, this.get('selectedSong.startTime') || 0);
+    this.setProperties({
+      isPlaying: true,
+      audioStartTime: moment()
     });
+    this.compareFrames();
+  },
+
+  startPlaying(data) {
+    let context = new AudioContext();
+    if(data instanceof ArrayBuffer) {
+      context.decodeAudioData(data, (buffer) => {
+        let selectedSong = this.get('selectedSong');
+        selectedSong.buffer = buffer;
+        this.connectAndStart(buffer, context);
+      });
+    } else {
+      this.connectAndStart(data, context);
+    }
   },
 
   fetchAudio(url) {
@@ -271,14 +286,10 @@ export default Ember.Component.extend(Shuffle, {
     if(this.get('isLoadingPhotos')) {
       return;
     }
-
     if(this.get('isPlaying')) {
       this.stop();
     }
-
-    let selectedSong = this.get('selectedSong');
-    this.initAudio(selectedSong.path);
-
+    this.play();
   }.observes('selectedSong'),
 
   getAvgVolume: function(frequencyData){
@@ -295,15 +306,18 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   play: function(){
-    let selectedSong = this.get('selectedSong');
-    this.initAudio(selectedSong.path);
+    this.initAudio(this.get('selectedSong'));
   },
 
   stop: function(){
     let source = this.get('source');
-    source.onended = function() {
-      //TODO capture stop time
-    };
+    let selectedSong = this.get('selectedSong');
+    source.onended = function(e) {
+      let endTime = moment(e.timestamp);
+      let diff = endTime.diff(this.get('audioStartTime'), 'seconds');
+      selectedSong.startTime = selectedSong.startTime || 0;
+      selectedSong.startTime += diff;
+    }.bind(this);
     source.stop();
 
     clearInterval(this.get('frameInterval'));
