@@ -1,0 +1,38 @@
+<div class="visaudio">
+    <div class="vizaudio__wrapper">
+        <div class="polaroid lifted">
+            <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
+              {{#if isLoadingPhotos}}
+                  <div class="loading-photos">
+                      <div class="loading-photos__number">
+                        {{progress}}
+                          <span class="loading-photos__symbol">
+                        %
+                    </span>
+                      </div>
+
+                  </div>
+              {{/if}}
+
+            </div>
+            <div class="polaroid__footer">
+              {{#if isConnectedToFacebook}}
+                  <div class="controls u-mt">
+                    {{sexy-select
+                    selection=selectedSong
+                    options=songs
+                    valueProperty="path"
+                    labelProperty="name"
+                    defaultLabel="Select A Song"}}
+                  </div>
+              {{else}}
+                  <div class="text-center">
+                      <button {{action 'fbConnect'}} class="btn btn--facebook u-mt">
+                          Connect to Facebook
+                      </button>
+                  </div>
+              {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
