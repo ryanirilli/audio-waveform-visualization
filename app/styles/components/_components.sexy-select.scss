@@ -1,10 +1,12 @@
-$sexy-select-bg: #fff;
-$sexy-select-color: #333;
+$sexy-select-bg: black;
+$sexy-select-color: white;
 $sexy-select-triangle-size: 10px;
 
 .sexy-select {
   position: relative;
   font-size: 0.7rem;
+  border-bottom: 1px solid;
+  color: #A2A2A2;
 }
 
 .sexy-select__label {
@@ -21,7 +23,7 @@ $sexy-select-triangle-size: 10px;
   position: absolute;
   z-index: 1;
   border-radius: 4px;
-  top: 70px;
+  top: 36px;
   display: none;
   &:after {
     content: '';
@@ -41,7 +43,7 @@ $sexy-select-triangle-size: 10px;
   cursor: pointer;
   white-space: nowrap;
   &:hover {
-    background: rgba(0,0,0,0.05);
+    background: rgba(white,0.2);
   }
 }
 

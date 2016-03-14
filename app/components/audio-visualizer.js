@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Shuffle from "audio-visualization/mixins/shuffle";
+const dropboxBaseURL = 'https://dl.dropboxusercontent.com/u/7119407';
 export default Ember.Component.extend(Shuffle, {
   /**----------------------------
    * Services
@@ -9,7 +10,7 @@ export default Ember.Component.extend(Shuffle, {
   /**----------------------------
   * Settings
   * ----------------------------*/
-  THRESHOLD: 18,
+  THRESHOLD: 8,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   MAX_IMAGE_DURATION: 5000,
@@ -27,14 +28,8 @@ export default Ember.Component.extend(Shuffle, {
   selectedSong: null,
   times: [],
   songs: [{
-    name: 'Pretty Lights - Looking For Love',
-    path: 'https://dl.dropboxusercontent.com/u/7119407/03_Looking_For_Love.mp3'
-  }, {
-    name: 'Islandis - Home',
-    path: 'https://dl.dropboxusercontent.com/u/7119407/01%20Home_1.mp3'
-  },{
-    name: 'Odesza - How did i get here',
-    path: 'https://dl.dropboxusercontent.com/u/7119407/02_How_Did_I_Get_Here.mp3'
+    name: 'J Dilla - So Far To Go',
+    path: `${dropboxBaseURL}/j-dilla-so-far-to-go.mp3`
   }],
 
   /**----------------------------
@@ -78,14 +73,9 @@ export default Ember.Component.extend(Shuffle, {
     photoUrls.forEach((path) => {
       let promise = new Promise((resolve) => {
         let $img = this.createImage(path);
-        this.hideImg($img);
-        this.$().find('.audio-visualizer__viewer').append($img);
         $img.load(() => {
           this.incrementProperty('loadingProgress');
           this.get('images').pushObject($img);
-          this.showImg($img);
-          this.adjustImagePosition($img);
-          $img.hide();
           resolve();
         });
       });
@@ -94,36 +84,10 @@ export default Ember.Component.extend(Shuffle, {
     return Ember.RSVP.all(promises);
   },
 
-  adjustImagePosition($img) {
-    let $viewer = this.$().find('.audio-visualizer__viewer');
-    let viewerHeight = $viewer.outerHeight();
-    let heightDiff = $img.outerHeight() - viewerHeight;
-    if(heightDiff > 0) {
-      $img.css({
-        top: -(heightDiff/4)
-      });
-    }
-  },
-
   createImage(path) {
     let $img = Ember.$('<img />');
     $img.attr('src', path);
     return $img;
-  },
-
-  hideImg($img) {
-    $img.css({
-      position: 'fixed',
-      visibility: 'hidden'
-    });
-  },
-
-  showImg($img) {
-    $img.css({
-      position: 'relative',
-      visibility: 'visible',
-      width: '100%'
-    });
   },
 
   progress: function(){
@@ -160,12 +124,26 @@ export default Ember.Component.extend(Shuffle, {
     source.buffer = buffer;
     source.connect(analyser);
     source.connect(context.destination);
-    source.start(0, this.get('selectedSong.startTime') || 0);
+    if(source.noteOn && this.isIphone()) {
+      this.set('confirmPlay', true);
+      Ember.run.scheduleOnce('afterRender', this, function(){
+        this.$('.audio-visualizer__confirm-play').on('touchend', function(){
+          source.noteOn(0);
+        })
+      });
+    } else {
+      source.start(0, this.get('selectedSong.startTime') || 0);
+    }
+
     this.setProperties({
       isPlaying: true,
       audioStartTime: moment()
     });
     this.compareFrames();
+  },
+
+  isIphone() {
+    return Ember.get('navigator.appVersion').indexOf('iPhone') > -1;
   },
 
   startPlaying(data) {
@@ -237,19 +215,25 @@ export default Ember.Component.extend(Shuffle, {
 
   showImage(){
     let images = this.get('images');
-    let $curImage = this.getCurrentImage();
+    let $curImage1 = this.getRandomImage();
+    let $curImage2 = this.getRandomImage();
+
+    let $viewer1 = this.$().find('.audio-visualizer__viewer1');
+    let $viewer2 = this.$().find('.audio-visualizer__viewer2');
+
+    $viewer1.css({
+      background: `url(${$curImage1.attr('src')})`,
+    });
+
+    $viewer2.css({
+      background: `url(${$curImage2.attr('src')})`,
+    });
 
     this.captureTime();
     this.setMaxImageInterval();
-
-    this.$('.audio-visualizer__viewer img').hide();
-    $curImage.show();
-    setTimeout(function(){
-      $curImage.toggleClass('audio-visualizer__effect--scale');
-    });
   },
 
-  getCurrentImage() {
+  getRandomImage() {
     let images = this.get('images');
     let currentImageIndex = this.get('currentImageIndex');
     if(currentImageIndex === images.length-1) {
@@ -333,6 +317,18 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   actions: {
+    fbConnect: function(){
+      this.set('isConnectingToFacebook', true);
+      this.get('facebook').fbConnect().then(() => {
+        this.set('isConnectingToFacebook', false);
+      }).catch(() => {
+        this.setProperties({
+          isConnectingToFacebook: false,
+          error: 'There was an issue connecting to Facebook, sorry!'
+        });
+      });
+    },
+
     play: function(){
       this.play();
     },

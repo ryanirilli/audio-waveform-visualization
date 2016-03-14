@@ -41,3 +41,8 @@
   50%   { background: rgba(70,137,102,0.4); }
   100% { background: rgba(182,73,38,0.4); }
 }
+
+@include keyframes(ken-burns) {
+  0%   { @include vendor(transform, scale(1)) }
+  100%   { @include vendor(transform, scale(2)) }
+}

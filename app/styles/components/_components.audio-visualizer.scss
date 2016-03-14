@@ -7,16 +7,29 @@ $twitter-blue: #00aced;
   }
 }
 
-.audio-visualizer__viewer {
+.audio-visualizer__viewer1,
+.audio-visualizer__viewer2 {
   text-align: center;
   position: relative;
   overflow: hidden;
+  width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.85);
-  img {
-    -webkit-transition: all 5s; /* Safari */
-    transition: all 10s;
-  }
+  background-size: cover !important;
+  z-index: 1;
+  @include animation('ken-burns 20s alternate infinite');
+}
+
+.audio-visualizer__viewer1 {
+  @include animation('ken-burns 10s alternate infinite');
+}
+
+.audio-visualizer__viewer2 {
+  position: absolute;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  @include animation('ken-burns 20s alternate infinite');
 }
 
 .audio-visualizer__header {
@@ -24,15 +37,8 @@ $twitter-blue: #00aced;
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(255,255,255,0.1);
-  @include vertical-gradient(black, transparent);
   z-index: 2;
   color: white;
-}
-
-.audio-visualizer__effect--scale {
-  -webkit-transform: scale(1.7); /* Safari */
-  transform: scale(1.3);
 }
 
 .audio-visualizer__progress {
@@ -83,6 +89,9 @@ $twitter-blue: #00aced;
   padding: 10px;
   border-radius: 3px;
   display: inline-block;
+  float: right;
+  position: relative;
+  right: 13px;
   &:hover {
     background: $brand-color;
   }

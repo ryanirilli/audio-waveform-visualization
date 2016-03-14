@@ -65,7 +65,7 @@ export default Ember.Service.extend({
 
   fbFetchUser() {
     return new Ember.RSVP.Promise((resolve) => {
-      FB.api('/me', function (user) {
+      FB.api('/me', user => {
         _user = user;
         resolve();
       });
@@ -73,24 +73,35 @@ export default Ember.Service.extend({
   },
 
   fbFetchPhotoUrls() {
-    return this.fbFetchMePhotos().then((photos) => {
-      let urls = [];
-      let photosPromises = [];
-      photos.forEach((photo) => {
-        photosPromises.push(this.fetchPhoto(photo.id).then((photoUrl) => {
-          urls.push(photoUrl);
-        }));
+    return this.fbFetchAlbums().then(albums => {
+      const albumsPhotosPromises = [];
+      const photoPromises = [];
+      const photoUrls = [];
+
+
+      albums.forEach(album => {
+        albumsPhotosPromises.push(this.fetchAlbumPhotos(album.id));
       });
-      return Ember.RSVP.all(photosPromises).then(function () {
-        return urls;
+
+      return Ember.RSVP.all(albumsPhotosPromises).then(albumsPhotos => {
+        albumsPhotos.forEach(albumPhotos => {
+          albumPhotos.forEach(albumPhoto => {
+            photoPromises.push(this.fetchPhoto(albumPhoto.id));
+          });
+        });
+
+        return Ember.RSVP.all(photoPromises);
       });
+
     });
   },
+
+
 
   fetchPhoto: function (photoId) {
     return new Ember.RSVP.Promise((resolve) => {
       FB.api(`${photoId}`, 'get', {fields: 'images'}, (response)=> {
-        resolve(response.images[1].source);
+        resolve(response.images[0].source);
       });
     });
   },
@@ -115,7 +126,7 @@ export default Ember.Service.extend({
     var ismobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
     var numImages = ismobile ? 10 : 500;
     return new Ember.RSVP.Promise((resolve) => {
-      FB.api(`/${_user.id}/photos`, 'get', {type: 'uploaded', limit: numImages}, function (response) {
+      FB.api(`/${_user.id}/photos`, 'get', { limit: numImages }, function (response) {
         resolve(response.data);
       });
     });

@@ -1,4 +1,10 @@
 <div class="audio-visualizer">
+    {{#if confirmPlay}}
+      <div class="audio-visualizer__confirm-play" style="padding: 40px; text-align: center; background: blue; color: white">
+          Play Now
+      </div>
+    {{/if}}
+
     <div class="audio-visualizer__header">
         <div class="layout">
             <div class="layout__item u-1/1">
@@ -23,32 +29,31 @@
                         defaultLabel="Select A Song"}}
                     </div>
                 </div>
-            </div><!--
-            --><div class="layout__item u-1/2">
-                <div class="float-right u-mr- u-mt-">
-
-                </div>
             </div>
         </div>
     </div>
-    <div class="audio-visualizer__viewer">
-        <div class="audio-visualizer__progress {{if isProgressComplete 'audio-visualizer__progress--hide'}}">
-            <div class="audio-visualizer__progress__number">
-                {{progress}}
-            </div>
-            <div class="audio-visualizer__progress__messages">
-                {{loading-messages}}
-            </div>
+
+    <div class="audio-visualizer__viewer1"></div>
+    <div class="audio-visualizer__viewer2"></div>
+
+    <div class="audio-visualizer__progress {{if isProgressComplete 'audio-visualizer__progress--hide'}}">
+        <div class="audio-visualizer__progress__number">
+          {{progress}}
         </div>
-        <div class="audio-visualizer__brand">
-            <h3 class="u-mb0 inline">
-                VISAUDIO
-            </h3>
-            <div class="inline social-facebook-with-circle icon fb-icon" {{action 'fbShare'}}></div>
-            <div class="inline">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.visaudio.me/" data-via="ryanirilli" data-count="none" data-hashtags="visaudio">Tweet</a>
-                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            </div>
+        <div class="audio-visualizer__progress__messages">
+          {{loading-messages}}
+        </div>
+    </div>
+
+
+    <div class="audio-visualizer__brand">
+        <h3 class="u-mb0 inline">
+            VISAUDIO
+        </h3>
+        <div class="inline social-facebook-with-circle icon fb-icon" {{action 'fbShare'}}></div>
+        <div class="inline">
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.visaudio.me/" data-via="ryanirilli" data-count="none" data-hashtags="visaudio">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
     </div>
 </div>
