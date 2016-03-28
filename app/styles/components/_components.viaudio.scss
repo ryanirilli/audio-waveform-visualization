@@ -1,11 +1,12 @@
 .visaudio {
   background-image: url('/greyzz.png');
   background-repeat: repeat;
-  background-color: #2183A3;
   height: 100vh;
   padding: 50px 0;
   position: relative;
   z-index: 0;
+  background-color: #2183A3;
+  @include vendor(background-blend-mode, multiply);
   &:after {
     content: '';
     position: absolute;
@@ -14,11 +15,10 @@
     top: 0;
     left: 0;
     @include vendor(transition, all 0.5s ease);
-    background-color: rgba(#2183A3, 0.8);
   }
 }
 
-.vizaudio__wrapper {
+.visaudio__wrapper {
   z-index: 1;
   position: relative;
   width: 750px;
@@ -37,34 +37,53 @@
   }
 }
 
-$bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
+.audio-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.05;
+  @include vendor(filter, blur(3px));
+}
 
+$bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 @each $bg in $bgs {
   $i: index($bgs, $bg);
   .visaudio--#{$i} {
-    &:after {
-      background-color: rgba($bg, 0.8);
-    }
-
+    background-color: $bg;
   }
 }
 
-
-
 .polaroid {
   width: 100%;
-  height: 585px;
   background: white;
   border-radius: 2px;
-  padding: 20px 20px 0 20px;
+  padding: 20px;
+  border-bottom: 2px solid rgba(0,0,0,0.75);
+  border-top: 1px solid rgba(0,0,0,0.75);
 }
-
 
 .polaroid__viewer {
   width: 710px;
   height: 455px;
+  overflow: hidden;
   background: #333;
   border-radius: 3px;
+  position: relative;
+}
+
+.polaroid__img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  @include vendor(transition, background-size 10s ease);
+  @include vendor(transform, scale(1));
+}
+
+.polaroid__img--animated {
+  @include vendor(transform, scale(1.3));
 }
 
 .polaroid__viewer--default {
@@ -84,7 +103,6 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   font-size: 78px;
   position: relative;
   left: -30px;
-
 }
 
 
@@ -101,8 +119,8 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 .lifted:after {
   content:"";
   position:absolute;
-  bottom:13px;
-  left:7px;
+  bottom:16px;
+  left:16px;
   width:50%;
   height:20%;
   max-width:100px;
@@ -113,7 +131,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 }
 
 .lifted:after {
-  right:7px;
+  right:16px;
   left:auto;
   @include vendor(transform, rotate(5deg));
 }

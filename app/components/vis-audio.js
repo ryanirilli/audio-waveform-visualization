@@ -20,30 +20,47 @@ export default Ember.Component.extend(Shuffle, {
   photos: null,
   currentPhotoIndex: 0,
   songs: [{
-    name: 'Beat Connection - Saola (Odesza Remix)',
-    path: `${dropboxBaseURL}/Beat%20Connection%20-%20Saola%20%28ODESZA%20Remix%29.mp3`
-  },{
     name: 'J Dilla - So Far To Go',
     path: `${dropboxBaseURL}/j-dilla-so-far-to-go.mp3`
+  }, {
+    name: 'Beat Connection - Saola (Odesza Remix)',
+    path: `${dropboxBaseURL}/Beat%20Connection%20-%20Saola%20%28ODESZA%20Remix%29.mp3`
   }],
   selectedSong: null,
   audioStartTime: 0,
   error: null,
+  frameInterval: null,
+  audioFrameInterval: null,
+
 
   THRESHOLD: 13,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   MAX_IMAGE_DURATION: 5000,
-  FRAMES_PER_SECOND: 24,
+  IMG_FRAMES_PER_SECOND: 30,
+  AUDIO_VIS_FRAMES_PER_SECOND: 8,
+  audioCanvas: null,
+  $polaroidImg: null,
 
   onInit: function(){
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.setProperties({
       selectedSong: this.get('songs.firstObject'),
       photos: Ember.A(),
-      audioCache: Ember.Map.create()
+      audioCache: Ember.Map.create(),
     });
   }.on('init'),
+
+  didInsertElement() {
+    this._super.apply(this, arguments);
+    const $canvas = this.$('.audio-animation');
+    this.set('audioCanvas', $canvas[0]);
+    const $polaroidImg = this.$('.polaroid__img');
+    this.set('$polaroidImg', $polaroidImg);
+    $canvas.attr('width', Ember.$(window).width());
+    $canvas.attr('height', Ember.$(window).height());
+    //const ctx = canvas.getContext('2d');
+  },
 
   actions: {
     fbConnect: function(){
@@ -62,11 +79,11 @@ export default Ember.Component.extend(Shuffle, {
       });
     },
 
-    play: function(){
+    play() {
       this.play();
     },
 
-    stop: function(){
+    stop() {
       this.stop();
     }
   },
@@ -77,11 +94,25 @@ export default Ember.Component.extend(Shuffle, {
     });
   },
 
-  photoUrlsObserver: function(){
+  photoUrlsObserver: function() {
+
     const photoUrls = this.get('photoUrls');
-    this.loadPhotos(photoUrls).then(() => {
-      this.initAudio(this.get('selectedSong'));
+    const token = FB.getAccessToken();
+
+    Ember.$.ajax({
+      url: 'http://localhost:3000/generate-slideshow',
+      type: 'POST',
+      data: {
+        photoUrls,
+        token
+      }
+    }).then(data => {
+      console.log('DONE!');
     });
+
+    // this.loadPhotos(photoUrls).then(() => {
+    //   this.initAudio(this.get('selectedSong'));
+    // });
   }.observes('photoUrls'),
 
   selectedSongObserver: function(){
@@ -109,6 +140,7 @@ export default Ember.Component.extend(Shuffle, {
     }.bind(this);
     source.stop();
     clearInterval(this.get('frameInterval'));
+    clearInterval(this.get('audioFrameInterval'));
     this.setProperties({
       frameInterval: null,
       isPlaying: false
@@ -129,6 +161,19 @@ export default Ember.Component.extend(Shuffle, {
     }
   },
 
+  startPlaying(data) {
+    let context = new AudioContext();
+    if(data instanceof ArrayBuffer) {
+      context.decodeAudioData(data, (buffer) => {
+        let selectedSong = this.get('selectedSong');
+        selectedSong.buffer = buffer;
+        this.connectAndStart(buffer, context);
+      });
+    } else {
+      this.connectAndStart(data, context);
+    }
+  },
+
   connectAndStart(buffer, context) {
     let source = this.createSource(context);
     let analyser = this.createAnalyser(context);
@@ -141,20 +186,8 @@ export default Ember.Component.extend(Shuffle, {
       isPlaying: true,
       audioStartTime: moment()
     });
-    this.compareFrames();
-  },
 
-  startPlaying(data) {
-    let context = new AudioContext();
-    if(data instanceof ArrayBuffer) {
-      context.decodeAudioData(data, (buffer) => {
-        let selectedSong = this.get('selectedSong');
-        selectedSong.buffer = buffer;
-        this.connectAndStart(buffer, context);
-      });
-    } else {
-      this.connectAndStart(data, context);
-    }
+    this.compareFrames();
   },
 
   fetchAudio(url) {
@@ -184,21 +217,15 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   setPhoto() {
-    let $polaroidViewer = this.get('$polaroidViewer');
-    if(!$polaroidViewer) {
-      $polaroidViewer = this.$('.polaroid__viewer');
-      this.set('$polaroidViewer', $polaroidViewer);
-    }
+    const $polaroidImg = this.get('$polaroidImg');
     const random = this.getRandomPhoto();
-    const width = random.$img[0].width;
     if(test) {
       //test = false;
-      $polaroidViewer.css({
+      $polaroidImg.css({
         'background-image': `url(${random.path})`,
         'background-size': 'cover'
       });
     }
-
   },
 
   loadPhotos: function(photoUrls){
@@ -268,11 +295,15 @@ export default Ember.Component.extend(Shuffle, {
     $visaudio.addClass(`visaudio--${randomBg}`);
   },
 
-  getCurrentFrameVal() {
+  getByteFrequencyData() {
     let analyser = this.get('analyser');
     let frequencyData = new Uint8Array(analyser.frequencyBinCount); //empty array
     analyser.getByteFrequencyData(frequencyData); //populated array
-    return this.getAvgVolume(frequencyData);
+    return frequencyData;
+  },
+
+  getCurrentFrameVal() {
+    return this.getAvgVolume(this.getByteFrequencyData());
   },
 
   getAvgVolume: function(frequencyData){
@@ -293,8 +324,36 @@ export default Ember.Component.extend(Shuffle, {
     if (!frameInterval) {
       frameInterval = setInterval(()=> {
         this.compareFrames();
-      }, 1000/this.FRAMES_PER_SECOND);
+      }, 1000/this.IMG_FRAMES_PER_SECOND);
       this.set('frameInterval', frameInterval);
+    }
+
+
+    let audioFrameInterval = this.get('audioFrameInterval');
+    if (!audioFrameInterval) {
+      audioFrameInterval = setInterval(()=> {
+        this.audioWavAnimation();
+      }, 1000/this.AUDIO_VIS_FRAMES_PER_SECOND);
+      this.set('audioFrameInterval', audioFrameInterval);
+    }
+  },
+
+  audioWavAnimation(){
+    let byteFrequencyData = this.getByteFrequencyData();
+    const audioCanvas = this.get('audioCanvas');
+    const ctx = audioCanvas.getContext('2d');
+    ctx.clearRect(0, 0, audioCanvas.width, audioCanvas.height); // Clear the audioCanvas
+
+    const colors = ['#000000', '#ffffff'];
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    ctx.fillStyle = color; // Color of the bars
+
+    const bars = 100;
+    const barWidth = audioCanvas.width/bars;
+    for (let i = 0; i < bars; i++) {
+      const barX = i * barWidth;
+      const barHeight = -(byteFrequencyData[i]*3);
+      ctx.fillRect(barX, audioCanvas.height, barWidth, barHeight);
     }
   },
 

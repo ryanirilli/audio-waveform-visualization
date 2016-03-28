@@ -73,30 +73,25 @@ export default Ember.Service.extend({
   },
 
   fbFetchPhotoUrls() {
+    const { all } = Ember.RSVP;
     return this.fbFetchAlbums().then(albums => {
-      const albumsPhotosPromises = [];
+      const albumPromises = [];
       const photoPromises = [];
-      const photoUrls = [];
-
 
       albums.forEach(album => {
-        albumsPhotosPromises.push(this.fetchAlbumPhotos(album.id));
+        albumPromises.push(this.fetchAlbumPhotos(album.id));
       });
 
-      return Ember.RSVP.all(albumsPhotosPromises).then(albumsPhotos => {
-        albumsPhotos.forEach(albumPhotos => {
-          albumPhotos.forEach(albumPhoto => {
-            photoPromises.push(this.fetchPhoto(albumPhoto.id));
+      return all(albumPromises).then(albums => {
+        albums.forEach(album => {
+          album.forEach(photo => {
+            photoPromises.push(this.fetchPhoto(photo.id));
           });
         });
-
-        return Ember.RSVP.all(photoPromises);
+        return all(photoPromises);
       });
-
     });
   },
-
-
 
   fetchPhoto: function (photoId) {
     return new Ember.RSVP.Promise((resolve) => {
