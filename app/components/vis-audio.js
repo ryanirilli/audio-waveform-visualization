@@ -98,7 +98,7 @@ export default Ember.Component.extend(Shuffle, {
 
     const photoUrls = this.get('photoUrls');
     const token = FB.getAccessToken();
-
+debugger;
     Ember.$.ajax({
       url: 'http://localhost:3000/generate-slideshow',
       type: 'POST',

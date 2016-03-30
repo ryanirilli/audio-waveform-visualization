@@ -1,53 +1,36 @@
-# Audio-visualization
+# Visaudio
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+## Install
 
-## Prerequisites
+`cd` into the project directory
 
-You will need the following things properly installed on your computer.
+[Install nvm](https://github.com/creationix/nvm) and source it
 
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-* [Bower](http://bower.io/)
-* [Ember CLI](http://www.ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+`. ~/.nvm/nvm.sh`
 
-## Installation
+```
+npm install -g bower ember-cli
+npm install
+bower install
+```
 
-* `git clone <repository-url>` this repository
-* change into the new directory
-* `npm install`
-* `bower install`
+## Start the app
 
-## Running / Development
+we use a proxy for api requests, first start the api server 
 
-* `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+```
+node api/server.js
+```
 
-### Code Generators
+then start the ember server (takes care of frontend build and livereload)
 
-Make use of the many generators for code, try `ember help generate` for more details
+```
+ember serve --proxy-http://localhost:3000
+```
 
-### Running Tests
+navigate to `http://localhost:4200` in your browser
 
-* `ember test`
-* `ember test --server`
+Enjoy!
 
-### Building
 
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](http://www.ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
 
