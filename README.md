@@ -6,7 +6,10 @@
 
 [Install nvm](https://github.com/creationix/nvm) and source it
 
-`. ~/.nvm/nvm.sh`
+```
+. ~/.nvm/nvm.sh
+nvm install 0.12.12
+```
 
 ```
 npm install -g bower ember-cli
