@@ -95,24 +95,10 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   photoUrlsObserver: function() {
-
     const photoUrls = this.get('photoUrls');
-    const token = FB.getAccessToken();
-debugger;
-    Ember.$.ajax({
-      url: 'http://localhost:3000/generate-slideshow',
-      type: 'POST',
-      data: {
-        photoUrls,
-        token
-      }
-    }).then(data => {
-      console.log('DONE!');
+    this.loadPhotos(photoUrls).then(() => {
+      this.initAudio(this.get('selectedSong'));
     });
-
-    // this.loadPhotos(photoUrls).then(() => {
-    //   this.initAudio(this.get('selectedSong'));
-    // });
   }.observes('photoUrls'),
 
   selectedSongObserver: function(){
@@ -223,7 +209,6 @@ debugger;
       //test = false;
       $polaroidImg.css({
         'background-image': `url(${random.path})`,
-        'background-size': 'cover'
       });
     }
   },
@@ -307,11 +292,6 @@ debugger;
   },
 
   getAvgVolume: function(frequencyData){
-    //return random number if frequencyData is all jacked up
-    if(_.unique(frequencyData).length === 1){
-      return Math.floor((Math.random() * 35) + 1);
-    }
-
     let values = 0;
     frequencyData.forEach(function(val) {
       values += val;
@@ -339,22 +319,22 @@ debugger;
   },
 
   audioWavAnimation(){
-    let byteFrequencyData = this.getByteFrequencyData();
-    const audioCanvas = this.get('audioCanvas');
-    const ctx = audioCanvas.getContext('2d');
-    ctx.clearRect(0, 0, audioCanvas.width, audioCanvas.height); // Clear the audioCanvas
-
-    const colors = ['#000000', '#ffffff'];
-    const color = colors[Math.floor(Math.random()*colors.length)];
-    ctx.fillStyle = color; // Color of the bars
-
-    const bars = 100;
-    const barWidth = audioCanvas.width/bars;
-    for (let i = 0; i < bars; i++) {
-      const barX = i * barWidth;
-      const barHeight = -(byteFrequencyData[i]*3);
-      ctx.fillRect(barX, audioCanvas.height, barWidth, barHeight);
-    }
+    // let byteFrequencyData = this.getByteFrequencyData();
+    // const audioCanvas = this.get('audioCanvas');
+    // const ctx = audioCanvas.getContext('2d');
+    // ctx.clearRect(0, 0, audioCanvas.width, audioCanvas.height); // Clear the audioCanvas
+    //
+    // const colors = ['#000000', '#ffffff'];
+    // const color = colors[Math.floor(Math.random()*colors.length)];
+    // ctx.fillStyle = color; // Color of the bars
+    //
+    // const bars = 100;
+    // const barWidth = audioCanvas.width/bars;
+    // for (let i = 0; i < bars; i++) {
+    //   const barX = i * barWidth;
+    //   const barHeight = -(byteFrequencyData[i]*3);
+    //   ctx.fillRect(barX, audioCanvas.height, barWidth, barHeight);
+    // }
   },
 
   getRandomPhoto() {

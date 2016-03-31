@@ -7,6 +7,20 @@
   left: 0;
 }
 
+.page-height-1\/1 {
+  width: 100vw;
+  height: 100vh;
+}
+
+.page-height-1\/2 {
+  width: 100vw;
+  height: 50vh;
+}
+
+.img--small {
+  width: 100px;
+}
+
 .relative {
   position: relative;
   z-index: 1;

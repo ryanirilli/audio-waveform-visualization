@@ -18,8 +18,8 @@ $brand-color: #3498DB;
 @import "../../bower_components/inuit-layout/objects.layout";
 @import "../../bower_components/inuit-list-bare/objects.list-bare";
 @import "../../bower_components/inuit-media/objects.media";
+@import "objects/objects.bgs";
 @import "objects/objects.buttons";
-@import "components/components.audio-visualizer";
 @import "components/components.headings";
 @import "components/components.sexy-select";
 @import "components/components.viaudio";
@@ -51,4 +51,12 @@ $brand-color: #3498DB;
 .section {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.logo {
+  width: 150px;
+  position: absolute;
+  left: 30px;
+  top: 20px;
+  z-index: 1;
 }

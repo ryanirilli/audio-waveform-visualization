@@ -44,6 +44,9 @@ $facebook-blue: #3B5998;
 
 .btn {
   position: relative;
+  &:focus {
+    outline: none;
+  }
 }
 
 .btn--facebook {
@@ -51,6 +54,15 @@ $facebook-blue: #3B5998;
   border-color: $facebook-blue;
   &:before, & {
     color: white;
+  }
+  .btn__icon {
+    font-size: 37px;
+    position: absolute;
+    left: 10px;
+    top: 7px;
+  }
+  &:hover {
+    background: #3A5690;
   }
 }
 
@@ -79,4 +91,19 @@ $facebook-blue: #3B5998;
     font-size: 1.5rem;
     opacity: 0.3;
   }
+}
+
+.btn-with-icon {
+  position: relative;
+}
+
+.btn-with-icon--left {
+  padding: 11px 23px 11px 63px;
+}
+
+.btn__icon {
+  font-size: 50px;
+  position: absolute;
+  left: 3px;
+  top: 0;
 }

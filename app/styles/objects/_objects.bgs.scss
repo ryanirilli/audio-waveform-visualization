@@ -1,0 +1,50 @@
+.bg-cover {
+  background-size: cover;
+  overflow: auto;
+}
+
+.bg-sky {
+  position: relative;
+  color: white;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    @include vertical-gradient(#88CCEB, transparent);
+  }
+}
+
+.bg-sky__content {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-fixed {
+  background-attachment: fixed;
+}
+
+.bg-cover--old-man {
+  background-image: url('/assets/image/old_on_bench.jpeg');
+}
+
+.bg {
+  &, p {
+    color: rgba(0,0,0,0.22);
+  }
+}
+
+.bg-1 {
+ background: #FFDC48;
+}
+
+.bg-2 {
+  background: #2183A3
+}
+
+.bg-3 {
+  background: #FF6300;
+}
+

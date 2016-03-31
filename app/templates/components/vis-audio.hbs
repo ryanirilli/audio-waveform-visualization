@@ -1,7 +1,7 @@
-<div class="visaudio">
+<div class="visaudio {{if animateIn 'visaudio-showing'}}">
     <div class="visaudio__wrapper">
         <canvas class="audio-animation"></canvas>
-        <div class="polaroid lifted">
+        <div class="polaroid">
             <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
               <div class="polaroid__img"></div>
               {{#if isLoadingPhotos}}
@@ -18,22 +18,29 @@
 
             </div>
             <div class="polaroid__footer">
-              {{#if isConnectedToFacebook}}
-                  <div class="controls u-mt">
-                    {{sexy-select
-                    selection=selectedSong
-                    options=songs
-                    valueProperty="path"
-                    labelProperty="name"
-                    defaultLabel="Select A Song"}}
-                  </div>
-              {{else}}
-                  <div class="text-center">
-                      <button {{action 'fbConnect'}} class="btn btn--facebook u-mt">
-                          Connect to Facebook
+
+                  {{#if isConnectedToFacebook}}
+                    <div class="controls controls-connected">
+                      {{#if isPlaying}}
+                          <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
+                      {{else}}
+                          <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
+                      {{/if}}
+                        <div class="control u-pl-">
+                          {{sexy-select
+                          selection=selectedSong
+                          options=songs
+                          valueProperty="path"
+                          labelProperty="name"
+                          defaultLabel="Select A Song"}}
+                        </div>
+                    </div>
+                  {{else}}
+                      <button {{action 'fbConnect'}} class="controls controls-unconnected btn btn--facebook btn-with-icon btn-with-icon--left u-mt">
+                        <i class="btn__icon vizaudio-facebook"></i> connect your photos
                       </button>
-                  </div>
-              {{/if}}
+                  {{/if}}
+
             </div>
         </div>
     </div>
