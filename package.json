@@ -12,9 +12,9 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "https://github.com/ryanirilli/audio-waveform-visualization",
+  "repository": "https://github.com/ryanirilli/visaudio",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": "0.12.12"
   },
   "author": "Ryan Irilli",
   "license": "MIT",
