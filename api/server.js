@@ -3,6 +3,9 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 
+var slideshow = require('./../slideshow/slideshow');
+var facebook = require('./../slideshow/facebook');
+
 var serverSettings = {
   port: process.env.PORT || 3000
 };
@@ -22,6 +25,12 @@ app.post('/publish-slideshow', function(req, res) {
   var token = req.body.token;
   var songPath = req.body.songPath;
 
+  facebook.getPhotos({ token: token }).then(() => {
+    slideshow.create({}).then(() => {
+      facebook.uploadVideo({});
+    });
+  });
+
   res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
 });
 
@@ -30,5 +39,5 @@ app.get('*', function(req, res) {
 });
 
 app.listen(serverSettings.port, function() {
-  console.log(`Server listening on port ${serverSettings.port}`);
+  console.log('Server listening on port ' + serverSettings.port);
 });

@@ -1,0 +1,3 @@
+[submodule "slideshow"]
+	path = slideshow
+	url = git@github.com:bschoch/slideshow.git

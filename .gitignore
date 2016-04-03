@@ -20,3 +20,6 @@ profiles_settings.xml
 Project_Default.xml
 workspace.xml
 .idea/
+
+images/
+temp/
