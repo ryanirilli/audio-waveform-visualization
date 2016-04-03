@@ -24,9 +24,11 @@ export default Ember.Component.extend(Shuffle, {
   currentPhotoIndex: 0,
   songs: [{
     name: 'Shakey Graves - Family and Genus',
+    audioFile: `Shakey-Graves_Family-and-Genus.mp4`,
     path: `${baseAudioPath}/Shakey-Graves_Family-and-Genus.${extension}`
   }, {
     name: 'LCD Soundsystem - Dance Yourself Clean',
+    audioFile: `LCD-Soundsystem_Dance-Yourself-Clean.mp4`,
     path: `${baseAudioPath}/LCD-Soundsystem_Dance-Yourself-Clean.${extension}`
   }],
   selectedSong: null,
@@ -68,7 +70,6 @@ export default Ember.Component.extend(Shuffle, {
           this.set('profileUrl', pic);
         });
 
-
         setTimeout(() => {
           this.setProperties({
             isConnectedToFacebook: true,
@@ -95,7 +96,7 @@ export default Ember.Component.extend(Shuffle, {
     share() {
       const urls = this.get('photos').map(photo => photo.path);
       const token = window.FB.getAccessToken();
-      const songPath = this.get('selectedSong.path');
+      const songPath = this.get('selectedSong.audioFile');
       const requestData = {
         url: '/publish-slideshow',
         type: 'post',
