@@ -25,8 +25,8 @@ app.post('/publish-slideshow', function(req, res) {
   var token = req.body.token;
   var songPath = req.body.songPath;
 
-  facebook.getPhotos({ token: token }).then(() => {
-    slideshow.create({}).then(() => {
+  facebook.getPhotos({ token: token }).then(function() {
+    slideshow.create({}).then(function() {
       facebook.uploadVideo({});
     });
   });
