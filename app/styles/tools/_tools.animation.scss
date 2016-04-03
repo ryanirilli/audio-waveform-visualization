@@ -50,13 +50,13 @@
 
 @include keyframes(get-started) {
   0%{ opacity: 1; left: 0; }
-  100%{ opacity: 0; left: 50px;}
+  100%{ opacity: 0; left: -50px;}
 }
 
 @include keyframes(get-started__secondary) {
   0%{ opacity: 1; left: 0; }
   20%{ opacity: 1; left: 0; }
-  100%{ opacity: 0; left: 50px;}
+  100%{ opacity: 0; left: -50px;}
 }
 
 .animate-out {
@@ -79,4 +79,25 @@
   25%{ @include vendor(transform, scale(1.1)) }
   30%{ @include vendor(transform, scale(1)) }
   100%{ @include vendor(transform, scale(1)) }
+}
+
+@include keyframes(scale-tiny) {
+  0%{ @include vendor(transform, scale(1)) }
+  15%{ @include vendor(transform, scale(1.2)) }
+  100%{ @include vendor(transform, scale(0)) }
+}
+
+.animate-scale-tiny {
+  @include animation('scale-tiny 0.5s ease');
+  @include vendor(animation-fill-mode, forwards);
+}
+
+
+.fade-in {
+  opacity: 0;
+  @include vendor(transition, opacity 1s ease);
+}
+
+.fade-in--show {
+  opacity: 1;
 }

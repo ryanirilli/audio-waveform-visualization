@@ -48,7 +48,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 
 .polaroid {
   width: 100%;
-  background: white;
+  background: rgba(white, 0.3);
   border-radius: 2px;
   padding: 20px;
 }
@@ -57,7 +57,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   width: 710px;
   height: 455px;
   overflow: hidden;
-  background: #333;
+  background: #36518B;
   border-radius: 3px;
   position: relative;
 }
@@ -71,7 +71,9 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   left: 0;
 }
 
-.polaroid__img--animated {
+.polaroid__progress {
+  width: 120px;
+  margin: 155px auto 0 auto;
 }
 
 .polaroid__viewer--default {
@@ -128,6 +130,9 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   position: absolute;
   bottom: -70px;
   left: 0px;
+  opacity: 0;
+  @include vendor(transition, opacity 1s ease);
+
 }
 
 .controls-connected {
@@ -136,9 +141,11 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   height: 50px;
   display: inline-block;
   padding: 0 40px 0 20px;
+  opacity: 1;
 }
 
 .controls-unconnected {
+  opacity: 1;
   @include animation('pulse-scale 4s infinite');
 }
 
@@ -157,4 +164,10 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   &:hover {
     color: rgba(black, 0.7);
   }
+}
+
+.visaudio__share {
+  position: absolute;
+  right: 0;
+  bottom: -55px;
 }

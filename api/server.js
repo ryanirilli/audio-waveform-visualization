@@ -17,6 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * Routes
  * **************************/
 
+app.post('/publish-slideshow', function(req, res) {
+  var urls = req.body.urls;
+  var token = req.body.token;
+  var songPath = req.body.songPath;
+
+  res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
+});
+
 app.get('*', function(req, res) {
   res.sendFile(path.resolve('dist/index.html'));
 });

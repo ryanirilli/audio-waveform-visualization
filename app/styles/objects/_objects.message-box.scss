@@ -1,0 +1,28 @@
+.message-box {
+  background: rgba(white, 0.45);
+  border-radius: 10px;
+  position: relative;
+  line-height: 1.3;
+  font-weight: 100;
+  &:after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    background: url('/assets/image/message-box__accent.svg');
+    opacity: 0.45;
+    position: absolute;
+  }
+}
+
+.message-box--left {
+  &:after {
+    left: -30px;
+  }
+}
+
+.message-box--right {
+  &:after {
+    right: -30px;
+    @include vendor(transform, scaleX(-1));
+  }
+}

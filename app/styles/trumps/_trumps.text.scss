@@ -9,3 +9,9 @@
 .text-light {
   font-weight: 300;
 }
+
+@for $i from 1 through 8 {
+  .text-weight-#{$i} {
+    font-weight: #{$i}00;
+  }
+}

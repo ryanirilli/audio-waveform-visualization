@@ -20,6 +20,8 @@ $brand-color: #3498DB;
 @import "../../bower_components/inuit-media/objects.media";
 @import "objects/objects.bgs";
 @import "objects/objects.buttons";
+@import "objects/objects.footer";
+@import "objects/objects.message-box";
 @import "components/components.headings";
 @import "components/components.sexy-select";
 @import "components/components.viaudio";
@@ -60,3 +62,5 @@ $brand-color: #3498DB;
   top: 20px;
   z-index: 1;
 }
+
+

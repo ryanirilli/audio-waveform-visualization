@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'vizaudio';
-    src:    url('fonts/vizaudio.eot?pv6tas');
-    src:    url('fonts/vizaudio.eot?pv6tas#iefix') format('embedded-opentype'),
-        url('fonts/vizaudio.ttf?pv6tas') format('truetype'),
-        url('fonts/vizaudio.woff?pv6tas') format('woff'),
-        url('fonts/vizaudio.svg?pv6tas#vizaudio') format('svg');
+    src:    url('fonts/vizaudio.eot?t97irt');
+    src:    url('fonts/vizaudio.eot?t97irt#iefix') format('embedded-opentype'),
+        url('fonts/vizaudio.ttf?t97irt') format('truetype'),
+        url('fonts/vizaudio.woff?t97irt') format('woff'),
+        url('fonts/vizaudio.svg?t97irt#vizaudio') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -24,6 +24,21 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vizaudio-slideshare:before {
+    content: "\e90d";
+}
+.vizaudio-share-alternitive:before {
+    content: "\e90e";
+}
+.vizaudio-clapperboard:before {
+    content: "\e902";
+}
+.vizaudio-chevron-with-circle-down:before {
+    content: "\e601";
+}
+.vizaudio-chevron-small-down:before {
+    content: "\e602";
+}
 .vizaudio-facebook:before {
     content: "\e909";
 }
@@ -89,15 +104,6 @@
 }
 .vizaudio-triangle-down:before {
     content: "\e603";
-}
-.vizaudio-clapperboard:before {
-    content: "\e902";
-}
-.vizaudio-chevron-with-circle-down:before {
-    content: "\e601";
-}
-.vizaudio-chevron-small-down:before {
-    content: "\e602";
 }
 .vizaudio-chevron-down:before {
     content: "\e600";

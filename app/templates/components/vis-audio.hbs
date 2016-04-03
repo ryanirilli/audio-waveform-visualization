@@ -1,26 +1,18 @@
 <div class="visaudio {{if animateIn 'visaudio-showing'}}">
+
     <div class="visaudio__wrapper">
-        <canvas class="audio-animation"></canvas>
         <div class="polaroid">
             <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
               <div class="polaroid__img"></div>
               {{#if isLoadingPhotos}}
-                  <div class="loading-photos">
-                      <div class="loading-photos__number">
-                        {{progress}}
-                          <span class="loading-photos__symbol">
-                        %
-                    </span>
-                      </div>
-
+                  <div class="polaroid__progress">
+                    {{progress-bar progress=progress}}
                   </div>
               {{/if}}
-
             </div>
             <div class="polaroid__footer">
-
                   {{#if isConnectedToFacebook}}
-                    <div class="controls controls-connected">
+                    <div class="controls {{if isShowingControls 'controls-connected'}}">
                       {{#if isPlaying}}
                           <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
                       {{else}}
@@ -35,12 +27,26 @@
                           defaultLabel="Select A Song"}}
                         </div>
                     </div>
+
+                    <div class="visaudio__share fade-in {{if isShowingControls 'fade-in--show'}}">
+                        <div {{action 'share'}} class="btn btn--small btn--primary btn--silent btn--border-white">
+                            <i class="vizaudio-facebook2"></i> Publish
+                        </div>
+                    </div>
+
                   {{else}}
-                      <button {{action 'fbConnect'}} class="controls controls-unconnected btn btn--facebook btn-with-icon btn-with-icon--left u-mt">
-                        <i class="btn__icon vizaudio-facebook"></i> connect your photos
+                      <button {{action 'fbConnect'}} class="
+                      controls
+                      {{unless facebookConnectSuccess 'controls-unconnected'}}
+                      btn
+                      btn--facebook
+                      btn-with-icon
+                      btn-with-icon--left
+                      u-mt {{if facebookConnectSuccess 'animate-scale-tiny'}}">
+                        <i class="btn__icon vizaudio-facebook"></i>
+                          connect your photos
                       </button>
                   {{/if}}
-
             </div>
         </div>
     </div>

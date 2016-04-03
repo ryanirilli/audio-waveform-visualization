@@ -66,6 +66,19 @@ $facebook-blue: #3B5998;
   }
 }
 
+.btn--silent {
+  background: transparent;
+  font-weight: 100;
+}
+
+.btn--border-white {
+  border-color: white;
+  &:hover {
+    background: white;
+    color: #333;
+  }
+}
+
 .btn--outline {
   position: relative;
   &:after {

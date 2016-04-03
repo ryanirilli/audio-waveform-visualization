@@ -23,6 +23,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.vizaudio-slideshare:before {
+  content: "\e90d";
+}
+.vizaudio-share-alternitive:before {
+  content: "\e90e";
+}
+.vizaudio-clapperboard:before {
+  content: "\e902";
+}
+.vizaudio-chevron-with-circle-down:before {
+  content: "\e601";
+}
+.vizaudio-chevron-small-down:before {
+  content: "\e602";
+}
 .vizaudio-facebook:before {
   content: "\e909";
 }
@@ -89,16 +104,9 @@
 .vizaudio-triangle-down:before {
   content: "\e603";
 }
-.vizaudio-clapperboard:before {
-  content: "\e902";
-}
-.vizaudio-chevron-with-circle-down:before {
-  content: "\e601";
-}
-.vizaudio-chevron-small-down:before {
-  content: "\e602";
-}
 .vizaudio-chevron-down:before {
   content: "\e600";
 }
+
+
 

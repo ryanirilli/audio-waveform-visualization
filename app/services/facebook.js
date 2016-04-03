@@ -72,6 +72,14 @@ export default Ember.Service.extend({
     });
   },
 
+  fbFetchProfilePic() {
+    return new Ember.RSVP.Promise((resolve) => {
+      FB.api('/me/picture', res => {
+        resolve(res.data.url);
+      });
+    });
+  },
+
   fbFetchPhotoUrls() {
     const { all } = Ember.RSVP;
     return this.fbFetchAlbums().then(albums => {
