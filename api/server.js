@@ -3,8 +3,9 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var kue = require('kue');
-var jobs = kue.createQueue();
-
+var jobs = kue.createQueue({
+  redis: 'redis://h:pf7u4588ot2mduf3t5bppgreurm@ec2-54-83-33-178.compute-1.amazonaws.com:9969'
+});
 
 var slideshow = require('./../slideshow/slideshow');
 var facebook = require('./../slideshow/facebook');
