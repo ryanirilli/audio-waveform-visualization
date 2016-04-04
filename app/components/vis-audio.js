@@ -23,13 +23,13 @@ export default Ember.Component.extend(Shuffle, {
   photos: null,
   currentPhotoIndex: 0,
   songs: [{
-    name: 'Shakey Graves - Family and Genus',
-    audioFile: `Shakey-Graves_Family-and-Genus.mp4`,
-    path: `${baseAudioPath}/Shakey-Graves_Family-and-Genus.${extension}`
-  }, {
     name: 'LCD Soundsystem - Dance Yourself Clean',
     audioFile: `LCD-Soundsystem_Dance-Yourself-Clean.mp4`,
     path: `${baseAudioPath}/LCD-Soundsystem_Dance-Yourself-Clean.${extension}`
+  } , {
+    name: 'Shakey Graves - Family and Genus',
+    audioFile: `Shakey-Graves_Family-and-Genus.mp4`,
+    path: `${baseAudioPath}/Shakey-Graves_Family-and-Genus.${extension}`
   }],
   selectedSong: null,
   audioStartTime: 0,
@@ -52,6 +52,7 @@ export default Ember.Component.extend(Shuffle, {
       audioCache: Ember.Map.create(),
     });
   }.on('init'),
+  
 
   didInsertElement() {
     this._super.apply(this, arguments);
@@ -217,6 +218,11 @@ export default Ember.Component.extend(Shuffle, {
   createSource(context) {
     let source = context.createBufferSource();
     this.set('source', source);
+
+    source.onended = function(){
+      console.log(JSON.stringify(this.get('times')));
+    }.bind(this)
+
     return source;
   },
 
@@ -228,7 +234,26 @@ export default Ember.Component.extend(Shuffle, {
     return analyser;
   },
 
+  times: [],
+
+  logTimes() {
+    const times = this.get('times');
+    const curTime = moment();
+    const lastTime = this.get('lastTime');
+    this.set('lastTime', curTime);
+
+    if(!lastTime) {
+      return times.push(0);
+    }
+
+    var duration = moment.duration(curTime.diff(lastTime));
+    times.push(duration.asMilliseconds());
+  },
+
   setPhoto() {
+
+    this.logTimes();
+
     const $polaroidImg = this.get('$polaroidImg');
     const random = this.getRandomPhoto();
     $polaroidImg.css({
