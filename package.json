@@ -41,6 +41,11 @@
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "express": "^4.13.4",
-    "kue": "^0.10.5"
+    "facebook-node-sdk": "^0.2.0",
+    "fb": "^1.0.2",
+    "fluent-ffmpeg": "^2.0.1",
+    "gm": "^1.21.1",
+    "kue": "^0.10.5",
+    "q": "^1.4.1"
   }
 }
