@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var kue = require('kue');
 var jobs = kue.createQueue({
-  redis: 'redis://h:pf7u4588ot2mduf3t5bppgreurm@ec2-54-83-33-178.compute-1.amazonaws.com:9969'
+  redis: 'redis://127.0.0.1:6379'
 });
 
 var slideshow = require('./../slideshow/slideshow');
