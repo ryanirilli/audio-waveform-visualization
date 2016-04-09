@@ -9,6 +9,11 @@
                     {{progress-bar progress=progress}}
                   </div>
               {{/if}}
+              {{#if isLoadingAudio}}
+                  <div class="polaroid__loading-audio">
+                    loading audio...
+                  </div>
+              {{/if}}
             </div>
             <div class="polaroid__footer">
                   {{#if isConnectedToFacebook}}
@@ -16,7 +21,11 @@
                       {{#if isPlaying}}
                           <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
                       {{else}}
-                          <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
+                          {{#if isLoadingAudio}}
+                              <i class="control control-icon controls__loading vizaudio-cog"></i>
+                          {{else}}
+                              <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
+                          {{/if}}
                       {{/if}}
                         <div class="control u-pl-">
                           {{sexy-select

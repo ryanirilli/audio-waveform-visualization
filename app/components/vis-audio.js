@@ -16,6 +16,7 @@ export default Ember.Component.extend(Shuffle, {
   facebookConnectSuccess: false,
   isShowingControls: false,
   isLoadingPhotos: false,
+  isLoadingAudio: false,
   hasLoadedPhotos: false,
   isPlaying: false,
   loadingProgress: 0,
@@ -52,7 +53,7 @@ export default Ember.Component.extend(Shuffle, {
       audioCache: Ember.Map.create(),
     });
   }.on('init'),
-  
+
 
   didInsertElement() {
     this._super.apply(this, arguments);
@@ -204,13 +205,15 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   fetchAudio(url) {
-    return new Promise(function(resolve) {
+    this.set('isLoadingAudio', true);
+    return new Promise(resolve => {
       let request = new XMLHttpRequest();
       request.open('GET', url, true);
       request.responseType = 'arraybuffer';
       request.onload = function() {
+        this.set('isLoadingAudio', false);
         resolve(request.response);
-      };
+      }.bind(this);
       request.send();
     });
   },
@@ -243,7 +246,7 @@ export default Ember.Component.extend(Shuffle, {
     this.set('lastTime', curTime);
 
     if(!lastTime) {
-      return times.push(0);
+      return;
     }
 
     var duration = moment.duration(curTime.diff(lastTime));
@@ -254,31 +257,37 @@ export default Ember.Component.extend(Shuffle, {
 
     this.logTimes();
 
+
+
     const $polaroidImg = this.get('$polaroidImg');
     const random = this.getRandomPhoto();
     $polaroidImg.css({
       'background-image': `url(${random.path})`
     });
+
+
+
+
+
   },
 
   loadPhotos: function(photoUrls){
     const promises = [];
     const photos = this.get('photos');
-    this.setProperties({
-      isLoadingPhotos: true
-    });
+    this.set('isLoadingPhotos', true);
 
     photoUrls.forEach((path) => {
-      let promise = new Promise((resolve) => {
-        let $img = this.createImage(path);
+      const promise = new Promise((resolve) => {
+        const $img = this.createImage(path);
         $img.load(() => {
           this.incrementProperty('loadingProgress');
-          photos.pushObject({$img, path});
+          photos.pushObject({ $img, path });
           resolve();
         });
       });
       promises.push(promise);
     });
+
     return Ember.RSVP.all(promises).then(() => {
       this.setProperties({
         isLoadingPhotos: false,

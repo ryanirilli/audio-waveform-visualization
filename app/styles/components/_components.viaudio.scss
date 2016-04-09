@@ -69,6 +69,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   height: 100%;
   top: 0;
   left: 0;
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
 }
 
 .polaroid__progress {
@@ -76,8 +77,12 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   margin: 155px auto 0 auto;
 }
 
-.polaroid__viewer--default {
-  //background: url('/visaudio-splash.svg');
+.polaroid__loading-audio {
+  line-height: 24;
+  height: 100%;
+  text-align: center;
+  font-weight: 100;
+  color: white;
 }
 
 .loading-photos {
