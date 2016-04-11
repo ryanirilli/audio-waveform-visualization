@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import Shuffle from "audio-visualization/mixins/shuffle";
-const baseAudioPath = '/assets/audio';
-const extension = Dolby.checkDDPlus() ? 'mp4' : 'mp3';
+
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -9,6 +8,8 @@ function getRandomInt(min, max) {
 
 export default Ember.Component.extend(Shuffle, {
   facebook: Ember.inject.service(),
+  songsService: Ember.inject.service('songs'),
+  songs: Ember.computed.alias('songsService.songs'),
   profileUrl: null,
   audioCache: null,
 
@@ -30,20 +31,6 @@ export default Ember.Component.extend(Shuffle, {
   photoUrls: null,
   photos: null,
   currentPhotoIndex: 0,
-
-  songs: [{
-    name: 'The Lumineers - Sleep on the Floor',
-    audioFile: `The-Lumineers_Sleep_on_the_Floor.mp3`,
-    path: `${baseAudioPath}/The-Lumineers_Sleep_on_the_Floor.mp3`
-  } , {
-    name: 'LCD Soundsystem - Dance Yourself Clean',
-    audioFile: `LCD-Soundsystem_Dance-Yourself-Clean.mp4`,
-    path: `${baseAudioPath}/LCD-Soundsystem_Dance-Yourself-Clean.${extension}`
-  } , {
-    name: 'Shakey Graves - Family and Genus',
-    audioFile: `Shakey-Graves_Family-and-Genus.mp4`,
-    path: `${baseAudioPath}/Shakey-Graves_Family-and-Genus.${extension}`
-  }],
 
   selectedSong: null,
   audioStartTime: 0,
