@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /***************************
  * Routes
  * **************************/
-app.post('/publish-slideshow', function(req, res) {
+app.post('/api/publish-slideshow', function(req, res) {
   var urls = req.body.urls;
   var token = req.body.token;
   var songPath = req.body.songPath;

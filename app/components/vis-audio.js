@@ -120,7 +120,7 @@ export default Ember.Component.extend(Shuffle, {
       const token = window.FB.getAccessToken();
       const songPath = this.get('selectedSong.audioFile');
       const requestData = {
-        url: '/publish-slideshow',
+        url: '/api/publish-slideshow',
         type: 'post',
         data: { urls, token, songPath },
         success: function(data) {
