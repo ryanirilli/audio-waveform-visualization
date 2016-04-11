@@ -1,4 +1,13 @@
-<div class="visaudio {{if animateIn 'visaudio-showing'}}">
+<div class="visaudio {{if _animateIn 'visaudio-showing'}}">
+
+    <div class="user-info">
+        {{#if profileUrl}}
+            <div class="user-info__img">
+                <img src="{{profileUrl}}" />
+            </div>
+        {{/if}}
+    </div>
+
 
     <div class="visaudio__wrapper">
         <div class="polaroid">
@@ -15,49 +24,79 @@
                   </div>
               {{/if}}
             </div>
-            <div class="polaroid__footer">
-                  {{#if isConnectedToFacebook}}
-                    <div class="controls {{if isShowingControls 'controls-connected'}}">
-                      {{#if isPlaying}}
-                          <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
-                      {{else}}
-                          {{#if isLoadingAudio}}
-                              <i class="control control-icon controls__loading vizaudio-cog"></i>
-                          {{else}}
-                              <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
-                          {{/if}}
-                      {{/if}}
-                        <div class="control u-pl-">
-                          {{sexy-select
-                          selection=selectedSong
-                          options=songs
-                          valueProperty="path"
-                          labelProperty="name"
-                          defaultLabel="Select A Song"}}
-                        </div>
-                    </div>
+        </div>
 
-                    <div class="visaudio__share fade-in {{if isShowingControls 'fade-in--show'}}">
-                        <div {{action 'share'}} class="btn btn--small btn--primary btn--silent btn--border-white">
-                            <i class="vizaudio-facebook2"></i> Publish
-                        </div>
-                    </div>
 
+        {{#if isShowingControls}}
+          <div class="layout u-mt fade-in {{if hasShownControls 'fade-in--show'}}">
+            <div class="player layout__item u-1/2">
+
+              <div class="controls">
+                {{#if isPlaying}}
+                    <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
+                {{else}}
+                  {{#if isLoadingAudio}}
+                      <i class="control control-icon controls__loading vizaudio-cog"></i>
                   {{else}}
-                      <button {{action 'fbConnect'}} class="
-                      controls
-                      {{unless facebookConnectSuccess 'controls-unconnected'}}
+                      <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
+                  {{/if}}
+                {{/if}}
+                  <div class="control u-pl-">
+                    {{sexy-select
+                    selection=selectedSong
+                    options=songs
+                    valueProperty="path"
+                    labelProperty="name"
+                    defaultLabel="Select A Song"}}
+                  </div>
+              </div>
+
+            </div><div class="connect layout__item u-1/2">
+            {{#unless isFbConnected}}
+                <button {{action 'fbConnect'}} class="
                       btn
                       btn--facebook
                       btn-with-icon
                       btn-with-icon--left
-                      u-mt {{if facebookConnectSuccess 'animate-scale-tiny'}}">
-                        <i class="btn__icon vizaudio-facebook"></i>
-                          connect your photos
-                      </button>
-                  {{/if}}
+                      float-right
+                      animate-scale-pulse">
+                    <i class="btn__icon vizaudio-facebook"></i>
+                    connect your photos
+                </button>
+            {{else}}
+              publish
+            {{/unless}}
             </div>
+          </div>
+
+        {{else}}
+
+          <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
+            <button {{action 'fbConnect'}} class="u-mt
+                      btn
+                      btn--facebook
+                      btn-with-icon
+                      btn-with-icon--left
+                      animate-scale-pulse">
+                <i class="btn__icon vizaudio-facebook"></i>
+                connect your photos
+            </button>
+
+            <a {{action 'sampleConnect'}} class="controls__sample-link">See a sample first...</a>
         </div>
+
+        {{/if}}
+
+
+
+
+
+
+
+
+
+
+
     </div>
 </div>
 

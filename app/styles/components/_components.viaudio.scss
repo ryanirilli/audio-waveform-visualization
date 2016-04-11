@@ -48,7 +48,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 
 .polaroid {
   width: 100%;
-  background: rgba(white, 0.3);
+  border: 1px solid rgba(white, 0.1);
   border-radius: 2px;
   padding: 20px;
 }
@@ -57,7 +57,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   width: 710px;
   height: 455px;
   overflow: hidden;
-  background: #36518B;
+  background-color: #36518B;
   border-radius: 3px;
   position: relative;
 }
@@ -69,7 +69,6 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   height: 100%;
   top: 0;
   left: 0;
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
 }
 
 .polaroid__progress {
@@ -100,59 +99,34 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   left: -30px;
 }
 
-
-/* Lifted corners */
-
-.lifted {
-  -moz-border-radius:4px;
-  border-radius:4px;
-  position: relative;
-
-}
-
-.lifted:before,
-.lifted:after {
-  content:"";
-  position:absolute;
-  bottom:16px;
-  left:16px;
-  width:50%;
-  height:20%;
-  max-width:100px;
-  z-index: -1;
-  @include vendor(box-shadow, 0 15px 30px rgba(black, 0.8));
-  @include vendor(transform, rotate(-5deg));
-
-}
-
-.lifted:after {
-  right:16px;
-  left:auto;
-  @include vendor(transform, rotate(5deg));
-}
-
 .controls {
   position: absolute;
-  bottom: -70px;
   left: 0px;
-  opacity: 0;
-  @include vendor(transition, opacity 1s ease);
-
-}
-
-.controls-connected {
   background: white;
   border-radius: 25px;
   height: 50px;
   display: inline-block;
   padding: 0 40px 0 20px;
-  opacity: 1;
 }
 
 .controls-unconnected {
   opacity: 1;
-  @include animation('pulse-scale 4s infinite');
 }
+
+.controls__sample-link {
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 100;
+  font-size: 14px;
+  font-style: oblique;
+  position: relative;
+  left: 10px;
+  top: 12px;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+}
+
 
 .control {
   display: inline-block;
@@ -175,4 +149,18 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   position: absolute;
   right: 0;
   bottom: -55px;
+}
+
+.user-info {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.user-info__img {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  overflow: hidden;
+  border: 3px solid white;
 }

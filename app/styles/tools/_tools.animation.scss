@@ -82,13 +82,14 @@
 }
 
 @include keyframes(scale-tiny) {
-  0%{ @include vendor(transform, scale(1)) }
-  15%{ @include vendor(transform, scale(1.2)) }
-  100%{ @include vendor(transform, scale(0)) }
+  0%{ @include vendor(transform, scale(1)); opacity: 1; }
+  20%{ @include vendor(transform, scale(1.2)) }
+  100%{ @include vendor(transform, scale(0.8)); opacity: 0; }
 }
 
 .animate-scale-tiny {
-  @include animation('scale-tiny 0.5s ease');
+  @include vendor(transform-origin, center center);
+  @include animation('scale-tiny 1s ease');
   @include vendor(animation-fill-mode, forwards);
 }
 
@@ -100,4 +101,8 @@
 
 .fade-in--show {
   opacity: 1;
+}
+
+.animate-scale-pulse {
+  @include animation('pulse-scale 4s infinite');
 }

@@ -11,19 +11,28 @@ export default Ember.Component.extend(Shuffle, {
   facebook: Ember.inject.service(),
   profileUrl: null,
   audioCache: null,
+
   isConnectingToFacebook: false,
   isConnectedToFacebook: false,
   facebookConnectSuccess: false,
   isShowingControls: false,
+  willShowControls: false,
+  hasShownControls: false,
   isLoadingPhotos: false,
   isLoadingAudio: false,
   hasLoadedPhotos: false,
+  slideshowPublishSuccess: false,
+
   isPlaying: false,
   loadingProgress: 0,
   photoUrls: null,
   photos: null,
   currentPhotoIndex: 0,
   songs: [{
+    name: 'The Lumineers - Sleep on the Floor',
+    audioFile: `The-Lumineers_Sleep_on_the_Floor.mp3`,
+    path: `${baseAudioPath}/The-Lumineers_Sleep_on_the_Floor.mp3`
+  } , {
     name: 'LCD Soundsystem - Dance Yourself Clean',
     audioFile: `LCD-Soundsystem_Dance-Yourself-Clean.mp4`,
     path: `${baseAudioPath}/LCD-Soundsystem_Dance-Yourself-Clean.${extension}`
@@ -40,10 +49,12 @@ export default Ember.Component.extend(Shuffle, {
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   MAX_IMAGE_DURATION: 5000,
-  IMG_FRAMES_PER_SECOND: 30,
+  IMG_FRAMES_PER_SECOND: 25,
+
+
   $polaroidImg: null,
 
-  slideshowPublishSuccess: false,
+  _animateIn: false,
 
   onInit: function(){
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -59,6 +70,13 @@ export default Ember.Component.extend(Shuffle, {
     this._super.apply(this, arguments);
     const $polaroidImg = this.$('.polaroid__img');
     this.set('$polaroidImg', $polaroidImg);
+
+    if(this.get('animateIn')) {
+      Ember.run.next(() => {
+        this.set('_animateIn', true);
+      });
+    }
+
   },
 
   actions: {
@@ -66,19 +84,21 @@ export default Ember.Component.extend(Shuffle, {
       const facebook = this.get('facebook');
       this.set('isConnectingToFacebook', true);
       facebook.fbConnect().then(() => {
-        this.set('facebookConnectSuccess', true);
 
         facebook.fbFetchProfilePic().then(pic => {
           this.set('profileUrl', pic);
         });
 
+        this.set('facebookConnectSuccess', true);
         setTimeout(() => {
           this.setProperties({
             isConnectedToFacebook: true,
             isConnectingToFacebook: false
           });
         }, 500);
+
         this.fetchPhotoUrls();
+
       }).catch(() => {
         this.setProperties({
           isConnectingToFacebook: false,
@@ -112,6 +132,15 @@ export default Ember.Component.extend(Shuffle, {
       };
 
       Ember.$.ajax(requestData);
+    },
+
+    sampleConnect() {
+      this.set('willShowControls', true);
+      const photoUrls = [];
+      for(let i = 0; i<100; i++) {
+        photoUrls.push(`https://unsplash.it/710/455/?random=${i}`);
+      }
+      this.set('photoUrls', photoUrls);
     }
   },
 
@@ -145,17 +174,12 @@ export default Ember.Component.extend(Shuffle, {
   stop: function(){
     let source = this.get('source');
     let selectedSong = this.get('selectedSong');
-    source.onended = function(e) {
-      let endTime = moment(e.timestamp);
-      let diff = endTime.diff(this.get('audioStartTime'), 'seconds');
-      selectedSong.startTime = selectedSong.startTime || 0;
-      selectedSong.startTime += diff;
-    }.bind(this);
     source.stop();
     clearInterval(this.get('frameInterval'));
     this.setProperties({
       frameInterval: null,
-      isPlaying: false
+      isPlaying: false,
+      times: []
     });
   },
 
@@ -167,9 +191,12 @@ export default Ember.Component.extend(Shuffle, {
       this.setProperties({
         audioStartTime: 0
       });
-      this.fetchAudio(selectedSong.path).then((data) => {
+      this.fetchAudio(selectedSong.path).then(data => {
         this.startPlaying(data);
         this.set('isShowingControls', true);
+        Ember.run.scheduleOnce('afterRender', () => {
+          this.set('hasShownControls', true);
+        });
       });
     }
   },
@@ -224,7 +251,7 @@ export default Ember.Component.extend(Shuffle, {
 
     source.onended = function(){
       console.log(JSON.stringify(this.get('times')));
-    }.bind(this)
+    }.bind(this);
 
     return source;
   },
@@ -238,7 +265,6 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   times: [],
-
   logTimes() {
     const times = this.get('times');
     const curTime = moment();
@@ -254,29 +280,19 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   setPhoto() {
-
     this.logTimes();
-
-
-
     const $polaroidImg = this.get('$polaroidImg');
     const random = this.getRandomPhoto();
     $polaroidImg.css({
       'background-image': `url(${random.path})`
     });
-
-
-
-
-
   },
 
   loadPhotos: function(photoUrls){
     const promises = [];
     const photos = this.get('photos');
     this.set('isLoadingPhotos', true);
-
-    photoUrls.forEach((path) => {
+    photoUrls.forEach(path => {
       const promise = new Promise((resolve) => {
         const $img = this.createImage(path);
         $img.load(() => {
@@ -311,16 +327,35 @@ export default Ember.Component.extend(Shuffle, {
     return Math.floor(loadingProgress/totalCount*100);
   }.property('loadingProgress', 'photoUrls'),
 
-
+  minTimeReached: true,
   compareFrames() {
+
     this.setFrameInterval();
     let lastFrameVal = this.get('lastFrameVal');
     let curFrameVal = this.getCurrentFrameVal();
     this.set('lastFrameVal', curFrameVal);
     let change = curFrameVal - lastFrameVal;
     if(Math.floor(change) >= this.THRESHOLD) {
+
+      const minTimeReached = this.get('minTimeReached');
+
+      if(!minTimeReached) { return }
+
+      this.set('minTimeReached', false);
+      setTimeout(() => {
+        this.set('minTimeReached', true);
+      }, 500);
+
       this.setPhoto();
       this.changeBgColor();
+    }
+  },
+
+  setFrameInterval() {
+    let frameInterval = this.get('frameInterval');
+    if (!frameInterval) {
+      frameInterval = setInterval(this.compareFrames.bind(this), 1000/this.IMG_FRAMES_PER_SECOND);
+      this.set('frameInterval', frameInterval);
     }
   },
 
@@ -354,16 +389,6 @@ export default Ember.Component.extend(Shuffle, {
       values += frequencyData[i];
     }
     return values/frequencyData.length;
-  },
-
-  setFrameInterval() {
-    let frameInterval = this.get('frameInterval');
-    if (!frameInterval) {
-      frameInterval = setInterval(()=> {
-        this.compareFrames();
-      }, 1000/this.IMG_FRAMES_PER_SECOND);
-      this.set('frameInterval', frameInterval);
-    }
   },
 
   getRandomPhoto() {
