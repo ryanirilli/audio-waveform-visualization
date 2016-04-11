@@ -52,7 +52,7 @@
               </div>
 
             </div><div class="connect layout__item u-1/2">
-            {{#unless isFbConnected}}
+            {{#unless isConnectedToFacebook}}
                 <button {{action 'fbConnect'}} class="
                       btn
                       btn--facebook
@@ -64,39 +64,34 @@
                     connect your photos
                 </button>
             {{else}}
-              publish
+                <div class="visaudio__share">
+                    <div {{action 'share'}} class="float-right btn-with-icon btn-with-icon--left btn btn--small btn--primary btn--silent btn--border-white">
+                        <i class="btn__icon vizaudio-facebook"></i> Share
+                    </div>
+                </div>
             {{/unless}}
             </div>
           </div>
 
         {{else}}
-
-          <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
-            <button {{action 'fbConnect'}} class="u-mt
+          {{#unless isConnectedToFacebook}}
+            {{#unless isConnectingToFacebook}}
+              <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
+                  <button {{action 'fbConnect'}} class="u-mt
                       btn
                       btn--facebook
                       btn-with-icon
                       btn-with-icon--left
                       animate-scale-pulse">
-                <i class="btn__icon vizaudio-facebook"></i>
-                connect your photos
-            </button>
+                      <i class="btn__icon vizaudio-facebook"></i>
+                      connect your photos
+                  </button>
 
-            <a {{action 'sampleConnect'}} class="controls__sample-link">See a sample first...</a>
-        </div>
-
+                  <a {{action 'sampleConnect'}} class="controls__sample-link">See a sample first...</a>
+              </div>
+            {{/unless}}
+          {{/unless}}
         {{/if}}
-
-
-
-
-
-
-
-
-
-
-
     </div>
 </div>
 

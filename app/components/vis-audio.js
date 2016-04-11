@@ -12,6 +12,9 @@ export default Ember.Component.extend(Shuffle, {
   profileUrl: null,
   audioCache: null,
 
+  logGeneratedTimes: true,
+  times: [],
+
   isConnectingToFacebook: false,
   isConnectedToFacebook: false,
   facebookConnectSuccess: false,
@@ -22,12 +25,12 @@ export default Ember.Component.extend(Shuffle, {
   isLoadingAudio: false,
   hasLoadedPhotos: false,
   slideshowPublishSuccess: false,
-
   isPlaying: false,
   loadingProgress: 0,
   photoUrls: null,
   photos: null,
   currentPhotoIndex: 0,
+
   songs: [{
     name: 'The Lumineers - Sleep on the Floor',
     audioFile: `The-Lumineers_Sleep_on_the_Floor.mp3`,
@@ -41,29 +44,30 @@ export default Ember.Component.extend(Shuffle, {
     audioFile: `Shakey-Graves_Family-and-Genus.mp4`,
     path: `${baseAudioPath}/Shakey-Graves_Family-and-Genus.${extension}`
   }],
+
   selectedSong: null,
   audioStartTime: 0,
   error: null,
   frameInterval: null,
+
+  MAX_SAMPLE_PHOTOS: 100,
   THRESHOLD: 12,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
-  MAX_IMAGE_DURATION: 5000,
   IMG_FRAMES_PER_SECOND: 25,
 
-
   $polaroidImg: null,
-
   _animateIn: false,
 
-  onInit: function(){
+  init: function(){
+    this._super.apply(this, arguments);
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.setProperties({
       selectedSong: this.get('songs.firstObject'),
       photos: Ember.A(),
       audioCache: Ember.Map.create(),
     });
-  }.on('init'),
+  },
 
 
   didInsertElement() {
@@ -76,11 +80,29 @@ export default Ember.Component.extend(Shuffle, {
         this.set('_animateIn', true);
       });
     }
+  },
 
+  resetPlayer() {
+    this.stop();
+    const $polaroidImg = this.get('$polaroidImg');
+    $polaroidImg.css({
+      'background-image': 'none'
+    });
+    this.setProperties({
+      isShowingControls: false,
+      isPlaying: false,
+      loadingProgress: 0,
+      photoUrls: [],
+      photos: [],
+      currentPhotoIndex: 0
+    });
   },
 
   actions: {
     fbConnect: function(){
+
+      this.resetPlayer();
+
       const facebook = this.get('facebook');
       this.set('isConnectingToFacebook', true);
       facebook.fbConnect().then(() => {
@@ -130,14 +152,13 @@ export default Ember.Component.extend(Shuffle, {
           this.set('slideshowPublishError', true);
         }.bind(this)
       };
-
       Ember.$.ajax(requestData);
     },
 
     sampleConnect() {
       this.set('willShowControls', true);
       const photoUrls = [];
-      for(let i = 0; i<100; i++) {
+      for(let i = 0; i<this.MAX_SAMPLE_PHOTOS; i++) {
         photoUrls.push(`https://unsplash.it/710/455/?random=${i}`);
       }
       this.set('photoUrls', photoUrls);
@@ -151,11 +172,22 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   photoUrlsObserver: function() {
-    const photoUrls = this.get('photoUrls');
+    const photoUrls = this.get('photoUrls') || [];
+    if(!photoUrls.length) { return }
+
     this.loadPhotos(photoUrls).then(() => {
       this.initAudio(this.get('selectedSong'));
     });
   }.observes('photoUrls'),
+
+  hasShownControlsObserver: function() {
+    const isShowingControls = this.get('isShowingControls');
+    if(isShowingControls) {
+      Ember.run.later(() => {
+        this.set('hasShownControls', true);
+      }, 500);
+    }
+  }.observes('isShowingControls'),
 
   selectedSongObserver: function(){
     if(!this.get('hasLoadedPhotos')) {
@@ -173,7 +205,9 @@ export default Ember.Component.extend(Shuffle, {
 
   stop: function(){
     let source = this.get('source');
-    let selectedSong = this.get('selectedSong');
+    if(!source) { return }
+
+    const selectedSong = this.get('selectedSong');
     source.stop();
     clearInterval(this.get('frameInterval'));
     this.setProperties({
@@ -188,17 +222,11 @@ export default Ember.Component.extend(Shuffle, {
     if(buffer) {
       this.startPlaying(buffer);
     } else {
-      this.setProperties({
-        audioStartTime: 0
-      });
       this.fetchAudio(selectedSong.path).then(data => {
         this.startPlaying(data);
-        this.set('isShowingControls', true);
-        Ember.run.scheduleOnce('afterRender', () => {
-          this.set('hasShownControls', true);
-        });
       });
     }
+    this.set('isShowingControls', true);
   },
 
   startPlaying(data) {
@@ -247,12 +275,13 @@ export default Ember.Component.extend(Shuffle, {
 
   createSource(context) {
     let source = context.createBufferSource();
+    if(this.get('logGeneratedTimes')) {
+      source.onended = function(){
+        console.log(JSON.stringify(this.get('times')));
+      }.bind(this);
+    }
+
     this.set('source', source);
-
-    source.onended = function(){
-      console.log(JSON.stringify(this.get('times')));
-    }.bind(this);
-
     return source;
   },
 
@@ -264,7 +293,6 @@ export default Ember.Component.extend(Shuffle, {
     return analyser;
   },
 
-  times: [],
   logTimes() {
     const times = this.get('times');
     const curTime = moment();
@@ -332,13 +360,12 @@ export default Ember.Component.extend(Shuffle, {
 
     this.setFrameInterval();
     let lastFrameVal = this.get('lastFrameVal');
-    let curFrameVal = this.getCurrentFrameVal();
+    let curFrameVal = this.getFrameVal();
     this.set('lastFrameVal', curFrameVal);
-    let change = curFrameVal - lastFrameVal;
+    const change = curFrameVal - lastFrameVal;
     if(Math.floor(change) >= this.THRESHOLD) {
 
       const minTimeReached = this.get('minTimeReached');
-
       if(!minTimeReached) { return }
 
       this.set('minTimeReached', false);
@@ -379,16 +406,16 @@ export default Ember.Component.extend(Shuffle, {
     return frequencyData;
   },
 
-  getCurrentFrameVal() {
-    return this.getAvgVolume(this.getByteFrequencyData());
+  getFrameVal() {
+    return this.getAvg(this.getByteFrequencyData());
   },
 
-  getAvgVolume: function(frequencyData){
+  getAvg: function(arr){
     let values = 0;
-    for(let i = 0; i < frequencyData.length; i++) {
-      values += frequencyData[i];
+    for(let i = 0; i < arr.length; i++) {
+      values += arr[i];
     }
-    return values/frequencyData.length;
+    return values/arr.length;
   },
 
   getRandomPhoto() {
