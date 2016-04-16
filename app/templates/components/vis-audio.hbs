@@ -1,5 +1,4 @@
 <div class="visaudio {{if _animateIn 'visaudio-showing'}}">
-
     <div class="user-info">
         {{#if profileUrl}}
             <div class="user-info__img">
@@ -58,17 +57,18 @@
                       btn--facebook
                       btn-with-icon
                       btn-with-icon--left
-                      float-right
-                      animate-scale-pulse">
+                      float-right">
                     <i class="btn__icon vizaudio-facebook"></i>
                     connect your photos
                 </button>
             {{else}}
-                <div class="visaudio__share">
-                    <div {{action 'share'}} class="float-right btn-with-icon btn-with-icon--left btn btn--small btn--primary btn--silent btn--border-white">
-                        <i class="btn__icon vizaudio-facebook"></i> Share
-                    </div>
-                </div>
+              {{#unless hasPublished}}
+                  <div class="visaudio__share">
+                      <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--small btn--primary btn--silent btn--border-white">
+                          <i class="btn__icon vizaudio-facebook"></i> Share
+                      </div>
+                  </div>
+              {{/unless}}
             {{/unless}}
             </div>
           </div>
@@ -86,7 +86,6 @@
                       <i class="btn__icon vizaudio-facebook"></i>
                       connect your photos
                   </button>
-
                   <a {{action 'sampleConnect'}} class="controls__sample-link">See a sample first...</a>
               </div>
             {{/unless}}
@@ -95,3 +94,20 @@
     </div>
 </div>
 
+{{#if isShowingPublishSuccess}}
+  {{#sexy-modal onClose=(action "confirmPublishedSlideshow")}}
+      <div class="u-p">
+        <div class="u-ph++">
+            <img class="u-1/1 u-pt" src="/assets/image/dude-face.svg" />
+        </div>
+        <div class="media media--small">
+            <div class="media__img">
+                <i class="visaudio__success-icon vizaudio-circle-check"></i>
+            </div>
+            <div class="media__body text-pgraph">
+              Your video is rendering. we'll post it shortly. Until then, keep on rockin' in the free world.
+            </div>
+        </div>
+      </div>
+  {{/sexy-modal}}
+{{/if}}

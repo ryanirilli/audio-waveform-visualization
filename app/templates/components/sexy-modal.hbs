@@ -1,0 +1,11 @@
+<div class="modal {{if isShowing 'modal--showing'}}">
+    <div class="modal__container">
+        <div class="modal__close"></div>
+        <div class="modal__body">
+            {{yield}}
+            <button class="btn btn--small btn--full btn--hard u-mt" {{action 'close'}}>
+                alright
+            </button>
+        </div>
+    </div>
+</div>

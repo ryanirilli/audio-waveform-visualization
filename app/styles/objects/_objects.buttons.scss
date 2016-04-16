@@ -73,10 +73,6 @@ $facebook-blue: #3B5998;
 
 .btn--border-white {
   border-color: white;
-  &:hover {
-    background: white;
-    color: #333;
-  }
 }
 
 .btn--outline {
@@ -102,8 +98,10 @@ $facebook-blue: #3B5998;
     width: 100%;
     line-height: 2;
     font-size: 1.5rem;
-    opacity: 0.3;
+    opacity: 1;
+    color: white;
   }
+
 }
 
 .btn-with-icon {
@@ -126,4 +124,8 @@ $facebook-blue: #3B5998;
     left: 12px;
     top: 6px;
   }
+}
+
+.btn--hard {
+  border-radius: 0;
 }

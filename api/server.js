@@ -24,24 +24,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * Routes
  * **************************/
 app.post('/api/publish-slideshow', function(req, res) {
-  var urls = req.body.urls;
-  var token = req.body.token;
-  var songPath = req.body.songPath;
-  function createJob() {
-    var job = jobs.create('slideshows', {
-      token: token,
-      songPath: songPath,
-      urls: urls
-    });
-    job.on('complete', function (){
-      console.log('Job', job.id, 'with token', job.data.token, 'is done');
-    }).on('failed', function (){
-      console.log('Job', job.id, 'with token', job.data.token, 'has failed');
-      createJob()
-    });
-    job.save();
-  }
-  createJob()
+  // var urls = req.body.urls;
+  // var token = req.body.token;
+  // var songPath = req.body.songPath;
+  //
+  // function createJob() {
+  //   var job = jobs.create('slideshows', {
+  //     token: token,
+  //     songPath: songPath,
+  //     urls: urls
+  //   });
+  //   job.on('complete', function (){
+  //     console.log('Job', job.id, 'with token', job.data.token, 'is done');
+  //   }).on('failed', function (){
+  //     console.log('Job', job.id, 'with token', job.data.token, 'has failed');
+  //     createJob()
+  //   });
+  //   job.save();
+  // }
+  //
+  // createJob();
 
   res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
 });

@@ -15,6 +15,9 @@ $sexy-select-triangle-size: 10px;
   margin-top: 4px;
   padding: 2px 45px 2px 10px;
   border-radius: 2px;
+  &:hover {
+    color: black;
+  }
 }
 
 .sexy-select__body {

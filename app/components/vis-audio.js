@@ -25,8 +25,14 @@ export default Ember.Component.extend(Shuffle, {
   isLoadingPhotos: false,
   isLoadingAudio: false,
   hasLoadedPhotos: false,
-  slideshowPublishSuccess: false,
+  
+  hasConfirmedPublishSlideshow: false,
   isPlaying: false,
+  willPublish: false,
+  hasPublished: false,
+  isShowingPublishSuccess: false,
+  isShowingPublishError: false,
+
   loadingProgress: 0,
   photoUrls: null,
   photos: null,
@@ -37,7 +43,7 @@ export default Ember.Component.extend(Shuffle, {
   error: null,
   frameInterval: null,
 
-  MAX_SAMPLE_PHOTOS: 100,
+  MAX_SAMPLE_PHOTOS: 5,
   THRESHOLD: 12,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
@@ -48,14 +54,12 @@ export default Ember.Component.extend(Shuffle, {
 
   init: function(){
     this._super.apply(this, arguments);
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.setProperties({
       selectedSong: this.get('songs.firstObject'),
       photos: Ember.A(),
-      audioCache: Ember.Map.create(),
+      audioCache: Ember.Map.create()
     });
   },
-
 
   didInsertElement() {
     this._super.apply(this, arguments);
@@ -125,21 +129,29 @@ export default Ember.Component.extend(Shuffle, {
     },
 
     share() {
-      const urls = this.get('photos').map(photo => photo.path);
-      const token = window.FB.getAccessToken();
-      const songPath = this.get('selectedSong.audioFile');
-      const requestData = {
-        url: '/api/publish-slideshow',
-        type: 'post',
-        data: { urls, token, songPath },
-        success: function(data) {
-          this.set('slideshowPublishSuccess', true);
-        }.bind(this),
-        error: function(err) {
-          this.set('slideshowPublishError', true);
-        }.bind(this)
-      };
-      Ember.$.ajax(requestData);
+      this.stop();
+      this.set('willPublish', true);
+      Ember.run.later(() => {
+        const urls = this.get('photos').map(photo => photo.path);
+        const token = window.FB.getAccessToken();
+        const songPath = this.get('selectedSong.audioFile');
+        const requestData = {
+          url: '/api/publish-slideshow',
+          type: 'post',
+          data: { urls, token, songPath },
+          success: function(data) {
+            this.setProperties({
+              isShowingPublishSuccess: true,
+              willPublish: false,
+              hasPublished: true
+            });
+          }.bind(this),
+          error: function(err) {
+            this.set('isShowingPublishError', true);
+          }.bind(this)
+        };
+        Ember.$.ajax(requestData);
+      }, 3000);
     },
 
     sampleConnect() {
@@ -149,6 +161,13 @@ export default Ember.Component.extend(Shuffle, {
         photoUrls.push(`https://unsplash.it/710/455/?random=${i}`);
       }
       this.set('photoUrls', photoUrls);
+    },
+
+    confirmPublishedSlideshow() {
+      this.setProperties({
+        isShowingPublishSuccess: false,
+        hasConfirmedPublishSlideshow: true
+      });
     }
   },
 
@@ -213,7 +232,6 @@ export default Ember.Component.extend(Shuffle, {
         this.startPlaying(data);
       });
     }
-    this.set('isShowingControls', true);
   },
 
   startPlaying(data) {
@@ -239,6 +257,7 @@ export default Ember.Component.extend(Shuffle, {
 
     this.setProperties({
       isPlaying: true,
+      isShowingControls: true,
       audioStartTime: moment()
     });
 
@@ -343,8 +362,8 @@ export default Ember.Component.extend(Shuffle, {
   }.property('loadingProgress', 'photoUrls'),
 
   minTimeReached: true,
-  compareFrames() {
 
+  compareFrames() {
     this.setFrameInterval();
     let lastFrameVal = this.get('lastFrameVal');
     let curFrameVal = this.getFrameVal();
