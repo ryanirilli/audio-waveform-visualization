@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var kue = require('kue');
 var jobs = kue.createQueue({
-  redis: 'redis://127.0.0.1:6379'
+  redis: 'redis://159.203.223.179:6379'
 });
 
 var slideshow = require('./../slideshow/slideshow');
@@ -24,26 +24,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * Routes
  * **************************/
 app.post('/api/publish-slideshow', function(req, res) {
-  // var urls = req.body.urls;
-  // var token = req.body.token;
-  // var songPath = req.body.songPath;
-  //
-  // function createJob() {
-  //   var job = jobs.create('slideshows', {
-  //     token: token,
-  //     songPath: songPath,
-  //     urls: urls
-  //   });
-  //   job.on('complete', function (){
-  //     console.log('Job', job.id, 'with token', job.data.token, 'is done');
-  //   }).on('failed', function (){
-  //     console.log('Job', job.id, 'with token', job.data.token, 'has failed');
-  //     createJob()
-  //   });
-  //   job.save();
-  // }
-  //
-  // createJob();
+   var urls = req.body.urls;
+   var token = req.body.token;
+   var songPath = req.body.songPath;
+
+   function createJob() {
+     var job = jobs.create('slideshows', {
+       token: token,
+       songPath: songPath,
+       urls: urls
+     });
+     job.on('complete', function (){
+       console.log('Job', job.id, 'with token', job.data.token, 'is done');
+     }).on('failed', function (){
+       console.log('Job', job.id, 'with token', job.data.token, 'has failed');
+       createJob()
+     });
+     job.save();
+   }
+
+   createJob();
 
   res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
 });
