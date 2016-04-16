@@ -25,8 +25,7 @@ export default Ember.Component.extend(Shuffle, {
   isLoadingPhotos: false,
   isLoadingAudio: false,
   hasLoadedPhotos: false,
-  
-  hasConfirmedPublishSlideshow: false,
+
   isPlaying: false,
   willPublish: false,
   hasPublished: false,
@@ -43,7 +42,7 @@ export default Ember.Component.extend(Shuffle, {
   error: null,
   frameInterval: null,
 
-  MAX_SAMPLE_PHOTOS: 5,
+  MAX_SAMPLE_PHOTOS: 100,
   THRESHOLD: 12,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
@@ -163,10 +162,9 @@ export default Ember.Component.extend(Shuffle, {
       this.set('photoUrls', photoUrls);
     },
 
-    confirmPublishedSlideshow() {
+    hidePublishSuccess() {
       this.setProperties({
-        isShowingPublishSuccess: false,
-        hasConfirmedPublishSlideshow: true
+        isShowingPublishSuccess: false
       });
     }
   },
