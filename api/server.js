@@ -5,7 +5,7 @@ var compress = require('compression');
 var kue = require('kue');
 var jobs = kue.createQueue({
   redis: {
-    host: '159.203.223.179',
+    host: '159.203.212.134',
     options: {
       socket_keepalive: true,
       retry_strategy: function (options) {
@@ -44,7 +44,7 @@ app.post('/api/publish-slideshow', function (req, res) {
   }).on('failed attempt', function(errorMessage, doneAttempts){
     console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
   }).on('failed', function (errorMessage) {
-    console.log('Job', job.id, 'with token', job.data.token, 'has failed for good', 'error', errorMessage);
+    console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
   })
 
   job.save(function (err) {
