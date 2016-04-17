@@ -55,6 +55,7 @@ app.post('/api/publish-slideshow', function(req, res) {
            }
        })
      }
+     save()
    }
 
    createJob();
