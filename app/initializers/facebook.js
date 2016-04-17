@@ -1,7 +1,7 @@
 export function initialize(/* container, application */) {
   var fbAsyncInit = function () {
     FB.init({
-      appId      : '1636712916587895',
+      appId      : '1636056166653570',
       status     : true,
       xfbml      : true,
       version    : 'v2.3' // or v2.0, v2.1, v2.0

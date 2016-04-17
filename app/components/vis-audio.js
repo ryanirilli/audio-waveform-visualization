@@ -109,7 +109,7 @@ export default Ember.Component.extend(Shuffle, {
           });
         }, 500);
 
-        this.fetchPhotoUrls();
+        this.fetchFacebookPhotoUrls();
 
       }).catch(() => {
         this.setProperties({
@@ -169,7 +169,7 @@ export default Ember.Component.extend(Shuffle, {
     }
   },
 
-  fetchPhotoUrls() {
+  fetchFacebookPhotoUrls() {
     this.get('facebook').fbFetchPhotoUrls().then((urls) => {
       this.set('photoUrls', urls);
     });
@@ -324,6 +324,7 @@ export default Ember.Component.extend(Shuffle, {
     const promises = [];
     const photos = this.get('photos');
     this.set('isLoadingPhotos', true);
+
     photoUrls.forEach(path => {
       const promise = new Promise((resolve) => {
         const $img = this.createImage(path);
@@ -331,7 +332,7 @@ export default Ember.Component.extend(Shuffle, {
           this.incrementProperty('loadingProgress');
           photos.pushObject({ $img, path });
           resolve();
-        });
+        }).error(resolve);
       });
       promises.push(promise);
     });
