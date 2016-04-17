@@ -33,31 +33,27 @@ app.post('/api/publish-slideshow', function (req, res) {
   var token = req.body.token;
   var songPath = req.body.songPath;
 
-  var attempts = 0
-  function createJob() {
-    var job = jobs.create('slideshows', {
-      token: token,
-      songPath: songPath,
-      urls: urls
-    })
-    job.on('complete', function () {
-      console.log('Job', job.id, 'with token', job.data.token, 'is done');
-    }).on('failed', function () {
-      console.log('Job', job.id, 'with token', job.data.token, 'has failed');
-      if (attempts++ < 2) {
-        createJob();
-      }
-    })
-    job.save(function (err) {
-      if (err) {
-        console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
-      } else {
-        console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
-      }
-    })
-  }
+  var job = jobs.create('slideshows', {
+    token: token,
+    songPath: songPath,
+    urls: urls
+  }).attempts(3)
 
-   createJob();
+  job.on('complete', function () {
+    console.log('Job', job.id, 'with token', job.data.token, 'is done');
+  }).on('failed attempt', function(errorMessage, doneAttempts){
+    console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+  }).on('failed', function (errorMessage) {
+    console.log('Job', job.id, 'with token', job.data.token, 'has failed for good', 'error', errorMessage);
+  })
+
+  job.save(function (err) {
+    if (err) {
+      console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+    } else {
+      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
+    }
+  })
 
   res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
 });
