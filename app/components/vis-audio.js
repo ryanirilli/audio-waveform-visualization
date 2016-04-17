@@ -376,7 +376,7 @@ export default Ember.Component.extend(Shuffle, {
       this.set('minTimeReached', false);
       setTimeout(() => {
         this.set('minTimeReached', true);
-      }, 500);
+      }, 300);
 
       this.setPhoto();
       this.changeBgColor();

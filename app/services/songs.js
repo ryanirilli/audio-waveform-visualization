@@ -5,6 +5,10 @@ const extension = Dolby.checkDDPlus() ? 'mp4' : 'mp3';
 export default Ember.Service.extend({
   songs: [
     {
+      name: 'Fast Life Youngstaz - Swag Surfin',
+      audioFile: `Fast-Life-Youngstaz_Swag-Surfin.mp3`,
+      path: `${baseAudioPath}/Fast-Life-Youngstaz_Swag-Surfin.mp3`
+    }, {
       name: 'The Lumineers - Sleep on the Floor',
       audioFile: `The-Lumineers_Sleep_on_the_Floor.mp3`,
       path: `${baseAudioPath}/The-Lumineers_Sleep_on_the_Floor.mp3`,
