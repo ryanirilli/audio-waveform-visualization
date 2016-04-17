@@ -9,9 +9,7 @@ var jobs = kue.createQueue({
     options: {
       socket_keepalive: true,
       retry_strategy: function (options) {
-        console.log("DISCONNECTED " + options.times_connected + " times.", "ATTEMPT " + options.attempt)
-        // reconnect after
-        return 3000
+        return 300
       }
     }
   }
@@ -25,48 +23,49 @@ var app = express();
 app.use(compress());
 app.use(express.static(path.resolve('dist')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 /***************************
  * Routes
  * **************************/
-app.post('/api/publish-slideshow', function(req, res) {
-   var urls = req.body.urls;
-   var token = req.body.token;
-   var songPath = req.body.songPath;
+app.post('/api/publish-slideshow', function (req, res) {
+  var urls = req.body.urls;
+  var token = req.body.token;
+  var songPath = req.body.songPath;
 
-   function createJob() {
-     var job = jobs.create('slideshows', {
-       token: token,
-       songPath: songPath,
-       urls: urls
-     });
-     job.on('complete', function (){
-       console.log('Job', job.id, 'with token', job.data.token, 'is done');
-     }).on('failed', function (){
-       console.log('Job', job.id, 'with token', job.data.token, 'has failed');
-     });
-     var tries = 0
-     function save() {
-       job.save(function(err) {
-           console.log("ERROR saving job", err)
-           if (tries++ < 5) {
-             save()
-           }
-       })
-     }
-     save()
-   }
+  var attempts = 0
+  function createJob() {
+    var job = jobs.create('slideshows', {
+      token: token,
+      songPath: songPath,
+      urls: urls
+    })
+    job.on('complete', function () {
+      console.log('Job', job.id, 'with token', job.data.token, 'is done');
+    }).on('failed', function () {
+      console.log('Job', job.id, 'with token', job.data.token, 'has failed');
+      if (attempts++ < 2) {
+        createJob();
+      }
+    })
+    job.save(function (err) {
+      if (err) {
+        console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+      } else {
+        console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
+      }
+    })
+  }
 
    createJob();
 
   res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
 });
 
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
   res.sendFile(path.resolve('dist/index.html'));
 });
 
-app.listen(serverSettings.port, function() {
+app.listen(serverSettings.port, function () {
   console.log('Server listening on port ' + serverSettings.port);
 });
