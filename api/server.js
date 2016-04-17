@@ -4,11 +4,18 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var kue = require('kue');
 var jobs = kue.createQueue({
-  redis: 'redis://159.203.223.179:6379'
-});
-
-var slideshow = require('./../slideshow/slideshow');
-var facebook = require('./../slideshow/facebook');
+  redis: {
+    host: '159.203.223.179',
+    options: {
+      socket_keepalive: true,
+      retry_strategy: function (options) {
+        console.log("DISCONNECTED " + options.times_connected + " times.", "ATTEMPT " + options.attempt)
+        // reconnect after
+        return 3000
+      }
+    }
+  }
+})
 
 var serverSettings = {
   port: process.env.PORT || 3000
@@ -38,9 +45,16 @@ app.post('/api/publish-slideshow', function(req, res) {
        console.log('Job', job.id, 'with token', job.data.token, 'is done');
      }).on('failed', function (){
        console.log('Job', job.id, 'with token', job.data.token, 'has failed');
-       createJob()
      });
-     job.save();
+     var tries = 0
+     function save() {
+       job.save(function(err) {
+           console.log("ERROR saving job", err)
+           if (tries++ < 5) {
+             save()
+           }
+       })
+     }
    }
 
    createJob();
