@@ -132,12 +132,12 @@ export default Ember.Component.extend(Shuffle, {
       this.set('willPublish', true);
       Ember.run.later(() => {
         const urls = this.get('photos').map(photo => photo.path);
-        const token = window.FB.getAccessToken();
+        const userId = this.get('facebook').getUser().id ;
         const songPath = this.get('selectedSong.audioFile');
         const requestData = {
           url: '/api/publish-slideshow',
           type: 'post',
-          data: { urls, token, songPath },
+          data: { urls, userId, songPath },
           success: function(data) {
             this.setProperties({
               isShowingPublishSuccess: true,
