@@ -34,6 +34,15 @@
   font-size: 35px;
 }
 
+.visaudio__dolby-watermark {
+  position: fixed;
+  z-index: 9999999;
+  overflow: visible;
+  width: 80px;
+  bottom: 20px;
+  right: 30px;
+}
+
 $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
 @each $bg in $bgs {
   $i: index($bgs, $bg);
@@ -47,6 +56,7 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   border: 1px solid rgba(white, 0.1);
   border-radius: 2px;
   padding: 20px;
+  position: relative;
 }
 
 .polaroid__viewer {

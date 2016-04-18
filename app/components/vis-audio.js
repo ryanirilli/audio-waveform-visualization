@@ -233,6 +233,7 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   startPlaying(data) {
+    this.set('isPlaying', true);
     let context = new AudioContext();
     if(data instanceof ArrayBuffer) {
       context.decodeAudioData(data, (buffer) => {
@@ -254,7 +255,6 @@ export default Ember.Component.extend(Shuffle, {
     source.start(0, 0);
 
     this.setProperties({
-      isPlaying: true,
       isShowingControls: true,
       audioStartTime: moment()
     });
