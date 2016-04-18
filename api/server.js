@@ -40,18 +40,18 @@ app.post('/api/publish-slideshow', function (req, res) {
   }).attempts(3)
 
   job.on('complete', function () {
-    console.log('Job', job.id, 'with token', job.data.token, 'is done');
+    console.log('Job', job.id, 'with userId', job.data.userId, 'is done');
   }).on('failed attempt', function(errorMessage, doneAttempts){
-    console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+    console.log('Job', job.id, 'with userId', job.data.userId, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
   }).on('failed', function (errorMessage) {
-    console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
+    console.log('Job', job.id, 'with userId', job.data.userId, 'has fail', 'error', errorMessage);
   })
 
   job.save(function (err) {
     if (err) {
-      console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+      console.log('ERROR_SAVING', err, 'Job', job.id, 'with userId', job.data.userId)
     } else {
-      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
+      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with userId', job.data.userId)
     }
   })
 
