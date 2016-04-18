@@ -28,13 +28,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 /***************************
  * Routes
  * **************************/
+
 app.post('/api/publish-slideshow', function (req, res) {
   var urls = req.body.urls;
   var userId = req.body.userId;
   var songPath = req.body.songPath;
+  var token = req.body.token;
 
   var job = jobs.create('slideshows', {
     userId: userId,
+    token: token,
     songPath: songPath,
     urls: urls
   }).attempts(3)
