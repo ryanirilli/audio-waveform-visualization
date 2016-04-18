@@ -31,30 +31,28 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/api/publish-slideshow', function (req, res) {
   var urls = req.body.urls;
-  var userId = req.body.userId;
   var songPath = req.body.songPath;
   var token = req.body.token;
 
   var job = jobs.create('slideshows', {
-    userId: userId,
     token: token,
     songPath: songPath,
     urls: urls
   }).attempts(3)
 
   job.on('complete', function () {
-    console.log('Job', job.id, 'with userId', job.data.userId, 'is done');
+    console.log('Job', job.id, 'with token', job.data.token, 'is done');
   }).on('failed attempt', function(errorMessage, doneAttempts){
-    console.log('Job', job.id, 'with userId', job.data.userId, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+    console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
   }).on('failed', function (errorMessage) {
-    console.log('Job', job.id, 'with userId', job.data.userId, 'has fail', 'error', errorMessage);
+    console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
   })
 
   job.save(function (err) {
     if (err) {
-      console.log('ERROR_SAVING', err, 'Job', job.id, 'with userId', job.data.userId)
+      console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
     } else {
-      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with userId', job.data.userId)
+      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
     }
   })
 
