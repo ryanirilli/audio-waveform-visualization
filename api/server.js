@@ -1,8 +1,9 @@
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var compress = require('compression');
-var kue = require('kue');
+var express = require('express')
+var path = require('path')
+var bodyParser = require('body-parser')
+var compress = require('compression')
+var kue = require('kue')
+var facebook = require('./../slideshow/facebook')
 var jobs = kue.createQueue({
   redis: {
     host: '159.203.212.134',
@@ -33,30 +34,34 @@ app.post('/api/publish-slideshow', function (req, res) {
   var urls = req.body.urls;
   var songPath = req.body.songPath;
   var token = req.body.token;
+  facebook.upgradeToken(token).then(function (token) {
+    var job = jobs.create('slideshows', {
+      token: token,
+      songPath: songPath,
+      urls: urls
+    }).attempts(3)
 
-  var job = jobs.create('slideshows', {
-    token: token,
-    songPath: songPath,
-    urls: urls
-  }).attempts(3)
+    job.on('complete', function () {
+      console.log('Job', job.id, 'with token', job.data.token, 'is done');
+    }).on('failed attempt', function (errorMessage, doneAttempts) {
+      console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+    }).on('failed', function (errorMessage) {
+      console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
+    })
 
-  job.on('complete', function () {
-    console.log('Job', job.id, 'with token', job.data.token, 'is done');
-  }).on('failed attempt', function(errorMessage, doneAttempts){
-    console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
-  }).on('failed', function (errorMessage) {
-    console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
+    job.save(function (err) {
+      if (err) {
+        console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+      } else {
+        console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
+      }
+    })
+
+  }).fail(function (err) {
+    console.log("ERROR_UPGRADE_TOKEN", token, err)
   })
 
-  job.save(function (err) {
-    if (err) {
-      console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
-    } else {
-      console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
-    }
-  })
-
-  res.status(200).send(JSON.stringify({ data: 'all good in the hood' }));
+  res.status(200).send(JSON.stringify({data: 'all good in the hood'}));
 });
 
 app.get('*', function (req, res) {
