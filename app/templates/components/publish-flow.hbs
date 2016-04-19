@@ -1,0 +1,35 @@
+{{#sexy-modal}}
+
+    {{#if isShowingConfirmUi}}
+      <div class="u-p">
+          <div class="u-ph++">
+              <img class="u-1/1 u-pb" src="/assets/image/dude-face-4.svg" />
+          </div>
+          <div class="media media--small">
+              <div class="media__img">
+                  <i class="visaudio__success-icon vizaudio-circle-check"></i>
+              </div>
+              <div class="media__body text-pgraph">
+                  Your video is rendering. we'll post it shortly. Until then, keep on rockin' in the free world.
+              </div>
+          </div>
+      </div>
+    {{/if}}
+
+    {{#if isShowingFinishedUi}}
+        <div class="u-p">
+            <div class="u-ph++">
+                <img class="u-1/1 u-pb" src="/assets/image/dude-face-5.svg" />
+            </div>
+            <div class="media media--small">
+                <div class="media__img">
+                    <i class="visaudio__success-icon vizaudio-social-facebook-circular"></i>
+                </div>
+                <div class="media__body text-pgraph">
+                    You are about to share this video with all your friends, are you sure you want to do that?
+                </div>
+            </div>
+        </div>
+    {{/if}}
+
+{{/sexy-modal}}

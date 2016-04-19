@@ -3,6 +3,10 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   isShowing: false,
 
+  _buttonText: function(){
+    return this.get('buttonText') || 'Alright'
+  }.property('buttonText'),
+
   didInsertElement() {
     this._super.apply(this, arguments);
     Ember.run.later(() => {
@@ -14,8 +18,11 @@ export default Ember.Component.extend({
     close() {
       this.set('isShowing', false);
       Ember.run.later(() => {
-        this.get('onClose')();
-      }, 300);
+        const onClose = this.get('onClose');
+        if(typeof onClose === 'function') {
+          onClose();
+        }
+      },   300);
     }
   }
 });
