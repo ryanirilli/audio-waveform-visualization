@@ -23,3 +23,5 @@ workspace.xml
 
 images/
 temp/
+
+startup.sh
