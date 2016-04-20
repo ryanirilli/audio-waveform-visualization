@@ -10,14 +10,6 @@ export default Ember.Component.extend({
 
   submit() {
 
-    this.setProperties({
-      isShowingSuccessUi: true,
-      isShowingInterstitial: false,
-      isShowingConfirmUi: false
-    });
-
-    return;
-
     const urls = this.get('urls');
     const songPath = this.get('songPath');
     const token = window.FB.getAccessToken();
@@ -30,8 +22,7 @@ export default Ember.Component.extend({
         this.setProperties({
           isShowingSuccessUi: true,
           isShowingInterstitial: false,
-          isShowingConfirmUi: false,
-          isFinished: true
+          isShowingConfirmUi: false
         });
       }.bind(this),
       error: function(err) {
