@@ -6,6 +6,10 @@
   display: none;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 @for $i from 1 through 10 {
   .opacity-#{$i} {
     opacity: 1/$i;

@@ -29,8 +29,7 @@ export default Ember.Component.extend(Shuffle, {
   isPlaying: false,
   willPublish: false,
   hasPublished: false,
-  isShowingPublishSuccess: false,
-  isShowingPublishError: false,
+  isShowingPublishFlow: true,
 
   loadingProgress: 0,
   photoUrls: null,
@@ -71,6 +70,11 @@ export default Ember.Component.extend(Shuffle, {
       });
     }
   },
+
+  photoPaths: function() {
+    const photos = this.get('photos') || Ember.A();
+    return photos.map(photo => photo.path);
+  }.property('photos'),
 
   resetPlayer() {
     this.stop();
@@ -131,27 +135,9 @@ export default Ember.Component.extend(Shuffle, {
       this.stop();
       this.set('willPublish', true);
       Ember.run.later(() => {
-        const urls = this.get('photos').map(photo => photo.path);
-        const userId = this.get('facebook').getUser().id ;
-        const songPath = this.get('selectedSong.audioFile');
-        const token = window.FB.getAccessToken();
-        const requestData = {
-          url: '/api/publish-slideshow',
-          type: 'post',
-          data: { urls, userId, songPath, token },
-          success: function(data) {
-            this.setProperties({
-              isShowingPublishSuccess: true,
-              willPublish: false,
-              hasPublished: true
-            });
-          }.bind(this),
-          error: function(err) {
-            this.set('isShowingPublishError', true);
-          }.bind(this)
-        };
-        Ember.$.ajax(requestData);
-      }, 3000);
+        this.set('willPublish', false);
+        this.set('isShowingPublishFlow', true);
+      }, 1000);
     },
 
     sampleConnect() {
@@ -161,12 +147,6 @@ export default Ember.Component.extend(Shuffle, {
         photoUrls.push(`https://unsplash.it/710/455/?random=${i}`);
       }
       this.set('photoUrls', photoUrls);
-    },
-
-    hidePublishSuccess() {
-      this.setProperties({
-        isShowingPublishSuccess: false
-      });
     }
   },
 
@@ -280,10 +260,14 @@ export default Ember.Component.extend(Shuffle, {
 
   createSource(context) {
     let source = context.createBufferSource();
+
     if(this.get('logGeneratedTimes')) {
       source.onended = function(){
         console.log(JSON.stringify(this.get('times')));
+        this.stop();
       }.bind(this);
+    } else {
+      this.stop();
     }
 
     this.set('source', source);

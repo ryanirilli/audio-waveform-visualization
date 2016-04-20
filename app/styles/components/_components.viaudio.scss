@@ -29,6 +29,13 @@
   margin: 0 auto;
 }
 
+.visaudio__publish-fb-icon {
+  font-size: 55px;
+  top: -10px;
+  position: relative;
+  color: #3b5998;
+}
+
 .visaudio__success-icon {
   color: #3ABB3A;
   font-size: 35px;
@@ -41,6 +48,7 @@
   width: 80px;
   bottom: 20px;
   right: 30px;
+  opacity: 0.4;
 }
 
 $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;

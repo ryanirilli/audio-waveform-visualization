@@ -35,7 +35,7 @@ export default Ember.Service.extend({
         } else {
           reject();
         }
-      }, {scope: 'user_photos'});
+      }, {scope: 'user_photos,publish_actions'});
     });
   },
 
