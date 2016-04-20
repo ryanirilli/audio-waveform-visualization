@@ -3,6 +3,8 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   isShowingPublishFlow: null,
+  hasPublished: null,
+  
   isShowingConfirmUi: true,
   isShowingSuccessUi: false,
   isShowingInterstitial: false,
@@ -22,7 +24,8 @@ export default Ember.Component.extend({
         this.setProperties({
           isShowingSuccessUi: true,
           isShowingInterstitial: false,
-          isShowingConfirmUi: false
+          isShowingConfirmUi: false,
+          hasPublished: true
         });
       }.bind(this),
       error: function(err) {

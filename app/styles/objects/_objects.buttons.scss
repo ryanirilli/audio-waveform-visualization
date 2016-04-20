@@ -93,13 +93,19 @@ $facebook-blue: #3B5998;
     @extend .rotating;
     font-family: 'vizaudio';
     position: absolute;
-    top: -7px;
+    top: 0px;
     left: 0;
     width: 100%;
     line-height: 2;
     font-size: 1.5rem;
     opacity: 1;
     color: white;
+  }
+
+  &.btn--small {
+    &:before {
+      top: -7px;
+    }
   }
 
 }

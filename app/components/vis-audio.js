@@ -30,7 +30,6 @@ export default Ember.Component.extend(Shuffle, {
   willPublish: false,
   hasPublished: false,
   isShowingPublishFlow: false,
-
   loadingProgress: 0,
   photoUrls: null,
   photos: null,

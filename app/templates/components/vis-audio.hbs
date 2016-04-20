@@ -68,7 +68,7 @@
             {{else}}
               {{#unless hasPublished}}
                   <div class="visaudio__share">
-                      <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--small btn--primary btn--silent btn--border-white">
+                      <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--silent btn--border-white">
                           <i class="btn__icon vizaudio-facebook"></i> Share
                       </div>
                   </div>
@@ -99,5 +99,5 @@
 </div>
 
 {{#if isShowingPublishFlow}}
-  {{publish-flow isShowingPublishFlow=isShowingPublishFlow songPath=selectedSong.audioFile urls=photoPaths}}
+  {{publish-flow isShowingPublishFlow=isShowingPublishFlow hasPublished=hasPublished songPath=selectedSong.audioFile urls=photoPaths}}
 {{/if}}
