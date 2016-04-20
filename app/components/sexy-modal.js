@@ -2,10 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   isShowing: false,
-
-  _buttonText: function(){
-    return this.get('buttonText') || 'Alright'
-  }.property('buttonText'),
+  isCloseEnabled: true,
 
   didInsertElement() {
     this._super.apply(this, arguments);
@@ -13,6 +10,13 @@ export default Ember.Component.extend({
       this.set('isShowing', true);
     }, 100);
   },
+
+  shouldCloseObserver: function(){
+    const shouldClose = this.get('shouldClose');
+    if(shouldClose) {
+      this.send('close');
+    }
+  }.observes('shouldClose'),
 
   actions: {
     close() {
@@ -22,7 +26,7 @@ export default Ember.Component.extend({
         if(typeof onClose === 'function') {
           onClose();
         }
-      },   300);
+      }, 300);
     }
   }
 });

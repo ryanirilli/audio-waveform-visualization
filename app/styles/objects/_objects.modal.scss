@@ -21,3 +21,17 @@
 .modal--showing {
   opacity: 1;
 }
+
+.modal__close {
+  position: relative;
+  text-align: right;
+  top: 3px;
+  opacity: 1;
+  font-size: 19px;
+  cursor: pointer;
+  color: #C88585;
+  right: 5px;
+  &:hover {
+    color: #CE5050;
+  }
+}

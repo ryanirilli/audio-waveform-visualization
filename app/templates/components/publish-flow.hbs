@@ -1,35 +1,38 @@
-{{#sexy-modal}}
-
+{{#sexy-modal onClose=(action 'hidePublishFlow') hideClose=isShowingInterstitial shouldClose=isFinished}}
     {{#if isShowingConfirmUi}}
-      <div class="u-p">
-          <div class="u-ph++">
-              <img class="u-1/1 u-pb" src="/assets/image/dude-face-4.svg" />
-          </div>
-          <div class="media media--small">
-              <div class="media__img">
-                  <i class="visaudio__success-icon vizaudio-circle-check"></i>
-              </div>
-              <div class="media__body text-pgraph">
-                  Your video is rendering. we'll post it shortly. Until then, keep on rockin' in the free world.
-              </div>
-          </div>
-      </div>
-    {{/if}}
-
-    {{#if isShowingFinishedUi}}
         <div class="u-p">
-            <div class="u-ph++">
-                <img class="u-1/1 u-pb" src="/assets/image/dude-face-5.svg" />
-            </div>
-            <div class="media media--small">
+            <div class="media media--tiny {{if isShowingInterstitial 'opacity-2'}}">
                 <div class="media__img">
-                    <i class="visaudio__success-icon vizaudio-social-facebook-circular"></i>
+                    <i class="visaudio__publish-fb-icon vizaudio-social-facebook-circular"></i>
                 </div>
                 <div class="media__body text-pgraph">
-                    You are about to share this video with all your friends, are you sure you want to do that?
+                    We'll create a video of your slideshow and post it to your timeline, do you want to continue?
                 </div>
+            </div>
+            <div class="u-mt-">
+                <button class="btn btn--small btn--full btn--hard {{if isShowingInterstitial 'btn--loading'}}" {{action 'publish'}}>
+                  Yes, share on Facebook
+                </button>
             </div>
         </div>
     {{/if}}
 
+    {{#if isShowingSuccessUi}}
+        <div class="u-p">
+            <div class="u-ph++">
+                <img class="u-1/1 u-pb" src="/assets/image/dude-face-4.svg" />
+            </div>
+            <div class="media media--small">
+                <div class="media__img">
+                    <i class="visaudio__modal-icon visaudio__success-icon vizaudio-circle-check"></i>
+                </div>
+                <div class="media__body text-pgraph">
+                    Your video is rendering. we'll post it shortly. Until then, keep on rockin' in the free world.
+                </div>
+            </div>
+            <button class="btn btn--small btn--full btn--hard u-mt" {{action 'finished'}}>
+                You close now
+            </button>
+        </div>
+    {{/if}}
 {{/sexy-modal}}
