@@ -42,23 +42,23 @@ app.post('/api/publish-slideshow', function (req, res) {
     }).attempts(3)
 
     job.on('complete', function () {
-      console.log('Job', job.id, 'with token', job.data.token, 'is done');
+      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'is done');
     }).on('failed attempt', function (errorMessage, doneAttempts) {
-      console.log('Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
     }).on('failed', function (errorMessage) {
-      console.log('Job', job.id, 'with token', job.data.token, 'has fail', 'error', errorMessage);
+      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage);
     })
 
     job.save(function (err) {
       if (err) {
-        console.log('ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+        console.log(new Date(), 'ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
       } else {
-        console.log('SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
+        console.log(new Date(), 'SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
       }
     })
 
   }).fail(function (err) {
-    console.log("ERROR_UPGRADE_TOKEN", token, err)
+    console.log(new Date(), "ERROR_UPGRADE_TOKEN", token, err)
   })
 
   res.status(200).send(JSON.stringify({data: 'all good in the hood'}));
