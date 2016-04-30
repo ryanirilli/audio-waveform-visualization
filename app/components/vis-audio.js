@@ -44,7 +44,7 @@ export default Ember.Component.extend(Shuffle, {
   THRESHOLD: 12,
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
-  IMG_FRAMES_PER_SECOND: 25,
+  IMG_FRAMES_PER_SECOND: 40,
 
   $polaroidImg: null,
   _animateIn: false,
@@ -360,7 +360,7 @@ export default Ember.Component.extend(Shuffle, {
       this.set('minTimeReached', false);
       setTimeout(() => {
         this.set('minTimeReached', true);
-      }, 500);
+      }, 200);
 
       this.setPhoto();
       this.changeBgColor();
