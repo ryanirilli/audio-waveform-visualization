@@ -34,27 +34,29 @@ app.post('/api/publish-slideshow', function (req, res) {
   var urls = req.body.urls;
   var songPath = req.body.songPath;
   var token = req.body.token;
-  facebook.upgradeToken(token).then(function (token) {
-    var job = jobs.create('slideshows', {
-      token: token,
-      songPath: songPath,
-      urls: urls
-    }).attempts(3)
+  facebook.upgradeToken({token: token}).then(function (token) {
+    return facebook.getUser({token: token}).then(function (user) {
+      console.log(new Date(), 'PROCESSING_USER', user)
+      var job = jobs.create('slideshows', {
+        token: token,
+        songPath: songPath,
+        urls: urls
+      }).attempts(3)
 
-    job.on('complete', function () {
-      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'is done');
-    }).on('failed attempt', function (errorMessage, doneAttempts) {
-      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
-    }).on('failed', function (errorMessage) {
-      console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage);
-    })
+      job.on('complete', function () {
+        console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'is done');
+      }).on('failed attempt', function (errorMessage, doneAttempts) {
+        console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage, 'attempts', doneAttempts)
+      }).on('failed', function (errorMessage) {
+        console.log(new Date(), 'Job', job.id, 'with token', job.data.token, 'has failed', 'error', errorMessage);
+      })
 
-    job.save(function (err) {
-      if (err) {
-        console.log(new Date(), 'ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
-      } else {
-        console.log(new Date(), 'SUCCESS_SAVING', '', 'Job', job.id, 'with token', job.data.token)
-      }
+      job.save(function (err) {
+        if (err) {
+          console.log(new Date(), 'ERROR_SAVING', err, 'Job', job.id, 'with token', job.data.token)
+        }
+      })
+
     })
 
   }).fail(function (err) {
