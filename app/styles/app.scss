@@ -1,6 +1,8 @@
 $brand-color: #3498DB;
 @import "../../bower_components/inuit-defaults/settings.defaults";
+@import "../../bower_components/inuit-responsive-settings/settings.responsive";
 @import "settings/settings.inuit-vars";
+@import "../../bower_components/inuit-responsive-tools/tools.responsive";
 @import "../../bower_components/inuit-functions/tools.functions";
 @import "../../bower_components/inuit-mixins/tools.mixins";
 @import "../../bower_components/inuit-tools-widths/tools.widths";
@@ -31,6 +33,9 @@ $brand-color: #3498DB;
 @import "trumps/trumps.visibility";
 @import "../../bower_components/inuit-clearfix/trumps.clearfix";
 @import "../../bower_components/inuit-spacing/trumps.spacing";
+@import "../../bower_components/inuit-spacing-responsive/trumps.spacing-responsive";
+@import "../../bower_components/inuit-widths/trumps.widths";
+@import "../../bower_components/inuit-widths-responsive/trumps.widths-responsive";
 
 
 
@@ -62,6 +67,10 @@ $brand-color: #3498DB;
   left: 30px;
   top: 20px;
   z-index: 1;
+  @include media-query(palm) {
+    top: 0;
+    left: 0;
+  }
 }
 
 

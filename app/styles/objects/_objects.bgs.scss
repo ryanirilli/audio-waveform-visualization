@@ -1,9 +1,22 @@
 .bg-cover {
   background-size: cover;
   overflow: auto;
+
 }
 
 .bg-sky {
+  &:after {
+    @include vertical-gradient(#88CCEB, transparent);
+  }
+}
+
+.bg-gradient--night {
+  &:after {
+    @include vertical-gradient(black, transparent);
+  }
+}
+
+.bg-gradient {
   position: relative;
   color: white;
   &:after {
@@ -13,7 +26,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    @include vertical-gradient(#88CCEB, transparent);
   }
 }
 
@@ -28,6 +40,13 @@
 
 .bg-cover--old-man {
   background-image: url('/assets/image/old_on_bench.jpeg');
+}
+
+.bg-cover--motorcycle {
+  background-image: url('/assets/image/motorcycle.jpeg');
+  @include media-query(palm) {
+    background-position: right;
+  }
 }
 
 .bg {

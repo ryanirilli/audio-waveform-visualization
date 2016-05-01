@@ -16,6 +16,10 @@
     left: 0;
     @include vendor(transition, all 0.5s ease);
   }
+
+  @include media-query(palm) {
+    padding: 40px 0 50px 0;
+  }
 }
 
 .visaudio-showing {
@@ -26,6 +30,9 @@
   z-index: 1;
   position: relative;
   width: 750px;
+  @include media-query(palm) {
+    width: 100%;
+  }
   margin: 0 auto;
 }
 
@@ -49,6 +56,11 @@
   bottom: 20px;
   right: 30px;
   opacity: 0.4;
+  @include media-query(palm) {
+    top: 58px;
+    right: 17px;
+    width: 60px;
+  }
 }
 
 $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
@@ -59,30 +71,53 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   }
 }
 
+.visaudio__desktop-controls {
+  @include media-query(palm) {
+    display: none;
+  }
+}
+
+
+.visaudio__palm-controls {
+  display: none;
+  @include media-query(palm) {
+    display: block;
+  }
+}
+
 .polaroid {
   width: 100%;
-  border: 1px solid rgba(white, 0.1);
-  border-radius: 2px;
-  padding: 20px;
+  padding: 10px;
   position: relative;
 }
 
 .polaroid__viewer {
-  width: 710px;
   height: 455px;
   overflow: hidden;
+  border-radius: 7px;
   background-color: #36518B;
-  border-radius: 3px;
   position: relative;
 }
 
 .polaroid__img {
-  background-size: cover;
   position: absolute;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+}
+
+.polaroid__img__item {
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.polaroid__img__item--active {
+  opacity: 1;
 }
 
 .polaroid__progress {
@@ -139,6 +174,11 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   &:hover {
     color: white;
   }
+  @include media-query(palm) {
+    color: black;
+    font-style: normal;
+    text-decoration: underline;
+  }
 }
 
 
@@ -171,4 +211,12 @@ $bgs: #2183A3, #FFDC48, #FF9800, #FF6300, #A32214;
   border-radius: 25px;
   overflow: hidden;
   border: 3px solid white;
+}
+
+.palm-controls {
+  position: fixed;
+  bottom: 0%;
+  width: 100%;
+  height: 105px;
+  background: white;
 }

@@ -8,6 +8,7 @@ function getRandomInt(min, max) {
 
 export default Ember.Component.extend(Shuffle, {
   facebook: Ember.inject.service(),
+  audioContext: null,
   songsService: Ember.inject.service('songs'),
   songs: Ember.computed.alias('songsService.songs'),
   profileUrl: null,
@@ -192,7 +193,10 @@ export default Ember.Component.extend(Shuffle, {
     if(!source) { return }
 
     const selectedSong = this.get('selectedSong');
-    source.stop();
+    try {
+      source.stop();
+    } catch(e) {}
+
     clearInterval(this.get('frameInterval'));
     this.setProperties({
       frameInterval: null,
@@ -207,6 +211,7 @@ export default Ember.Component.extend(Shuffle, {
       this.startPlaying(buffer);
     } else {
       this.fetchAudio(selectedSong.path).then(data => {
+        console.log('STARTING TO PLAY: ', data);
         this.startPlaying(data);
       });
     }
@@ -214,7 +219,13 @@ export default Ember.Component.extend(Shuffle, {
 
   startPlaying(data) {
     this.set('isPlaying', true);
-    let context = new AudioContext();
+
+    let context = this.get('audioContext');
+    if(!context) {
+      context = new AudioContext();
+      this.set('audioContext', context);
+    }
+
     if(data instanceof ArrayBuffer) {
       context.decodeAudioData(data, (buffer) => {
         let selectedSong = this.get('selectedSong');
@@ -232,7 +243,18 @@ export default Ember.Component.extend(Shuffle, {
     source.buffer = buffer;
     source.connect(analyser);
     source.connect(context.destination);
-    source.start(0, 0);
+
+    console.log('STARTING_SOURCE: ', buffer);
+
+    if(source.noteOn) {
+      source.noteOn(0);
+    } else {
+      source.start(0, 0);
+    }
+
+
+
+
 
     this.setProperties({
       isShowingControls: true,
@@ -244,12 +266,14 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   fetchAudio(url) {
+    console.log('LOADING: :', url);
     this.set('isLoadingAudio', true);
     return new Promise(resolve => {
       let request = new XMLHttpRequest();
       request.open('GET', url, true);
       request.responseType = 'arraybuffer';
       request.onload = function() {
+        console.log('LOADED: :', url);
         this.set('isLoadingAudio', false);
         resolve(request.response);
       }.bind(this);
@@ -298,10 +322,11 @@ export default Ember.Component.extend(Shuffle, {
   setPhoto() {
     this.logTimes();
     const $polaroidImg = this.get('$polaroidImg');
+
+    const $active = this.$('.polaroid__img__item--active');
+    $active.removeClass('polaroid__img__item--active');
     const random = this.getRandomPhoto();
-    $polaroidImg.css({
-      'background-image': `url(${random.path})`
-    });
+    random.$img.addClass('polaroid__img__item--active');
   },
 
   loadPhotos: function(photoUrls){
@@ -309,11 +334,19 @@ export default Ember.Component.extend(Shuffle, {
     const photos = this.get('photos');
     this.set('isLoadingPhotos', true);
 
+    const containerWidth = this.$('.polaroid__imgs').width();
+
     photoUrls.forEach(path => {
       const promise = new Promise((resolve) => {
         const $img = this.createImage(path);
         $img.load(() => {
           this.incrementProperty('loadingProgress');
+          const imgWidth = $img.width();
+          if(imgWidth < containerWidth) {
+            const diff = containerWidth - imgWidth;
+            $img.width(imgWidth + diff);
+            $img.css({height: 'auto'});
+          }
           photos.pushObject({ $img, path });
           resolve();
         }).error(resolve);
@@ -332,8 +365,11 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   createImage(path) {
+    const $polaroidImgs = this.$('.polaroid__imgs');
     let $img = Ember.$('<img />');
     $img.attr('src', path);
+    $img.addClass('polaroid__img__item');
+    $polaroidImgs.append($img);
     return $img;
   },
 
