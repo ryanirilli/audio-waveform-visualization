@@ -4,7 +4,7 @@
 
 }
 
-.bg-sky {
+.bg-gradient--sky {
   &:after {
     @include vertical-gradient(#88CCEB, transparent);
   }
