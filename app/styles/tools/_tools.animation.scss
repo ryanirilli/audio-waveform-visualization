@@ -44,7 +44,7 @@
 
 @include keyframes(ken-burns) {
   0%   { @include vendor(transform, scale(1)) }
-  50%   { @include vendor(transform, scale(1.4)) }
+  50%   { @include vendor(transform, scale(1.2)) }
   100%   { @include vendor(transform, scale(1)) }
 }
 
