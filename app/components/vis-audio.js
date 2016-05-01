@@ -368,7 +368,7 @@ export default Ember.Component.extend(Shuffle, {
     const $polaroidImgs = this.$('.polaroid__imgs');
     let $img = Ember.$('<img />');
     $img.attr('src', path);
-    $img.addClass('polaroid__img__item');
+    $img.addClass('polaroid__img__item ken-burns');
     $polaroidImgs.append($img);
     return $img;
   },

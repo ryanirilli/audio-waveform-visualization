@@ -44,7 +44,8 @@
 
 @include keyframes(ken-burns) {
   0%   { @include vendor(transform, scale(1)) }
-  100%   { @include vendor(transform, scale(2)) }
+  50%   { @include vendor(transform, scale(1.4)) }
+  100%   { @include vendor(transform, scale(1)) }
 }
 
 
@@ -105,4 +106,9 @@
 
 .animate-scale-pulse {
   @include animation('pulse-scale 4s infinite');
+}
+
+
+.ken-burns {
+  @include animation('ken-burns 50s infinite');
 }
