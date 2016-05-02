@@ -80,10 +80,8 @@ export default Ember.Component.extend(Shuffle, {
 
   resetPlayer() {
     this.stop();
-    const $polaroidImg = this.get('$polaroidImg');
-    $polaroidImg.css({
-      'background-image': 'none'
-    });
+    const $active = this.$('.polaroid__img__item--active');
+    $active.removeClass('polaroid__img__item--active');
     this.setProperties({
       isShowingControls: false,
       isPlaying: false,
@@ -156,7 +154,7 @@ export default Ember.Component.extend(Shuffle, {
   fetchFacebookPhotoUrls() {
     this.get('facebook').fbFetchPhotoUrls().then((urls) => {
       if(this.get('isMobile')) {
-        
+
         return;
       }
 
