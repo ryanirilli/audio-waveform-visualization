@@ -17,6 +17,7 @@ export default Ember.Component.extend(Shuffle, {
   logGeneratedTimes: true,
   times: [],
 
+  isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
   isConnectingToFacebook: false,
   isConnectedToFacebook: false,
   facebookConnectSuccess: false,
@@ -41,6 +42,7 @@ export default Ember.Component.extend(Shuffle, {
   error: null,
   frameInterval: null,
 
+  MAX_SAMPLE_PHOTOS_MOBILE: 20,
   MAX_SAMPLE_PHOTOS: 100,
   THRESHOLD: 12,
   FFTSIZE: 1024,
@@ -143,7 +145,8 @@ export default Ember.Component.extend(Shuffle, {
     sampleConnect() {
       this.set('willShowControls', true);
       const photoUrls = [];
-      for(let i = 0; i<this.MAX_SAMPLE_PHOTOS; i++) {
+      const maxPhotos = this.get('isMobile') ? this.MAX_SAMPLE_PHOTOS_MOBILE : this.MAX_SAMPLE_PHOTOS;
+      for(let i = 0; i < maxPhotos; i++) {
         photoUrls.push(`https://unsplash.it/710/455/?random=${i}`);
       }
       this.set('photoUrls', photoUrls);
@@ -152,6 +155,11 @@ export default Ember.Component.extend(Shuffle, {
 
   fetchFacebookPhotoUrls() {
     this.get('facebook').fbFetchPhotoUrls().then((urls) => {
+      if(this.get('isMobile')) {
+        
+        return;
+      }
+
       this.set('photoUrls', urls);
     });
   },
@@ -161,7 +169,12 @@ export default Ember.Component.extend(Shuffle, {
     if(!photoUrls.length) { return }
 
     this.loadPhotos(photoUrls).then(() => {
-      this.initAudio(this.get('selectedSong'));
+      if( this.get('isMobile') ) {
+        this.set('isShowingControls', true);
+      } else {
+        this.initAudio(this.get('selectedSong'));
+      }
+
     });
   }.observes('photoUrls'),
 
@@ -218,6 +231,7 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   startPlaying(data) {
+
     this.set('isPlaying', true);
 
     let context = this.get('audioContext');
@@ -245,16 +259,7 @@ export default Ember.Component.extend(Shuffle, {
     source.connect(context.destination);
 
     console.log('STARTING_SOURCE: ', buffer);
-
-    if(source.noteOn) {
-      source.noteOn(0);
-    } else {
-      source.start(0, 0);
-    }
-
-
-
-
+    source.start(0, 0);
 
     this.setProperties({
       isShowingControls: true,

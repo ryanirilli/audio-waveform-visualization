@@ -1,197 +1,130 @@
-<div class="visaudio {{if _animateIn 'visaudio-showing'}}">
-    <div class="user-info">
-        {{#if profileUrl}}
-            <div class="user-info__img">
-                <img src="{{profileUrl}}" />
-            </div>
-        {{/if}}
-    </div>
+{{#unless isMobile}}
+  <div class="visaudio {{if _animateIn 'visaudio-showing'}}">
 
-    <div class="visaudio__dolby-watermark">
-        <img src="/assets/image/DolbyAudio-logo-black.svg" />
-    </div>
-
-    <div class="visaudio__wrapper">
-        <div class="polaroid u-mt palm-mt0">
-            <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
-
-              <div class="polaroid__imgs"></div>
-
-              {{#if isLoadingPhotos}}
-                  <div class="polaroid__progress">
-                    {{progress-bar progress=progress}}
-                  </div>
-              {{/if}}
-              {{#if isLoadingAudio}}
-                  <div class="polaroid__loading-audio">
-                    loading audio...
-                  </div>
-              {{/if}}
-            </div>
-        </div>
-
-
-
-
-
-
-
-        <div class="visaudio__desktop-controls">
-          {{#if isShowingControls}}
-            <div class="layout u-mt fade-in {{if hasShownControls 'fade-in--show'}}">
-              <div class="player layout__item u-1/2">
-
-                <div class="controls">
-                  {{#if isPlaying}}
-                      <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
-                  {{else}}
-                    {{#if isLoadingAudio}}
-                        <i class="control control-icon controls__loading vizaudio-cog"></i>
-                    {{else}}
-                        <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
-                    {{/if}}
-                  {{/if}}
-                    <div class="control u-pl-">
-                      {{sexy-select
-                      selection=selectedSong
-                      options=songs
-                      valueProperty="path"
-                      labelProperty="name"
-                      defaultLabel="Select A Song"}}
-                    </div>
-                </div>
-
-              </div><div class="connect layout__item u-1/2">
-              {{#unless isConnectedToFacebook}}
-                  <button {{action 'fbConnect'}} class="
-                        btn
-                        btn--facebook
-                        btn-with-icon
-                        btn-with-icon--left
-                        float-right">
-                      <i class="btn__icon vizaudio-facebook"></i>
-                      connect your photos
-                  </button>
-              {{else}}
-                {{#unless hasPublished}}
-                    <div class="visaudio__share">
-                        <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--silent btn--border-white">
-                            <i class="btn__icon vizaudio-facebook"></i> Share
-                        </div>
-                    </div>
-                {{/unless}}
-              {{/unless}}
+      <div class="user-info">
+          {{#if profileUrl}}
+              <div class="user-info__img">
+                  <img src="{{profileUrl}}" />
               </div>
-            </div>
+          {{/if}}
+      </div>
 
-          {{else}}
-            {{#unless isConnectedToFacebook}}
-              {{#unless isConnectingToFacebook}}
-                <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
-                    <button {{action 'fbConnect'}} class="u-mt
-                        btn
-                        btn--facebook
-                        btn-with-icon
-                        btn-with-icon--left
-                        animate-scale-pulse">
+      <div class="visaudio__dolby-watermark">
+          <img src="/assets/image/DolbyAudio-logo-black.svg" />
+      </div>
+
+      <div class="visaudio__wrapper">
+          <div class="polaroid u-mt palm-mt0">
+              <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
+
+                <div class="polaroid__imgs"></div>
+
+                {{#if isLoadingPhotos}}
+                    <div class="polaroid__progress">
+                      {{progress-bar progress=progress}}
+                    </div>
+                {{/if}}
+                {{#if isLoadingAudio}}
+                    <div class="polaroid__loading-audio">
+                      loading audio...
+                    </div>
+                {{/if}}
+              </div>
+          </div>
+
+
+
+
+
+
+
+          <div class="visaudio__desktop-controls">
+            {{#if isShowingControls}}
+              <div class="layout u-mt fade-in {{if hasShownControls 'fade-in--show'}}">
+                <div class="player layout__item u-1/2">
+
+                  <div class="controls">
+                    {{#if isPlaying}}
+                        <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
+                    {{else}}
+                      {{#if isLoadingAudio}}
+                          <i class="control control-icon controls__loading vizaudio-cog"></i>
+                      {{else}}
+                          <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
+                      {{/if}}
+                    {{/if}}
+                      <div class="control u-pl-">
+                        {{sexy-select
+                        selection=selectedSong
+                        options=songs
+                        valueProperty="path"
+                        labelProperty="name"
+                        defaultLabel="Select A Song"}}
+                      </div>
+                  </div>
+
+                </div><div class="connect layout__item u-1/2">
+                {{#unless isConnectedToFacebook}}
+                    <button {{action 'fbConnect'}} class="
+                          btn
+                          btn--facebook
+                          btn-with-icon
+                          btn-with-icon--left
+                          float-right">
                         <i class="btn__icon vizaudio-facebook"></i>
                         connect your photos
                     </button>
-                    <a {{action 'sampleConnect'}} class="controls__sample-link">use random images</a>
-                </div>
-              {{/unless}}
-            {{/unless}}
-          {{/if}}
-        </div>
-
-
-        <div class="visaudio__palm-controls">
-            <div class="palm-controls">
-              {{#if isShowingControls}}
-
-                  <div class="layout u-mt fade-in {{if hasShownControls 'fade-in--show'}}">
-                      <div class="player layout__item u-1/2">
-
-                          <div class="controls">
-                            {{#if isPlaying}}
-                                <i class="control control-icon controls__pause vizaudio-pause" {{action 'stop'}}></i>
-                            {{else}}
-                              {{#if isLoadingAudio}}
-                                  <i class="control control-icon controls__loading vizaudio-cog"></i>
-                              {{else}}
-                                  <i class="control control-icon controls__play vizaudio-play" {{action 'play'}}></i>
-                              {{/if}}
-                            {{/if}}
-                              <div class="control u-pl-">
-                                {{sexy-select
-                                selection=selectedSong
-                                options=songs
-                                valueProperty="path"
-                                labelProperty="name"
-                                defaultLabel="Select A Song"}}
-                              </div>
+                {{else}}
+                  {{#unless hasPublished}}
+                      <div class="visaudio__share">
+                          <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--silent btn--border-white">
+                              <i class="btn__icon vizaudio-facebook"></i> Share
                           </div>
-
-                      </div><div class="connect layout__item u-1/2">
-                        {{#unless isConnectedToFacebook}}
-                            <button {{action 'fbConnect'}} class="
-                            btn
-                            btn--facebook
-                            btn-with-icon
-                            btn-with-icon--left
-                            float-right">
-                                <i class="btn__icon vizaudio-facebook"></i>
-                                connect
-                            </button>
-                        {{else}}
-                          {{#unless hasPublished}}
-                              <div class="visaudio__share">
-                                  <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--silent btn--border-white">
-                                      <i class="btn__icon vizaudio-facebook"></i> Share
-                                  </div>
-                              </div>
-                          {{/unless}}
-                        {{/unless}}
-                      </div>
-                  </div>
-
-
-              {{else}}
-
-
-                {{#unless isConnectedToFacebook}}
-                  {{#unless isConnectingToFacebook}}
-                      <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
-                          <button {{action 'fbConnect'}} class="u-mt
-                        btn
-                        btn--facebook
-                        btn-with-icon
-                        btn-with-icon--left
-                        animate-scale-pulse u-ml">
-                              <i class="btn__icon vizaudio-facebook"></i>
-                              connect
-                          </button>
-                          <a {{action 'sampleConnect'}} class="controls__sample-link">use random images</a>
                       </div>
                   {{/unless}}
                 {{/unless}}
+                </div>
+              </div>
 
+            {{else}}
+              {{#unless isConnectedToFacebook}}
+                {{#unless isConnectingToFacebook}}
+                  <div class="inline {{if willShowControls 'animate-scale-tiny'}}">
+                      <button {{action 'fbConnect'}} class="u-mt
+                          btn
+                          btn--facebook
+                          btn-with-icon
+                          btn-with-icon--left
+                          animate-scale-pulse">
+                          <i class="btn__icon vizaudio-facebook"></i>
+                          connect your photos
+                      </button>
+                      <a {{action 'sampleConnect'}} class="controls__sample-link">use random images</a>
+                  </div>
+                {{/unless}}
+              {{/unless}}
+            {{/if}}
+          </div>
+      </div>
+  </div>
 
-              {{/if}}
-            </div>
+  {{#if isShowingPublishFlow}}
+    {{publish-flow isShowingPublishFlow=isShowingPublishFlow hasPublished=hasPublished songPath=selectedSong.audioFile urls=photoPaths}}
+  {{/if}}
+{{else}}
+  <div class="page-height-1/1 bg-gradient bg-gradient--cool">
 
-        </div>
+      <div class="text-center u-p u-pt++ text-pgraph text-pgraph--bigger">
+          Sorry we're not mobile ready yet. But we're working on it!
+      </div>
+      <div class="text-center">
+        <i class="vizaudio-movie_filter icon--huge" />
+      </div>
 
+      <div class="text-center u-p text-pgraph text-pgraph--bigger">
+          Please visit visaudio.me on a desktop or laptop computer.
+      </div>
 
+  </div>
 
-
-
-
-
-
-    </div>
-</div>
-
-{{#if isShowingPublishFlow}}
-  {{publish-flow isShowingPublishFlow=isShowingPublishFlow hasPublished=hasPublished songPath=selectedSong.audioFile urls=photoPaths}}
-{{/if}}
+{{/unless}}
