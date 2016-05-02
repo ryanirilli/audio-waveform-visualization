@@ -22,6 +22,11 @@
   }
 }
 
+.bg-facebook {
+  background: #3B5998;
+  color: white;
+}
+
 .bg-gradient {
   position: relative;
   color: white;
@@ -32,7 +37,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
   }
 }
 
@@ -47,6 +51,9 @@
 
 .bg-cover--old-man {
   background-image: url('/assets/image/old_on_bench.jpeg');
+  @include media-query(palm) {
+    background: #3B5998;
+  }
 }
 
 .bg-cover--motorcycle {
