@@ -269,29 +269,26 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   fetchAudio(url) {
-    console.log('LOADING: :', url);
     this.set('isLoadingAudio', true);
     return new Promise(resolve => {
       let request = new XMLHttpRequest();
       request.open('GET', url, true);
       request.responseType = 'arraybuffer';
-      request.onload = function() {
-        console.log('LOADED: :', url);
+      request.onload = () => {
         this.set('isLoadingAudio', false);
         resolve(request.response);
-      }.bind(this);
+      };
       request.send();
     });
   },
 
   createSource(context) {
     let source = context.createBufferSource();
-
     if(this.get('logGeneratedTimes')) {
-      source.onended = function(){
+      source.onended = () => {
         console.log(JSON.stringify(this.get('times')));
         this.stop();
-      }.bind(this);
+      };
     } else {
       this.stop();
     }
@@ -318,14 +315,12 @@ export default Ember.Component.extend(Shuffle, {
       return;
     }
 
-    var duration = moment.duration(curTime.diff(lastTime));
+    const duration = moment.duration(curTime.diff(lastTime));
     times.push(duration.asMilliseconds());
   },
 
   setPhoto() {
     this.logTimes();
-    const $polaroidImg = this.get('$polaroidImg');
-
     const $active = this.$('.polaroid__img__item--active');
     $active.removeClass('polaroid__img__item--active');
     const random = this.getRandomPhoto();
@@ -399,7 +394,7 @@ export default Ember.Component.extend(Shuffle, {
       this.set('minTimeReached', false);
       setTimeout(() => {
         this.set('minTimeReached', true);
-      }, 200);
+      }, 1000);
 
       this.setPhoto();
       this.changeBgColor();

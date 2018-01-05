@@ -8,11 +8,6 @@
               </div>
           {{/if}}
       </div>
-
-      <div class="visaudio__dolby-watermark">
-          <img src="/assets/image/DolbyAudio-logo-black.svg" />
-      </div>
-
       <div class="visaudio__wrapper">
           <div class="polaroid u-mt palm-mt0">
               <div class="polaroid__viewer {{unless isConnectedToFacebook 'polaroid__viewer--default' }}">
@@ -31,13 +26,6 @@
                 {{/if}}
               </div>
           </div>
-
-
-
-
-
-
-
           <div class="visaudio__desktop-controls">
             {{#if isShowingControls}}
               <div class="layout u-mt fade-in {{if hasShownControls 'fade-in--show'}}">
@@ -74,18 +62,9 @@
                         <i class="btn__icon vizaudio-facebook"></i>
                         connect your photos
                     </button>
-                {{else}}
-                  {{#unless hasPublished}}
-                      <div class="visaudio__share">
-                          <div {{action 'share'}} class="{{if willPublish 'btn--loading'}} float-right btn-with-icon btn-with-icon--left btn btn--silent btn--border-white">
-                              <i class="btn__icon vizaudio-facebook"></i> Share
-                          </div>
-                      </div>
-                  {{/unless}}
                 {{/unless}}
                 </div>
               </div>
-
             {{else}}
               {{#unless isConnectedToFacebook}}
                 {{#unless isConnectingToFacebook}}
