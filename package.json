@@ -14,7 +14,7 @@
   },
   "repository": "https://github.com/ryanirilli/visaudio",
   "engines": {
-    "node": "0.12.12"
+    "node": "6.11.4"
   },
   "author": "Ryan Irilli",
   "license": "MIT",
