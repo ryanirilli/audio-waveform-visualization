@@ -25,5 +25,8 @@
     "progressbar.js": "^1.0.0",
     "inuit-widths-responsive": "~0.2.2",
     "inuit-spacing-responsive": "~0.0.8"
+  },
+  "resolutions": {
+    "inuit-defaults": "~0.2.0"
   }
 }
