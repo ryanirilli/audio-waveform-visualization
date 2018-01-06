@@ -14,7 +14,7 @@ export default Ember.Component.extend(Shuffle, {
   profileUrl: null,
   audioCache: null,
 
-  logGeneratedTimes: true,
+  logGeneratedTimes: false,
   times: [],
 
   isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
@@ -48,6 +48,7 @@ export default Ember.Component.extend(Shuffle, {
   FFTSIZE: 1024,
   SMOOTHING: 0.1,
   IMG_FRAMES_PER_SECOND: 40,
+  MIN_PHOTO_DURATION_MS: 900,
 
   $polaroidImg: null,
   _animateIn: false,
@@ -154,7 +155,6 @@ export default Ember.Component.extend(Shuffle, {
   fetchFacebookPhotoUrls() {
     this.get('facebook').fbFetchPhotoUrls().then((urls) => {
       if(this.get('isMobile')) {
-
         return;
       }
 
@@ -165,14 +165,13 @@ export default Ember.Component.extend(Shuffle, {
   photoUrlsObserver: function() {
     const photoUrls = this.get('photoUrls') || [];
     if(!photoUrls.length) { return }
-
-    this.loadPhotos(photoUrls).then(() => {
-      if( this.get('isMobile') ) {
-        this.set('isShowingControls', true);
-      } else {
-        this.initAudio(this.get('selectedSong'));
-      }
-
+    this.loadPhotos(photoUrls)
+      .then(() => {
+        if( this.get('isMobile') ) {
+          this.set('isShowingControls', true);
+        } else {
+          this.initAudio(this.get('selectedSong'));
+        }
     });
   }.observes('photoUrls'),
 
@@ -222,7 +221,6 @@ export default Ember.Component.extend(Shuffle, {
       this.startPlaying(buffer);
     } else {
       this.fetchAudio(selectedSong.path).then(data => {
-        console.log('STARTING TO PLAY: ', data);
         this.startPlaying(data);
       });
     }
@@ -255,8 +253,6 @@ export default Ember.Component.extend(Shuffle, {
     source.buffer = buffer;
     source.connect(analyser);
     source.connect(context.destination);
-
-    console.log('STARTING_SOURCE: ', buffer);
     source.start(0, 0);
 
     this.setProperties({
@@ -305,22 +301,7 @@ export default Ember.Component.extend(Shuffle, {
     return analyser;
   },
 
-  logTimes() {
-    const times = this.get('times');
-    const curTime = moment();
-    const lastTime = this.get('lastTime');
-    this.set('lastTime', curTime);
-
-    if(!lastTime) {
-      return;
-    }
-
-    const duration = moment.duration(curTime.diff(lastTime));
-    times.push(duration.asMilliseconds());
-  },
-
   setPhoto() {
-    this.logTimes();
     const $active = this.$('.polaroid__img__item--active');
     $active.removeClass('polaroid__img__item--active');
     const random = this.getRandomPhoto();
@@ -394,7 +375,7 @@ export default Ember.Component.extend(Shuffle, {
       this.set('minTimeReached', false);
       setTimeout(() => {
         this.set('minTimeReached', true);
-      }, 1000);
+      }, this.MIN_PHOTO_DURATION_MS);
 
       this.setPhoto();
       this.changeBgColor();
@@ -430,14 +411,8 @@ export default Ember.Component.extend(Shuffle, {
   },
 
   getFrameVal() {
-    return this.getAvg(this.getByteFrequencyData());
-  },
-
-  getAvg: function(arr){
-    let values = 0;
-    for(let i = 0; i < arr.length; i++) {
-      values += arr[i];
-    }
+    const arr = this.getByteFrequencyData();
+    const values = arr.reduce((val, sum) => sum + val, 0);
     return values/arr.length;
   },
 
